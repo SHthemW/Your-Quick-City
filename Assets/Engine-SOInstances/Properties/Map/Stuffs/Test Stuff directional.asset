@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c213d6ff7cfe045ba34c8bf17d8ae7, type: 3}
+  m_Name: Test Stuff directional
+  m_EditorClassIdentifier: 
+  _obj: {fileID: 8835985460589666655, guid: 159fff1df71b6d4439a933b23bf8cdb6, type: 3}
+  _maxGenerateNum: 9999
+  _maxGenerateTry: 50
+  _minGenerateDensity: 3
+  _maxGenerateDensity: 5
+  _directionalGenerate: 1
+  _minRotationOffset: 90
+  _maxRotationOffset: 90
+  _minGenerateSpacing: 5
+  _maxGenerateSpacing: 8

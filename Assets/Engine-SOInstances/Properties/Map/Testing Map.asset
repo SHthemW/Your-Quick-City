@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86855dae0e20896479e9ba2699c45b47, type: 3}
+  m_Name: Testing Map
+  m_EditorClassIdentifier: 
+  _basicProperty:
+    _size_x: 15
+    _size_y: 15
+    _tileUnitSize: 16
+  _baseGenerationProperty:
+    _obstaclePercent: 0.25
+    _floorObjs:
+    - {fileID: 6779773313222493515, guid: 62e90e4c0779e724ba896bf8dc9f2cf2, type: 3}
+    _obstacleObjs:
+    - {fileID: 6064991991819847798, guid: 366edf552c4e08b41ac63b992d86d374, type: 3}
+    - {fileID: 3792684834583581552, guid: f4bba2221117a164a89efd7a880f2e27, type: 3}
+  _structureGenerationProperty:
+    _enableStructureDebug: 1
+    _structureList:
+    - {fileID: 11400000, guid: a9b144cfc4c8c8f479d62ae03b94b4fe, type: 2}
+    - {fileID: 11400000, guid: 3d83d457e51bc4c46928bcc5e3f60d4d, type: 2}
+  _stuffGenerationProperty:
+    _stuffGenerateAccuracy: 6
+    _detectorSettings:
+      _maxDistanceStandard: 50
+      _detectDirectionNum: 8
+    stuffs:
+    - {fileID: 11400000, guid: e0c6b9fcdca2eb244a3c433d20f64922, type: 2}
+    - {fileID: 11400000, guid: 30879ee467287ee4f98a0874180c488e, type: 2}
+    - {fileID: 11400000, guid: 4a514fd22f667954db96e56530ae444f, type: 2}
+    - {fileID: 11400000, guid: 1cee41e4387c4b146bfdf059b0bef6ce, type: 2}
