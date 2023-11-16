@@ -49,9 +49,10 @@ namespace Game.Ctrller.Map
             else
                 _generatedCount[generated]++;
         }
+        private readonly Dictionary<IStuff, float> _alternativeTargets = new();
         private bool GetTargetObject(float density, out IStuff target)
         {
-            Dictionary<IStuff, float> alternatives = new();
+            _alternativeTargets.Clear();
 
             foreach (var stuff in _stuffGenProp.Stuffs)
             {
@@ -59,17 +60,17 @@ namespace Game.Ctrller.Map
                     continue;
 
                 if (stuff.DensityIsMatch(density))
-                    alternatives.Add(stuff, stuff.GetDensityMatchingValue(density));
+                    _alternativeTargets.Add(stuff, stuff.GetDensityMatchingValue(density));
             }
 
-            if (alternatives.Count == 0)
+            if (_alternativeTargets.Count == 0)
             {
                 target = null;
                 return false;
             }
             else
             {
-                target = alternatives.Keys.Aggregate((i, j) => alternatives[i] > alternatives[j] ? i : j);
+                target = _alternativeTargets.Keys.Aggregate((i, j) => _alternativeTargets[i] > _alternativeTargets[j] ? i : j);
                 return true;
             }           
         }
