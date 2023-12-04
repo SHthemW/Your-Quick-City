@@ -4,19 +4,19 @@ using UnityEngine;
 
 namespace Game.Ctrller.Map
 {
-    public sealed class MapStuffDetectorCoordsGenerator
+    public sealed class MapTileCoordsGenerator
     {
         private readonly MapBasicProperty _basicProp;
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
         private const float HANGING_HEIGHT = 1;
 
-        public MapStuffDetectorCoordsGenerator(MapBasicProperty basicProp, MapStuffGenerationProperty stuffProp)
+        public MapTileCoordsGenerator(MapBasicProperty basicProp, MapStuffGenerationProperty stuffProp)
         {
             _basicProp = basicProp;
             _stuffGenProp = stuffProp;
         }
-        public Vector3[] GenerateStuffCoords(MapDiagram map)
+        public Vector3[] GenerateCoords(MapDiagram map)
         {
             var offsets = GeneratePositionOffsets();
             List<Vector3> result = new();
@@ -47,7 +47,7 @@ namespace Game.Ctrller.Map
                 offsetMsg);
         }
 
-        private MapStuffDetectorCoordsGenerator() { }
+        private MapTileCoordsGenerator() { }
         private HashSet<Vector3> GeneratePositionOffsets()
         {
             float unitDistance = (float)_basicProp.TileUnitSize / _stuffGenProp.StuffGenerateAccuracy;

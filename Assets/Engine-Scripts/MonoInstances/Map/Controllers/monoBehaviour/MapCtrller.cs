@@ -32,6 +32,8 @@ namespace Game.Instances.Map
         /// routine for add structures, stuffs, etc.
         /// </remarks>
         private MapDiagram _currentMapDiagram;
+
+        private IMapTerrainDetector[] _currentMapTerrainDetectors;
         
         private void Start()
         {           
@@ -42,8 +44,13 @@ namespace Game.Instances.Map
         {
             _currentMapDiagram = new(_map.BasicProperty);
 
+            Debug.Log("start gen buildings..");
             yield return StartCoroutine(GenerateBuildingsOnMap(_currentMapDiagram));
-            GenerateStuffsOnMap(_currentMapDiagram);
+
+            Debug.Log("start gen detectors..");
+            yield return StartCoroutine(GenerateDetectorsOnMap(_currentMapDiagram));
+
+            Debug.Log("generate finished.");
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {           
@@ -58,15 +65,18 @@ namespace Game.Instances.Map
 
             yield return new WaitUntil(entityGenerator.GenerateIsFinished);
         }
-        private void GenerateStuffsOnMap(MapDiagram map)
+        private IEnumerator GenerateDetectorsOnMap(MapDiagram map)
         {
-            var coords = new MapStuffDetectorCoordsGenerator(_map.BasicProperty, _map.StuffGenerationProperty).GenerateStuffCoords(map);
+            var coords = new MapTileCoordsGenerator(_map.BasicProperty, _map.StuffGenerationProperty).GenerateCoords(map);
 
-            var detectors = new MapStuffDetectorEntityGenerator(
-                _map.BasicProperty, _map.StuffGenerationProperty, _conf.UtilObjectConf, GetComponent<IMapHandler>())
-                .GenerateDetectors(coords);
+            var detectorsGenerator = new MapStuffDetectorEntityGenerator(
+                _map.BasicProperty, _map.StuffGenerationProperty, _conf.UtilObjectConf, GetComponent<IMapHandler>());
 
-            new MapStuffEntityGenerator(_map.StuffGenerationProperty, GetComponent<IMapHandler>(), this).GenerateStuffs(detectors);
+            _currentMapTerrainDetectors = detectorsGenerator.GenerateDetectors(coords);
+
+            Debug.Log("detectors count: " + _currentMapTerrainDetectors.Length);
+
+            yield return new WaitUntil(detectorsGenerator.GenerateIsFinished);
         }
 
     }

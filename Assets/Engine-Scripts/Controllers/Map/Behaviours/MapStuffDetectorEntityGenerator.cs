@@ -14,18 +14,23 @@ namespace Game.Ctrller.Map
         private readonly MapBasicProperty _map;      
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
-        private readonly List<IMapTerrainDetector> _detectors;
+        private int _targetGenerateNum  = 0;
+        private int _currentGenerateNum = 0;
+        public bool GenerateIsFinished() 
+            => _currentGenerateNum >= _targetGenerateNum;
 
         public MapStuffDetectorEntityGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
         {          
             _map = map;
             _conf = conf;
             _stuffGenProp = stuffProp;
-            _detectors = new();
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
-        public List<IMapTerrainDetector> GenerateDetectors(Vector3[] coords)
+        public IMapTerrainDetector[] GenerateDetectors(Vector3[] coords)
         {
+            List<IMapTerrainDetector> detectors = new();
+            _targetGenerateNum = coords.Length;
+
             foreach (var coord in coords)
             {
                 var detector = UnityEngine.Object.Instantiate(
@@ -36,10 +41,11 @@ namespace Game.Ctrller.Map
                 detector.Init(coord, CalculateDebuggerSize(), _stuffGenProp.DetectorSettings);
                 detector.ExecuteDetect();
                 detector.ShowDebugColor();
-                
-                _detectors.Add(detector);
+
+                _currentGenerateNum++;
+                detectors.Add(detector);
             }
-            return _detectors;
+            return detectors.ToArray();
         }
 
         private MapStuffDetectorEntityGenerator() { }
