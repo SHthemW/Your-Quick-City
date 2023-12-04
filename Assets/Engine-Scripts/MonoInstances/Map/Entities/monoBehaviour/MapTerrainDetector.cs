@@ -59,22 +59,6 @@ namespace Game.Instances.Map.Entities
             set => _closestAttachDirection = value;
         }
 
-        private bool? _canGenerateStuffValidly = null;
-        /// <summary>
-        /// 当前探测器所处的位置是否能够实例化Stuff实体
-        /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// 在读取前必须对参数进行初始化.
-        /// </exception>
-        private bool CanGenerateStuffValidly
-        {
-            get =>
-                _canGenerateStuffValidly != null ?
-                (bool)_canGenerateStuffValidly :
-                throw new InvalidOperationException($"[Map][Detector] 探测器 {gameObject.name} 的生成数据还未初始化, 无法尝试读取它.");
-            set => _canGenerateStuffValidly = value;
-        }
-
         /*
          *  private
          */
@@ -95,7 +79,6 @@ namespace Game.Instances.Map.Entities
          *  implements
          */
 
-        bool IMapTerrainDetector.CanStuffGenerateValidly => this.CanGenerateStuffValidly;
         float IMapTerrainDetector.DensityValue => this.ClosestBuilingDistance;
         Vector3 IMapTerrainDetector.AttachDirection => this.ClosestAttachDirection;
         Vector3 IMapTerrainDetector.Position => transform.position;
@@ -140,21 +123,6 @@ namespace Game.Instances.Map.Entities
         void IMapTerrainDetector.RegisterToHandler(IStuffDetectorDataHandler handler)
         {
             handler.Detectors.Add(this);
-        }
-        IEnumerator IMapTerrainDetector.GenerateStuffAndDestorySelf(IStuff conf, Transform parent)
-        {
-            Destroy(gameObject);
-            var obj = Instantiate(conf.Obj, parent);
-
-            if (!obj.TryGetComponent(out IMapStuffEntity stuff))
-                throw new NotImplementedException($"[Map][Stuff] 没有在地图Stuff物体 {obj.name} 上找到 {nameof(IMapStuffEntity)} 的实现.");
-
-            this.CanGenerateStuffValidly = stuff.TryInit(conf, this);
-
-            if (this.CanGenerateStuffValidly)
-                yield return new WaitUntil(stuff.IsInited);
-            else
-                yield break;
         }
         
     }

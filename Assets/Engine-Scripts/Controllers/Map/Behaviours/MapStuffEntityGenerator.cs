@@ -24,22 +24,22 @@ namespace Game.Ctrller.Map
         }
         public void GenerateStuffs(in List<IMapTerrainDetector> detectors)
         {
-            _coroutineCaster.StartCoroutine(GenerateStuffGradually(detectors));
+            GenerateStuffGradually(detectors);
         }
 
         private MapStuffEntityGenerator() { }
-        private IEnumerator GenerateStuffGradually(List<IMapTerrainDetector> detectors)
+        private void GenerateStuffGradually(List<IMapTerrainDetector> detectors)
         {
             foreach (var detector in MapUtils.ShuffleRandomly(detectors.ToArray()))
             {
                 if (!GetTargetObject(detector.DensityValue, out IStuff generateTarget))
                     continue;
 
-                yield return _coroutineCaster.StartCoroutine(
-                        detector.GenerateStuffAndDestorySelf(generateTarget, _entityHandler.GetStuffObjParent()));
+                //bool success = 
+                //    detector.TryGenerateStuffObject(generateTarget, _entityHandler.GetStuffObjParent());
 
-                if (detector.CanStuffGenerateValidly)
-                    SignTheGenerate(generateTarget);
+                //if (success)
+                //    SignTheGenerate(generateTarget);
             }
         }
         private void SignTheGenerate(IStuff generated)
