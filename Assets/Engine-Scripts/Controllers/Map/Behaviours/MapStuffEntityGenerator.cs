@@ -10,65 +10,37 @@ namespace Game.Ctrller.Map
 {
     public sealed class MapStuffEntityGenerator
     {
-        private readonly MapStuffGenerationProperty _stuffGenProp;
+        private readonly Transform _generateParent;
 
-        private readonly Dictionary<IStuff, int> _generatedCount = new();
-
-        public MapStuffEntityGenerator(MapStuffGenerationProperty stuffGenProp, IMapHandler entityHandler, MonoBehaviour coroutineCaster)
+        public MapStuffEntityGenerator(Transform generateParent)
         {
-            //_entityHandler = entityHandler ?? throw new ArgumentNullException(nameof(entityHandler));
-            //_coroutineCaster = coroutineCaster != null ? coroutineCaster : throw new ArgumentNullException(nameof(coroutineCaster));
-            _stuffGenProp = stuffGenProp;
+            _generateParent = generateParent != null ? generateParent : throw new ArgumentNullException(nameof(generateParent));
         }
 
-        public void GenerateStuffs(in List<IMapTerrainDetector> detectors)
+        public void GenerateStuffs(Dictionary<Vector3, IStuff> stuffInfo)
         {
-            foreach (var detector in MapUtils.ShuffleRandomly(detectors.ToArray()))
+            foreach (var info in stuffInfo)
             {
-                if (!GetTargetObject(detector.DensityValue, out IStuff generateTarget))
+                if (_generateCount.ContainsKey(info.Value) && 
+                    _generateCount[info.Value] > info.Value.MaxGenerateNum)
                     continue;
 
-                //bool success = 
-                //    detector.TryGenerateStuffObject(generateTarget, _entityHandler.GetStuffObjParent());
+                UnityEngine.Object.Instantiate(   
+                    parent:   _generateParent,
+                    original: info.Value.Obj,
+                    position: new Vector3(info.Key.x, 0, info.Key.z),
+                    rotation: info.Value.Obj.transform.rotation);
 
-                //if (success)
-                //    SignTheGenerate(generateTarget);
+                if (_generateCount.ContainsKey(info.Value))
+                    _generateCount[info.Value]++;
+                else
+                    _generateCount.Add(info.Value, 1);
             }
         }
 
-        private MapStuffEntityGenerator() { }
-        private void SignTheGenerate(IStuff generated)
-        {
-            if (!_generatedCount.ContainsKey(generated))
-                _generatedCount.Add(generated, 1);
-            else
-                _generatedCount[generated]++;
-        }
-        private readonly Dictionary<IStuff, float> _alternativeTargets = new();
-        private bool GetTargetObject(float density, out IStuff target)
-        {
-            _alternativeTargets.Clear();
+        private MapStuffEntityGenerator()
+            => throw new NotImplementedException();
 
-            foreach (var stuff in _stuffGenProp.Stuffs)
-            {
-                if ((_generatedCount.ContainsKey(stuff)) && (_generatedCount[stuff] >= stuff.MaxGenerateNum))
-                    continue;
-
-                if (stuff.DensityIsMatch(density))
-                    _alternativeTargets.Add(stuff, stuff.GetDensityMatchingValue(density));
-            }
-
-            if (_alternativeTargets.Count == 0)
-            {
-                target = null;
-                return false;
-            }
-            else
-            {
-                target = _alternativeTargets.Keys.Aggregate((i, j) => _alternativeTargets[i] > _alternativeTargets[j] ? i : j);
-                return true;
-            }           
-        }
-        
+        private readonly Dictionary<IStuff, int> _generateCount = new();
     }
 }

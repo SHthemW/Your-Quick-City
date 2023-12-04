@@ -29,11 +29,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: a9b144cfc4c8c8f479d62ae03b94b4fe, type: 2}
     - {fileID: 11400000, guid: 3d83d457e51bc4c46928bcc5e3f60d4d, type: 2}
   _stuffGenerationProperty:
-    _stuffGenerateAccuracy: 6
+    _stuffGenerateAccuracy: 8
     _stuffDistributeDiagramResolution: 100
     _detectorSettings:
       _maxDistanceStandard: 50
-      _detectDirectionNum: 8
+      _detectDirectionNum: 12
     stuffs:
     - {fileID: 11400000, guid: e0c6b9fcdca2eb244a3c433d20f64922, type: 2}
     - {fileID: 11400000, guid: 30879ee467287ee4f98a0874180c488e, type: 2}

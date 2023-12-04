@@ -94,8 +94,8 @@ namespace Game.Instances.Map
 
             Debug.Log("finish analysis");
 
-            foreach (var thing in stuffObjData)
-                Debug.Log($"pos: {thing.Key}, obj: {thing.Value.Obj.name}");
+            new MapStuffEntityGenerator(GetComponent<IMapHandler>().GetStuffObjParent())
+                .GenerateStuffs(stuffObjData);
 
             yield break;
         }

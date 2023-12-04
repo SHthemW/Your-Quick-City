@@ -28,7 +28,8 @@ MonoBehaviour:
     _structureList:
     - {fileID: 11400000, guid: 3d83d457e51bc4c46928bcc5e3f60d4d, type: 2}
   _stuffGenerationProperty:
-    _stuffGenerateAccuracy: 6
+    _stuffGenerateAccuracy: 8
+    _stuffDistributeDiagramResolution: 0
     _detectorSettings:
       _maxDistanceStandard: 50
       _detectDirectionNum: 8

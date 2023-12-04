@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _obj: {fileID: 3842628320049593571, guid: 0b7b1729b7faff44b808140fc4666822, type: 3}
   _maxGenerateNum: 9999
-  _maxGenerateTry: 150
   _minGenerateDensity: 0
   _maxGenerateDensity: 5
   _directionalGenerate: 0
