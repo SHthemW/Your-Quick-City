@@ -95,8 +95,7 @@ namespace Game.General.Interfaces
         void Init(Vector3 position, float size, TerrainDetectorProperty property);
         void ExecuteDetect();
         void ShowDebugColor();
-        void RegisterToHandler(IStuffDetectorDataHandler handler);
-
+        
         // default
 
         bool AttachDirectionIsNSWE

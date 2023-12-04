@@ -120,10 +120,5 @@ namespace Game.Instances.Map.Entities
             var mat = GetDebugger().GetComponent<MeshRenderer>().material;
             mat.color = MapUtils.GetDebugColor(percent);
         }
-        void IMapTerrainDetector.RegisterToHandler(IStuffDetectorDataHandler handler)
-        {
-            handler.Detectors.Add(this);
-        }
-        
     }
 }

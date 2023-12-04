@@ -6,20 +6,22 @@ using UnityEngine;
 
 namespace Game.Ctrller.Map
 {
-    public sealed class MapStuffDetectorEntityGenerator : IStuffDetectorDataHandler
+    public sealed class MapStuffDetectorEntityGenerator
     {     
         private readonly IMapHandler _handler;
-        private readonly MapBasicProperty _map;      
         private readonly MapUtilObjectConf _conf;
+
+        private readonly MapBasicProperty _map;      
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
-        private readonly List<IMapTerrainDetector> _detectors = new();
+        private readonly List<IMapTerrainDetector> _detectors;
 
         public MapStuffDetectorEntityGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
         {          
             _map = map;
             _conf = conf;
             _stuffGenProp = stuffProp;
+            _detectors = new();
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
         public List<IMapTerrainDetector> GenerateDetectors(Vector3[] coords)
@@ -34,7 +36,8 @@ namespace Game.Ctrller.Map
                 detector.Init(coord, CalculateDebuggerSize(), _stuffGenProp.DetectorSettings);
                 detector.ExecuteDetect();
                 detector.ShowDebugColor();
-                detector.RegisterToHandler(this);
+                
+                _detectors.Add(detector);
             }
             return _detectors;
         }
@@ -44,11 +47,5 @@ namespace Game.Ctrller.Map
         {
             return _map.TileUnitSize / (_stuffGenProp.StuffGenerateAccuracy + 1);
         }
-
-        /*
-         *  implement
-         */
-
-        List<IMapTerrainDetector> IStuffDetectorDataHandler.Detectors => _detectors;
     }
 }
