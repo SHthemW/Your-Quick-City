@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Controllers", "_Controllers.csproj", "{886381CC-6C85-DEA2-439E-02704528D1F4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spine-unity-examples", "spine-unity-examples.csproj", "{1D32FC98-FE11-BE4D-3598-40345C802798}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{0D4B8A14-E840-BE1B-6EB7-90D2FFC4048B}"
@@ -10,6 +8,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Interfaces", "_Interfaces.csproj", "{ADBBAD5D-E410-E488-4E17-51E94A7F1E67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spine-unity-editor", "spine-unity-editor.csproj", "{90736FC8-9732-93E3-0DB6-C956DF9DD9F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Controllers", "_Controllers.csproj", "{886381CC-6C85-DEA2-439E-02704528D1F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spine-csharp", "spine-csharp.csproj", "{8E388BE9-7609-7EAE-98AA-2D6ECDB01BD2}"
 EndProject
@@ -27,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{886381CC-6C85-DEA2-439E-02704528D1F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{886381CC-6C85-DEA2-439E-02704528D1F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{886381CC-6C85-DEA2-439E-02704528D1F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{886381CC-6C85-DEA2-439E-02704528D1F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D32FC98-FE11-BE4D-3598-40345C802798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D32FC98-FE11-BE4D-3598-40345C802798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D32FC98-FE11-BE4D-3598-40345C802798}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +43,10 @@ Global
 		{90736FC8-9732-93E3-0DB6-C956DF9DD9F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90736FC8-9732-93E3-0DB6-C956DF9DD9F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90736FC8-9732-93E3-0DB6-C956DF9DD9F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886381CC-6C85-DEA2-439E-02704528D1F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886381CC-6C85-DEA2-439E-02704528D1F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886381CC-6C85-DEA2-439E-02704528D1F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886381CC-6C85-DEA2-439E-02704528D1F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8E388BE9-7609-7EAE-98AA-2D6ECDB01BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E388BE9-7609-7EAE-98AA-2D6ECDB01BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E388BE9-7609-7EAE-98AA-2D6ECDB01BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
