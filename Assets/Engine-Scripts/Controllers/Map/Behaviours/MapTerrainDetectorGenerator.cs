@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Ctrller.Map
 {
-    public sealed class MapStuffDetectorEntityGenerator
+    public sealed class MapTerrainDetectorGenerator
     {     
         private readonly IMapHandler _handler;
         private readonly MapUtilObjectConf _conf;
@@ -19,7 +19,7 @@ namespace Game.Ctrller.Map
         public bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
-        public MapStuffDetectorEntityGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
+        public MapTerrainDetectorGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
         {          
             _map = map;
             _conf = conf;
@@ -48,7 +48,7 @@ namespace Game.Ctrller.Map
             return detectors.ToArray();
         }
 
-        private MapStuffDetectorEntityGenerator() { }
+        private MapTerrainDetectorGenerator() { }
         private float CalculateDebuggerSize()
         {
             return _map.TileUnitSize / (_stuffGenProp.StuffGenerateAccuracy + 1);
