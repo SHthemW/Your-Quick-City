@@ -108,7 +108,12 @@ namespace Game.General.Properties //TODO: replacement position of Game.General.P
                     Debug.LogWarning($"[Map] 检测到未初始化的属性 {nameof(_stuffGenerateAccuracy)} .");
                 return _stuffGenerateAccuracy;
             }
-        }
+        } // TODO: change to "terrain detector resolution" and move to basic prop.
+
+        [SerializeField]
+        private float _stuffDistributeDiagramResolution;
+        public readonly float StuffDistributeDiagramResolution
+            => _stuffDistributeDiagramResolution;
 
         [Space, SerializeField]
         [Tooltip("地形探测器设置. 本设置将决定与地形图生成相关的属性.")]

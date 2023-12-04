@@ -50,6 +50,9 @@ namespace Game.Instances.Map
             Debug.Log("start gen detectors..");
             yield return StartCoroutine(GenerateDetectorsOnMap(_currentMapDiagram));
 
+            Debug.Log("start parse datas..");
+            yield return StartCoroutine(GenerateStuffByTerrain(_currentMapTerrainDetectors));
+
             Debug.Log("generate finished.");
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
@@ -69,7 +72,7 @@ namespace Game.Instances.Map
         {
             var coords = new MapTileCoordsGenerator(_map.BasicProperty, _map.StuffGenerationProperty).GenerateCoords(map);
 
-            var detectorsGenerator = new MapStuffDetectorEntityGenerator(
+            var detectorsGenerator = new MapTerrainDetectorGenerator(
                 _map.BasicProperty, _map.StuffGenerationProperty, _conf.UtilObjectConf, GetComponent<IMapHandler>());
 
             _currentMapTerrainDetectors = detectorsGenerator.GenerateDetectors(coords);
@@ -77,6 +80,24 @@ namespace Game.Instances.Map
             Debug.Log("detectors count: " + _currentMapTerrainDetectors.Length);
 
             yield return new WaitUntil(detectorsGenerator.GenerateIsFinished);
+        }
+
+        private IEnumerator GenerateStuffByTerrain(IMapTerrainDetector[] terrain)
+        {
+            var dataAnalyzer = new MapStuffDataAnalyzer(_map.StuffGenerationProperty);
+
+            Debug.Log("start analysis");
+
+            var stuffObjData = dataAnalyzer.Analysis(terrain);
+
+            yield return new WaitUntil(dataAnalyzer.Finished);
+
+            Debug.Log("finish analysis");
+
+            foreach (var thing in stuffObjData)
+                Debug.Log($"pos: {thing.Key}, obj: {thing.Value.Obj.name}");
+
+            yield break;
         }
 
     }

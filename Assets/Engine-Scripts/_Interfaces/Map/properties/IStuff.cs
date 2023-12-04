@@ -26,13 +26,17 @@ namespace Game.General.Interfaces
         }
         float GetDensityMatchingValue(float density)
         {
+            if (density < 0)
+                throw new ArgumentOutOfRangeException(density.ToString());
+
             if (!DensityIsMatch(density))
                 return 0;
 
-            var diff_left = density - MinGenerateDensity;
-            var diff_right = MaxGenerateDensity - density;
+            float middle     = (MinGenerateDensity + MaxGenerateDensity) / 2;
+            float x_halfLen  = (MaxGenerateDensity - MinGenerateDensity) / 2;
+            float x_distance = Mathf.Abs(density - middle);
 
-            return diff_left < diff_right ? diff_left : diff_right;
+            return Mathf.Abs(x_distance - x_halfLen) / x_halfLen;
         }
         Quaternion GetGenerateDirection(IMapTerrainDetector data, Vector3 origRotation)
         {

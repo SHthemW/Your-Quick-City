@@ -14,7 +14,7 @@ namespace Game.Ctrller.Map
         private readonly MapBasicProperty _map;      
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
-        private int _targetGenerateNum  = 0;
+        private int _targetGenerateNum  = 1;
         private int _currentGenerateNum = 0;
         public bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;

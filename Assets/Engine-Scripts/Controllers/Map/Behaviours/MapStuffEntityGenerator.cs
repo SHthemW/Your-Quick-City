@@ -10,25 +10,18 @@ namespace Game.Ctrller.Map
 {
     public sealed class MapStuffEntityGenerator
     {
-        private readonly IMapHandler _entityHandler;
-        private readonly MonoBehaviour _coroutineCaster;
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
         private readonly Dictionary<IStuff, int> _generatedCount = new();
 
         public MapStuffEntityGenerator(MapStuffGenerationProperty stuffGenProp, IMapHandler entityHandler, MonoBehaviour coroutineCaster)
         {
-            _entityHandler = entityHandler ?? throw new ArgumentNullException(nameof(entityHandler));
-            _coroutineCaster = coroutineCaster != null ? coroutineCaster : throw new ArgumentNullException(nameof(coroutineCaster));
+            //_entityHandler = entityHandler ?? throw new ArgumentNullException(nameof(entityHandler));
+            //_coroutineCaster = coroutineCaster != null ? coroutineCaster : throw new ArgumentNullException(nameof(coroutineCaster));
             _stuffGenProp = stuffGenProp;
         }
-        public void GenerateStuffs(in List<IMapTerrainDetector> detectors)
-        {
-            GenerateStuffGradually(detectors);
-        }
 
-        private MapStuffEntityGenerator() { }
-        private void GenerateStuffGradually(List<IMapTerrainDetector> detectors)
+        public void GenerateStuffs(in List<IMapTerrainDetector> detectors)
         {
             foreach (var detector in MapUtils.ShuffleRandomly(detectors.ToArray()))
             {
@@ -42,6 +35,8 @@ namespace Game.Ctrller.Map
                 //    SignTheGenerate(generateTarget);
             }
         }
+
+        private MapStuffEntityGenerator() { }
         private void SignTheGenerate(IStuff generated)
         {
             if (!_generatedCount.ContainsKey(generated))
