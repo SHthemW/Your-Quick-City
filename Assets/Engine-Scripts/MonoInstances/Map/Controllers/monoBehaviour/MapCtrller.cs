@@ -94,6 +94,8 @@ namespace Game.Instances.Map
 
             Debug.Log("finish analysis");
 
+            dataAnalyzer.PrintDistributionDiagram();
+
             new MapStuffEntityGenerator(GetComponent<IMapHandler>().GetStuffObjParent())
                 .GenerateStuffs(stuffObjData);
 

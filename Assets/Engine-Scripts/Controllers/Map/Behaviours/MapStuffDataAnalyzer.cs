@@ -3,6 +3,7 @@ using Game.General.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace Game.Ctrller.Map
@@ -13,6 +14,7 @@ namespace Game.Ctrller.Map
 
         private int _targetAnalysisNum  = 1;
         private int _currentAnalysisNum = 0;
+        private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
 
         public MapStuffDataAnalyzer(MapStuffGenerationProperty stuffGenProp)
         {
@@ -32,12 +34,12 @@ namespace Game.Ctrller.Map
 
             var analysisResult = new Dictionary<Vector3, IStuff>(capacity: detectors.Length);
 
-            var distribution = BakeStuffDistributionDiagram(_stuffGenProp, detectors.Max(d => d.DensityValue));
+            _distributionDiagram = BakeStuffDistributionDiagram(_stuffGenProp, detectors.Max(d => d.DensityValue));
 
             foreach (var detector in MapUtils.ShuffleRandomly(detectors))
             {
                 // get matches of current detector's density
-                var matches =  distribution.FirstOrDefault(g => 
+                var matches = _distributionDiagram.FirstOrDefault(g => 
                     g.Key.l <= detector.DensityValue && 
                     g.Key.r >= detector.DensityValue).Value;
 
@@ -62,6 +64,25 @@ namespace Game.Ctrller.Map
                 analysisResult.Add(detector.Position, randomStuff);
             }
             return analysisResult;
+        }
+
+        public void PrintDistributionDiagram()
+        {
+            StringBuilder content = new();
+
+            foreach (var dist in _distributionDiagram)
+            {
+                content.Append($"\n[{dist.Key.l} - {dist.Key.r}] \n");
+
+                foreach (var stuff in dist.Value)
+                {
+                    var keyStr = stuff.Key.Obj.name.PadRight(10);
+                    var valStr = stuff.Value.ToString().PadRight(10);
+
+                    content.Append($"- {keyStr}: {valStr} \n");
+                }
+            }
+            Debug.Log(content.ToString());
         }
 
         /// <summary>
