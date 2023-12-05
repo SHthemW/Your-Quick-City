@@ -37,7 +37,7 @@ namespace Game.Instances.Map
             _isInited = true;
 
             // set rotation           
-            transform.rotation = conf.GetGenerateDirection(data, transform.rotation.eulerAngles);
+            // transform.rotation = conf.GetGenerateDirection(data, transform.rotation.eulerAngles);
 
             return true;
         }

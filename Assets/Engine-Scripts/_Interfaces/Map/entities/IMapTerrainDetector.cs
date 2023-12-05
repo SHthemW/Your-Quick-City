@@ -96,15 +96,5 @@ namespace Game.General.Interfaces
         void ExecuteDetect();
         void ShowDebugColor();
         
-        // default
-
-        bool AttachDirectionIsNSWE
-        {
-            get
-            {
-                return AttachDirection == Vector3.forward || AttachDirection == Vector3.back
-                    || AttachDirection == Vector3.left || AttachDirection == Vector3.right;
-            }
-        }
     }
 }

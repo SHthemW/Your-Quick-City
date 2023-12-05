@@ -1,4 +1,5 @@
 ﻿using Game.General.Properties;
+using Game.General.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,12 +39,14 @@ namespace Game.General.Interfaces
 
             return Mathf.Abs(x_distance - x_halfLen) / x_halfLen;
         }
-        Quaternion GetGenerateDirection(IMapTerrainDetector data, Vector3 origRotation)
+        Quaternion GetGenerateDirection(Vector3 attachDirection, Vector3 origRotation)
         {
+            attachDirection = Quaternion.Euler(0, 90, 0) * attachDirection;
+
             Vector3 targetRotationVector = DirectionalGenerate switch
             {
-                DirectionalGenerateType.Part => data.AttachDirectionIsNSWE ? data.AttachDirection : Vector3.zero,
-                DirectionalGenerateType.Full => data.AttachDirection,
+                DirectionalGenerateType.Part => attachDirection.IsNSWE() ? attachDirection : Vector3.zero,
+                DirectionalGenerateType.Full => attachDirection,
                 _ => Vector3.zero
             };
 

@@ -28,11 +28,11 @@ namespace Game.Ctrller.Map
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        public Dictionary<Vector3, IStuff> Analysis(in IMapTerrainDetector[] detectors)
+        public Dictionary<(Vector3, Vector3), IStuff> Analysis(in IMapTerrainDetector[] detectors)
         {
             _targetAnalysisNum = detectors.Length;
 
-            var analysisResult = new Dictionary<Vector3, IStuff>(capacity: detectors.Length);
+            var analysisResult = new Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>(capacity: detectors.Length);
 
             _distributionDiagram = BakeStuffDistributionDiagram(_stuffGenProp, detectors.Max(d => d.DensityValue));
 
@@ -64,10 +64,9 @@ namespace Game.Ctrller.Map
                         break;
                     }
                 }
-
                 // add to result
                 _currentAnalysisNum++;
-                analysisResult.Add(detector.Position, randomStuff);
+                analysisResult.Add((pos: detector.Position, attachDir: detector.AttachDirection), randomStuff);
             }
             return analysisResult;
         }

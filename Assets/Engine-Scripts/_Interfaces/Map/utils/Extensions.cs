@@ -38,5 +38,11 @@ namespace Game.General.Utilities
                 _ => throw new NotImplementedException($"[Enum] 枚举 {nameof(Direction)} 的转向 {direction} 未定义."),
             };
         }
+
+        public static bool IsNSWE(this Vector3 direction)
+        {
+            return direction == Vector3.forward || direction == Vector3.back
+                   || direction == Vector3.left || direction == Vector3.right;
+        }
     }
 }
