@@ -39,17 +39,23 @@ namespace Game.Ctrller.Map
             foreach (var detector in MapUtils.ShuffleRandomly(detectors))
             {
                 // get matches of current detector's density
-                var matches = _distributionDiagram.FirstOrDefault(g => 
+                Dictionary<IStuff, float> distInInterval = 
+                    _distributionDiagram.First(g => 
                     g.Key.l <= detector.DensityValue && 
                     g.Key.r >= detector.DensityValue).Value;
 
                 // get stuff by its weight
-                float totalWeight = matches.Sum(m => m.Value);
+                float totalWeightOfInterval = distInInterval.Sum(d => d.Value);
+                if (totalWeightOfInterval == 0)
+                {
+                    _currentAnalysisNum++;
+                    continue;
+                }
 
-                float  randomSeed  = UnityEngine.Random.Range(0, totalWeight);
+                float  randomSeed  = UnityEngine.Random.Range(0, totalWeightOfInterval);
                 IStuff randomStuff = null;
 
-                foreach (var match in matches)
+                foreach (var match in distInInterval)
                 {
                     randomSeed -= match.Value;
                     if (randomSeed <= 0)
