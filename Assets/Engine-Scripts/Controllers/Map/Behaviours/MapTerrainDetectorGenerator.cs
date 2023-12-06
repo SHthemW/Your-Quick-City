@@ -6,24 +6,31 @@ using UnityEngine;
 
 namespace Game.Ctrller.Map
 {
-    public sealed class MapStuffDetectorEntityGenerator : IStuffDetectorDataHandler
+    public sealed class MapTerrainDetectorGenerator
     {     
         private readonly IMapHandler _handler;
-        private readonly MapBasicProperty _map;      
         private readonly MapUtilObjectConf _conf;
+
+        private readonly MapBasicProperty _map;      
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
-        private readonly List<IMapTerrainDetector> _detectors = new();
+        private int _targetGenerateNum  = 1;
+        private int _currentGenerateNum = 0;
+        public bool GenerateIsFinished() 
+            => _currentGenerateNum >= _targetGenerateNum;
 
-        public MapStuffDetectorEntityGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
+        public MapTerrainDetectorGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
         {          
             _map = map;
             _conf = conf;
             _stuffGenProp = stuffProp;
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
-        public List<IMapTerrainDetector> GenerateDetectors(Vector3[] coords)
+        public IMapTerrainDetector[] GenerateDetectors(Vector3[] coords)
         {
+            List<IMapTerrainDetector> detectors = new();
+            _targetGenerateNum = coords.Length;
+
             foreach (var coord in coords)
             {
                 var detector = UnityEngine.Object.Instantiate(
@@ -34,21 +41,17 @@ namespace Game.Ctrller.Map
                 detector.Init(coord, CalculateDebuggerSize(), _stuffGenProp.DetectorSettings);
                 detector.ExecuteDetect();
                 detector.ShowDebugColor();
-                detector.RegisterToHandler(this);
+
+                _currentGenerateNum++;
+                detectors.Add(detector);
             }
-            return _detectors;
+            return detectors.ToArray();
         }
 
-        private MapStuffDetectorEntityGenerator() { }
+        private MapTerrainDetectorGenerator() { }
         private float CalculateDebuggerSize()
         {
             return _map.TileUnitSize / (_stuffGenProp.StuffGenerateAccuracy + 1);
         }
-
-        /*
-         *  implement
-         */
-
-        List<IMapTerrainDetector> IStuffDetectorDataHandler.Detectors => _detectors;
     }
 }

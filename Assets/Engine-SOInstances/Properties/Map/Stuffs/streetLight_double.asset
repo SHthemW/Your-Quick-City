@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: streetLight_double
   m_EditorClassIdentifier: 
   _obj: {fileID: 3967281962636261048, guid: 37b7d28b9e58ed24b9c2e020dd6e9029, type: 3}
-  _maxGenerateNum: 9999
-  _maxGenerateTry: 50
-  _minGenerateDensity: 3
-  _maxGenerateDensity: 7
-  _directionalGenerate: 1
+  _maxGenerateNum: 200
+  _minGenerateDensity: 5
+  _maxGenerateDensity: 8
+  _directionalGenerate: 2
   _minRotationOffset: 90
   _maxRotationOffset: 90
   _minGenerateSpacing: 16

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Game.Instances.Map.Entities
 {
-    [SelectionBase]
+    [SelectionBase, Serializable]
     internal sealed class MapTerrainDetector : MonoBehaviour, IMapTerrainDetector
     {
         private TerrainDetectorProperty? _property = null;
@@ -27,7 +27,8 @@ namespace Game.Instances.Map.Entities
         private const float INFINITE = -1;
         private const float MAX_DIST = 999;
 
-        private float? _closestBuilingDistance = null;
+        [SerializeField]
+        private float _closestBuilingDistance = -1;
         /// <summary>
         /// 该探测器距最近的建筑物的物理距离
         /// </summary>
@@ -37,13 +38,14 @@ namespace Game.Instances.Map.Entities
         private float ClosestBuilingDistance
         {
             get => 
-                _closestBuilingDistance != null ?
+                _closestBuilingDistance != -1 ?
                 (float)_closestBuilingDistance :
                 throw new InvalidOperationException($"[Map][Detector] 探测器 {gameObject.name} 的探测数据还未初始化, 无法尝试读取它.");
             set => _closestBuilingDistance = value;
         }
 
-        private Vector3? _closestAttachDirection = null;
+        [SerializeField]
+        private Vector3 _closestAttachDirection = default;
         /// <summary>
         /// 该探测器相对于最近的建筑物的贴附方向
         /// </summary>
@@ -53,26 +55,10 @@ namespace Game.Instances.Map.Entities
         private Vector3 ClosestAttachDirection
         {
             get =>
-                _closestAttachDirection != null ?
+                _closestAttachDirection != default ?
                 (Vector3)_closestAttachDirection :
                 throw new InvalidOperationException($"[Map][Detector] 探测器 {gameObject.name} 的探测数据还未初始化, 无法尝试读取它.");
             set => _closestAttachDirection = value;
-        }
-
-        private bool? _canGenerateStuffValidly = null;
-        /// <summary>
-        /// 当前探测器所处的位置是否能够实例化Stuff实体
-        /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// 在读取前必须对参数进行初始化.
-        /// </exception>
-        private bool CanGenerateStuffValidly
-        {
-            get =>
-                _canGenerateStuffValidly != null ?
-                (bool)_canGenerateStuffValidly :
-                throw new InvalidOperationException($"[Map][Detector] 探测器 {gameObject.name} 的生成数据还未初始化, 无法尝试读取它.");
-            set => _canGenerateStuffValidly = value;
         }
 
         /*
@@ -95,7 +81,6 @@ namespace Game.Instances.Map.Entities
          *  implements
          */
 
-        bool IMapTerrainDetector.CanStuffGenerateValidly => this.CanGenerateStuffValidly;
         float IMapTerrainDetector.DensityValue => this.ClosestBuilingDistance;
         Vector3 IMapTerrainDetector.AttachDirection => this.ClosestAttachDirection;
         Vector3 IMapTerrainDetector.Position => transform.position;
@@ -137,25 +122,5 @@ namespace Game.Instances.Map.Entities
             var mat = GetDebugger().GetComponent<MeshRenderer>().material;
             mat.color = MapUtils.GetDebugColor(percent);
         }
-        void IMapTerrainDetector.RegisterToHandler(IStuffDetectorDataHandler handler)
-        {
-            handler.Detectors.Add(this);
-        }
-        IEnumerator IMapTerrainDetector.GenerateStuffAndDestorySelf(IStuff conf, Transform parent)
-        {
-            Destroy(gameObject);
-            var obj = Instantiate(conf.Obj, parent);
-
-            if (!obj.TryGetComponent(out IMapStuffEntity stuff))
-                throw new NotImplementedException($"[Map][Stuff] 没有在地图Stuff物体 {obj.name} 上找到 {nameof(IMapStuffEntity)} 的实现.");
-
-            this.CanGenerateStuffValidly = stuff.TryInit(conf, this);
-
-            if (this.CanGenerateStuffValidly)
-                yield return new WaitUntil(stuff.IsInited);
-            else
-                yield break;
-        }
-        
     }
 }

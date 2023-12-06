@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: streetLight
   m_EditorClassIdentifier: 
   _obj: {fileID: 7545074355739607518, guid: 440a6eaab5af5c2438b987640e32a5ea, type: 3}
-  _maxGenerateNum: 9999
-  _maxGenerateTry: 50
+  _maxGenerateNum: 200
   _minGenerateDensity: 4
   _maxGenerateDensity: 5
   _directionalGenerate: 0

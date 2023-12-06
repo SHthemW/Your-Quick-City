@@ -12,7 +12,7 @@ namespace Game.General.Properties
         [SerializeField]
         [Tooltip("探测器能够区分的最大距离. 比此值更远处的目标将不再被区分. \n[性能开销: 无影响]")]
         private float _maxDistanceStandard;
-        public float MaxDistanceStandard
+        public readonly float MaxDistanceStandard
         {
             get
             {
@@ -25,7 +25,7 @@ namespace Game.General.Properties
         [SerializeField]
         [Tooltip("探测器探测的方向数. 更高的值将增加地形图的生成精度. 程序会根据方向数量自动计算每个探测方向. \n[性能开销: 线性]")]
         private int _detectDirectionNum;
-        public Vector3[] DetectDirections
+        public readonly Vector3[] DetectDirections
         {
             get
             {
@@ -86,10 +86,7 @@ namespace Game.General.Interfaces
         /// 该探测器相对于最近的建筑物的贴附方向
         /// </summary>
         Vector3 AttachDirection { get; }
-        /// <summary>
-        /// 当前探测器所处的位置是否能够实例化Stuff实体
-        /// </summary>
-        bool CanStuffGenerateValidly { get; }
+
         Vector3 Position { get; }
 
 
@@ -97,24 +94,7 @@ namespace Game.General.Interfaces
 
         void Init(Vector3 position, float size, TerrainDetectorProperty property);
         void ExecuteDetect();
-        /// <summary>
-        /// generate stuff entity, and destory the detector.
-        /// </summary>
-        /// <returns>generate is finished</returns>
-        IEnumerator GenerateStuffAndDestorySelf(IStuff data, Transform parent);
-
         void ShowDebugColor();
-        void RegisterToHandler(IStuffDetectorDataHandler handler);
-
-        // default
-
-        bool AttachDirectionIsNSWE
-        {
-            get
-            {
-                return AttachDirection == Vector3.forward || AttachDirection == Vector3.back
-                    || AttachDirection == Vector3.left || AttachDirection == Vector3.right;
-            }
-        }
+        
     }
 }

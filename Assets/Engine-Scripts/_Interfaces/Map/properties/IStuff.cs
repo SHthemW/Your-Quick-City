@@ -1,4 +1,5 @@
 ﻿using Game.General.Properties;
+using Game.General.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,20 +27,26 @@ namespace Game.General.Interfaces
         }
         float GetDensityMatchingValue(float density)
         {
+            if (density < 0)
+                throw new ArgumentOutOfRangeException(density.ToString());
+
             if (!DensityIsMatch(density))
                 return 0;
 
-            var diff_left = density - MinGenerateDensity;
-            var diff_right = MaxGenerateDensity - density;
+            float middle     = (MinGenerateDensity + MaxGenerateDensity) / 2;
+            float x_halfLen  = (MaxGenerateDensity - MinGenerateDensity) / 2;
+            float x_distance = Mathf.Abs(density - middle);
 
-            return diff_left < diff_right ? diff_left : diff_right;
+            return Mathf.Abs(x_distance - x_halfLen) / x_halfLen;
         }
-        Quaternion GetGenerateDirection(IMapTerrainDetector data, Vector3 origRotation)
+        Quaternion GetGenerateDirection(Vector3 attachDirection, Vector3 origRotation)
         {
+            attachDirection = Quaternion.Euler(0, 90, 0) * attachDirection;
+
             Vector3 targetRotationVector = DirectionalGenerate switch
             {
-                DirectionalGenerateType.Part => data.AttachDirectionIsNSWE ? data.AttachDirection : Vector3.zero,
-                DirectionalGenerateType.Full => data.AttachDirection,
+                DirectionalGenerateType.Part => attachDirection.IsNSWE() ? attachDirection : Vector3.zero,
+                DirectionalGenerateType.Full => attachDirection,
                 _ => Vector3.zero
             };
 
