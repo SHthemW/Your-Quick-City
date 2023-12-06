@@ -34,6 +34,8 @@ namespace Game.Ctrller.Map
 
             var analysisResult = new Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>(capacity: detectors.Length);
 
+            var totalMapCoords = detectors.Select(d => d.Position).ToArray();
+
             _distributionDiagram = BakeStuffDistributionDiagram(_stuffGenProp, detectors.Max(d => d.DensityValue));
 
             foreach (var detector in MapUtils.ShuffleRandomly(detectors))
@@ -60,22 +62,39 @@ namespace Game.Ctrller.Map
                 // else, calc result stuff by its weight.
 
                 float  randomSeed  = UnityEngine.Random.Range(0, totalWeightOfInterval);
-                IStuff randomStuff = null;
+                IStuff resultStuff = null;
 
                 foreach (var match in distInInterval)
                 {
                     randomSeed -= match.Value;
                     if (randomSeed <= 0)
                     {
-                        randomStuff = match.Key;
+                        resultStuff = match.Key;
                         break;
                     }
                 }
 
-                // add result to result list
+                // check if current result match the space distance limit
+
+                var nearbyCoords = GetNearbyCoordIndexes(
+                    map:         totalMapCoords, 
+                    radius:      resultStuff.GetGenerateSpacing(),
+                    centerIndex: Array.IndexOf(totalMapCoords, detector.Position)
+                    )
+                    .Select(i => totalMapCoords[i])
+                    .ToArray();
+
+                if (analysisResult.Any(rst => 
+                    nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
+                {
+                    _currentAnalysisNum++;
+                    continue;
+                }
+
+                // append result
 
                 _currentAnalysisNum++;
-                analysisResult.Add((pos: detector.Position, attachDir: detector.AttachDirection), randomStuff);
+                analysisResult.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
             }
             return analysisResult;
         }
@@ -97,6 +116,30 @@ namespace Game.Ctrller.Map
                 }
             }
             Debug.Log(content.ToString());
+        }
+
+        private MapStuffDataAnalyzer()
+            => throw new NotImplementedException();
+
+        private static int[] GetNearbyCoordIndexes(Vector3[] map, int centerIndex, float radius)
+        {
+            if (map == null || map.Length == 0)
+                throw new ArgumentException(nameof(map));
+
+            if (centerIndex > map.Length - 1)
+                throw new ArgumentOutOfRangeException(nameof(centerIndex));
+
+            List<int> nearbyIndexes = new();
+
+            for (int i = 0; i < map.Length; i++)
+            {
+                if (i == centerIndex) 
+                    continue;
+
+                if (Vector3.Distance(map[i], map[centerIndex]) <= radius)
+                    nearbyIndexes.Add(i);
+            }
+            return nearbyIndexes.ToArray();
         }
 
         /// <summary>
