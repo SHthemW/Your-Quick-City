@@ -1,5 +1,6 @@
 ﻿using Game.Ctrller.Map;
 using Game.General.Interfaces;
+using Game.Instances.UI;
 using System.Collections;
 using UnityEngine;
 
@@ -44,16 +45,16 @@ namespace Game.Instances.Map
         {
             _currentMapDiagram = new(_map.BasicProperty);
 
-            Debug.Log("start gen buildings..");
+            LogUI.AppendLog("start gen buildings..");
             yield return StartCoroutine(GenerateBuildingsOnMap(_currentMapDiagram));
 
-            Debug.Log("start gen detectors..");
+            LogUI.AppendLog("start gen detectors..");
             yield return StartCoroutine(GenerateDetectorsOnMap(_currentMapDiagram));
 
-            Debug.Log("start parse datas..");
+            LogUI.AppendLog("start parse datas..");
             yield return StartCoroutine(GenerateStuffByTerrain(_currentMapTerrainDetectors));
 
-            Debug.Log("generate finished.");
+            LogUI.AppendLog("generate finished.");
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {           
@@ -86,13 +87,13 @@ namespace Game.Instances.Map
         {
             var dataAnalyzer = new MapStuffDataAnalyzer(_map.StuffGenerationProperty);
 
-            Debug.Log("start analysis");
+            LogUI.AppendLog("start analysis");
 
             var stuffObjData = dataAnalyzer.Analysis(terrain);
 
             yield return new WaitUntil(dataAnalyzer.Finished);
 
-            Debug.Log("finish analysis");
+            LogUI.AppendLog("finish analysis");
 
             dataAnalyzer.PrintDistributionDiagram();
 
