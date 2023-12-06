@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86855dae0e20896479e9ba2699c45b47, type: 3}
-  m_Name: Testing Map
+  m_Name: Medieval Town
   m_EditorClassIdentifier: 
   _basicProperty:
     _size_x: 15
