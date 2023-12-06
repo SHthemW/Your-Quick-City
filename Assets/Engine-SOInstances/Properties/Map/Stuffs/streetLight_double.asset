@@ -16,7 +16,7 @@ MonoBehaviour:
   _maxGenerateNum: 200
   _minGenerateDensity: 5
   _maxGenerateDensity: 8
-  _directionalGenerate: 2
+  _directionalGenerate: 1
   _minRotationOffset: 90
   _maxRotationOffset: 90
   _minGenerateSpacing: 16

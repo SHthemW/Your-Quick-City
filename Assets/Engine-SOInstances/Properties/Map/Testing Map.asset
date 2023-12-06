@@ -29,7 +29,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: a9b144cfc4c8c8f479d62ae03b94b4fe, type: 2}
     - {fileID: 11400000, guid: 3d83d457e51bc4c46928bcc5e3f60d4d, type: 2}
   _stuffGenerationProperty:
-    _stuffGenerateAccuracy: 8
+    _stuffGenerateAccuracy: 6
     _stuffDistributeDiagramResolution: 50
     _detectorSettings:
       _maxDistanceStandard: 50
