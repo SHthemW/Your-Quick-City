@@ -28,7 +28,7 @@ namespace Yours.QuickCity.Internal
             "Normal - 常规 \n" +
             "ReplaceExists - 生成时允许替换已有的建筑物 \n" +
             "Force - 强制生成, 不执行其它检查. 该选项保证地图上一定会出现指定数量的该结构")]
-        private StructureGeneratePriority _generatePriority;
+        private StructureGeneratePriority _generatePriority; 
 
         /*
          *  functions

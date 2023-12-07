@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Yours.QuickCity.Internal;
 
-namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.Properties $$ Interfaces.
+namespace Yours.QuickCity //TODO: replacement position of Game.General.Properties $$ Interfaces.
 {
     [Serializable]
     internal struct MapBasicProperty
@@ -16,7 +17,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
         [SerializeField]
         private float _tileUnitSize;
 
-        internal int Size_X
+        internal readonly int Size_X
         {
             get
             {
@@ -25,7 +26,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
                 return _size_x;
             }
         }
-        internal int Size_Y
+        internal readonly int Size_Y
         {
             get
             {
@@ -34,7 +35,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
                 return _size_y;
             }
         }
-        internal float TileUnitSize
+        internal readonly float TileUnitSize
         {
             get
             {
@@ -43,7 +44,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
                 return _tileUnitSize;
             }
         }
-        internal int TotalNodeNum => Size_X * Size_Y;       
+        internal readonly int TotalNodeNum => Size_X * Size_Y;       
     }
 
     [Serializable]
@@ -126,7 +127,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
     }
 }
 
-namespace Yours.QuickCity.Internal
+namespace Yours.QuickCity
 {
     internal interface IMap
     {
