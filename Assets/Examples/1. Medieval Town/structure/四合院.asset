@@ -77,4 +77,4 @@ MonoBehaviour:
         type: 3}
   _closedNodeNum: 1
   _generateNumber: 3
-  _forceGenerate: 1
+  _generatePriority: 1
