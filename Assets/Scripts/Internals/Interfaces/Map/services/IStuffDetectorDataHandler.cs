@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    public interface IStuffDetectorDataHandler
+    internal interface IStuffDetectorDataHandler
     {
         List<IMapTerrainDetector> Detectors { get; }
     }

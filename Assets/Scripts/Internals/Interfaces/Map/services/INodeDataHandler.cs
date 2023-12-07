@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [Serializable]
-    public sealed class MapDiagramNode : INodeDataHandler
+    internal sealed class MapDiagramNode : INodeDataHandler
     {
         [SerializeField]
         [Tooltip("该节点相对于原点(左下角)的坐标.")]
@@ -14,16 +14,16 @@ namespace Yours.QuickCity.Internal
         private MapDiagramNodeData _data;
 
         // properties
-        public Coord Coordinate 
+        internal Coord Coordinate 
         { 
             get => _coordinate; 
             set => _coordinate = value; 
         }      
-        public MapDiagramNodeData NodeData => _data;
-        public bool IsObstacle => _data.NodeObj != null;
+        internal MapDiagramNodeData NodeData => _data;
+        internal bool IsObstacle => _data.NodeObj != null;
 
         // runtime setters
-        public void PlaceObstacle(GameObject obstacle)
+        internal void PlaceObstacle(GameObject obstacle)
         {
             var temp = _data;
             _data = new(temp.Direction, obstacle);
@@ -38,22 +38,22 @@ namespace Yours.QuickCity.Internal
     }
 
     [Serializable]
-    public struct MapDiagramNodeData
+    internal struct MapDiagramNodeData
     {
         [field: SerializeField]
-        public Direction Direction { get; private set; }
+        internal Direction Direction { get; private set; }
 
         [field: SerializeField]
         [Tooltip("该节点应该生成的Object.")]
-        public GameObject NodeObj { get; private set; }
+        internal GameObject NodeObj { get; private set; }
 
-        public MapDiagramNodeData(Direction direction, GameObject nodeObj)
+        internal MapDiagramNodeData(Direction direction, GameObject nodeObj)
         {
             Direction = direction;
             NodeObj = nodeObj;
         }
     }
-    public enum Direction { Random = 0, Up, Down, Left, Right }
+    internal enum Direction { Random = 0, Up, Down, Left, Right }
 }
 
 namespace Yours.QuickCity.Internal
@@ -61,7 +61,7 @@ namespace Yours.QuickCity.Internal
     /// <summary>
     /// data setter interface of <see cref="MapDiagramNode"/>
     /// </summary>
-    public interface INodeDataHandler
+    internal interface INodeDataHandler
     {
         MapDiagramNodeData Data { get; set; }
     }

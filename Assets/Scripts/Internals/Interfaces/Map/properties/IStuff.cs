@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    public interface IStuff
+    internal interface IStuff
     {
         GameObject Obj { get; }
 

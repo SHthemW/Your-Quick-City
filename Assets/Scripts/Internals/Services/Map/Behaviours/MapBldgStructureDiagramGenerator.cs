@@ -4,21 +4,21 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    public sealed class MapBldgStructureDiagramGenerator
+    internal sealed class MapBldgStructureDiagramGenerator
     {
         private readonly MapStructureGenerationProperty _properties;
 
         private Dictionary<Coord, MapDiagramNodeData> _finalStructureDiagram { get; set; } = new();
 
         /*
-         *  public:
+         *  internal:
          */
 
-        public MapBldgStructureDiagramGenerator(MapStructureGenerationProperty properties)
+        internal MapBldgStructureDiagramGenerator(MapStructureGenerationProperty properties)
         {
             _properties = properties;
         }
-        public void GenerateOnDiagram(MapDiagram diagram)
+        internal void GenerateOnDiagram(MapDiagram diagram)
         {
             foreach (var structure in _properties.StructureList)
             {

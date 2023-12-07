@@ -3,7 +3,7 @@
 namespace Yours.QuickCity.Internal
 {
     [CreateAssetMenu(fileName = "New Map", menuName = "Data/Map")]
-    public sealed class MapData_SO : ScriptableObject, IMap
+    internal sealed class MapData_SO : ScriptableObject, IMap
     {
         [Space, SerializeField]
         private MapBasicProperty _basicProperty;

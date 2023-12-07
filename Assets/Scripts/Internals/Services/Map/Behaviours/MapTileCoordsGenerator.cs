@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    public sealed class MapTileCoordsGenerator
+    internal sealed class MapTileCoordsGenerator
     {
         private readonly MapBasicProperty _basicProp;
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
         private const float HANGING_HEIGHT = 1;
 
-        public MapTileCoordsGenerator(MapBasicProperty basicProp, MapStuffGenerationProperty stuffProp)
+        internal MapTileCoordsGenerator(MapBasicProperty basicProp, MapStuffGenerationProperty stuffProp)
         {
             _basicProp = basicProp;
             _stuffGenProp = stuffProp;
         }
-        public Vector3[] GenerateCoords(MapDiagram map)
+        internal Vector3[] GenerateCoords(MapDiagram map)
         {
             var offsets = GeneratePositionOffsets();
             List<Vector3> result = new();
@@ -33,7 +33,7 @@ namespace Yours.QuickCity.Internal
 
             return result.ToArray();
         }
-        public void PrintDebugInfo()
+        internal void PrintDebugInfo()
         {
             string offsetMsg = "";
 

@@ -4,7 +4,7 @@ using System;
 namespace Yours.QuickCity.Internal
 {
     [CreateAssetMenu(fileName = "New Stuff", menuName = "Data/Map Stuff")]
-    public sealed class StuffData_SO : ScriptableObject, IStuff
+    internal sealed class StuffData_SO : ScriptableObject, IStuff
     {
         [Header("Basic")]
 
@@ -84,7 +84,7 @@ namespace Yours.QuickCity.Internal
         }       
     }
 
-    public enum DirectionalGenerateType
+    internal enum DirectionalGenerateType
     {
         None = 0, Part, Full
     }

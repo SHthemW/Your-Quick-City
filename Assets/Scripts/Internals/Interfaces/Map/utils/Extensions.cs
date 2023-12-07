@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    public static class Extensions
+    internal static class Extensions
     {
-        public static Direction RandomValue(this Direction direction)
+        internal static Direction RandomValue(this Direction direction)
         {
             if (direction != Direction.Random)
                 return direction;
@@ -23,7 +23,7 @@ namespace Yours.QuickCity.Internal
                 _ => throw new NotImplementedException($"[Enum] 枚举 {nameof(Direction)} 的值 {seed} 未定义.")
             };
         }
-        public static Quaternion ToRotation(this Direction direction)
+        internal static Quaternion ToRotation(this Direction direction)
         {
             if (direction == Direction.Random)
                 direction = direction.RandomValue();
@@ -39,7 +39,7 @@ namespace Yours.QuickCity.Internal
             };
         }
 
-        public static bool IsNSWE(this Vector3 direction)
+        internal static bool IsNSWE(this Vector3 direction)
         {
             return direction == Vector3.forward || direction == Vector3.back
                    || direction == Vector3.left || direction == Vector3.right;

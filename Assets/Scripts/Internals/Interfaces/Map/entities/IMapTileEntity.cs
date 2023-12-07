@@ -4,15 +4,15 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [Serializable]
-    public struct Coord
+    internal struct Coord
     {
         [field: SerializeField]
-        public int x { get; private set; }
+        internal int x { get; private set; }
 
         [field: SerializeField]
-        public int y { get; private set; }
+        internal int y { get; private set; }
 
-        public Coord(int x, int y)
+        internal Coord(int x, int y)
         {
             this.x = x;
             this.y = y;
@@ -47,12 +47,12 @@ namespace Yours.QuickCity.Internal
         }
     }
 
-    public readonly struct TileProperty
+    internal readonly struct TileProperty
     {
-        public Vector3 ActualPosition { get; }
-        public Direction Direction { get; }
+        internal Vector3 ActualPosition { get; }
+        internal Direction Direction { get; }
 
-        public TileProperty(Vector3 actualCoord, Direction direction)
+        internal TileProperty(Vector3 actualCoord, Direction direction)
         {
             ActualPosition = actualCoord;
             Direction = direction;
@@ -62,7 +62,7 @@ namespace Yours.QuickCity.Internal
 
 namespace Yours.QuickCity.Internal
 {
-    public interface IMapTileEntity : IGameObject
+    internal interface IMapTileEntity : IGameObject
     {
         TileProperty Property { get; }
 

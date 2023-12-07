@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    public sealed class MapStuffDataAnalyzer
+    internal sealed class MapStuffDataAnalyzer
     {
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
@@ -14,19 +14,19 @@ namespace Yours.QuickCity.Internal
         private int _currentAnalysisNum = 0;
         private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
 
-        public MapStuffDataAnalyzer(MapStuffGenerationProperty stuffGenProp)
+        internal MapStuffDataAnalyzer(MapStuffGenerationProperty stuffGenProp)
         {
             _stuffGenProp = stuffGenProp;
         }
 
-        public bool Finished() => _currentAnalysisNum >= _targetAnalysisNum;
+        internal bool Finished() => _currentAnalysisNum >= _targetAnalysisNum;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        public Dictionary<(Vector3, Vector3), IStuff> Analysis(in IMapTerrainDetector[] detectors)
+        internal Dictionary<(Vector3, Vector3), IStuff> Analysis(in IMapTerrainDetector[] detectors)
         {
             _targetAnalysisNum = detectors.Length;
 
@@ -97,7 +97,7 @@ namespace Yours.QuickCity.Internal
             return analysisResult;
         }
 
-        public void PrintDistributionDiagram()
+        internal void PrintDistributionDiagram()
         {
             StringBuilder content = new();
 

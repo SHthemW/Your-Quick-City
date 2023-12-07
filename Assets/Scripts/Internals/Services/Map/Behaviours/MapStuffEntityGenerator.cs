@@ -4,16 +4,16 @@ using System;
 
 namespace Yours.QuickCity.Internal
 {
-    public sealed class MapStuffEntityGenerator
+    internal sealed class MapStuffEntityGenerator
     {
         private readonly Transform _generateParent;
 
-        public MapStuffEntityGenerator(Transform generateParent)
+        internal MapStuffEntityGenerator(Transform generateParent)
         {
             _generateParent = generateParent != null ? generateParent : throw new ArgumentNullException(nameof(generateParent));
         }
 
-        public void GenerateStuffs(Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> stuffInfo)
+        internal void GenerateStuffs(Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> stuffInfo)
         {
             foreach (var info in stuffInfo)
             {

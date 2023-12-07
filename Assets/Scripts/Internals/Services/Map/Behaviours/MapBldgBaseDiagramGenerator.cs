@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    public sealed class MapBldgBaseDiagramGenerator
+    internal sealed class MapBldgBaseDiagramGenerator
     {
         private readonly MapBasicProperty _basicProperty;
         private readonly MapBaseGenerationProperty _baseGenProperty;
@@ -11,15 +11,15 @@ namespace Yours.QuickCity.Internal
         private List<Coord> _allTileCoords { get; set; } = new();
 
         /*
-         *  public:
+         *  internal:
          */
 
-        public MapBldgBaseDiagramGenerator(MapBasicProperty basicProperty, MapBaseGenerationProperty entityProperty)
+        internal MapBldgBaseDiagramGenerator(MapBasicProperty basicProperty, MapBaseGenerationProperty entityProperty)
         {
             _basicProperty  = basicProperty;
             _baseGenProperty = entityProperty;
         }
-        public void GenerateOnDiagram(MapDiagram diagram)
+        internal void GenerateOnDiagram(MapDiagram diagram)
         {
             var randomCoords = GenerateRandomCoords();
 

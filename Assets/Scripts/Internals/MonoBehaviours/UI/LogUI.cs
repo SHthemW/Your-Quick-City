@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 namespace Yours.QuickCity.Internal
 {
-    public enum LogLevel
+    internal enum LogLevel
     {
         Normal, Done, Error
     }
 
-    public sealed class LogUI : MonoBehaviour
+    internal sealed class LogUI : MonoBehaviour
     {
         [field: SerializeField]
         private Text LogText { get; set; }
@@ -20,7 +20,7 @@ namespace Yours.QuickCity.Internal
         }
 
         private static LogUI _instance;
-        public static void Log(string message, LogLevel level = LogLevel.Normal)
+        internal static void Log(string message, LogLevel level = LogLevel.Normal)
         {
             _instance.LogText.text = message;
 
@@ -33,7 +33,7 @@ namespace Yours.QuickCity.Internal
                 _ => throw new NotImplementedException(),
             };
         }
-        public static void AppendLog(string message)
+        internal static void AppendLog(string message)
         {
             _instance.LogText.text += "\n" + message;
         }

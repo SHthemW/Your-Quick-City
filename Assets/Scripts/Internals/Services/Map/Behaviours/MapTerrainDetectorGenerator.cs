@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    public sealed class MapTerrainDetectorGenerator
+    internal sealed class MapTerrainDetectorGenerator
     {     
         private readonly IMapHandler _handler;
         private readonly MapUtilObjectConf _conf;
@@ -14,17 +14,17 @@ namespace Yours.QuickCity.Internal
 
         private int _targetGenerateNum  = 1;
         private int _currentGenerateNum = 0;
-        public bool GenerateIsFinished() 
+        internal bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
-        public MapTerrainDetectorGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
+        internal MapTerrainDetectorGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
         {          
             _map = map;
             _conf = conf;
             _stuffGenProp = stuffProp;
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
-        public IMapTerrainDetector[] GenerateDetectors(Vector3[] coords)
+        internal IMapTerrainDetector[] GenerateDetectors(Vector3[] coords)
         {
             List<IMapTerrainDetector> detectors = new();
             _targetGenerateNum = coords.Length;

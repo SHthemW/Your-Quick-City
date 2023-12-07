@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    public interface IStructure
+    internal interface IStructure
     {
         List<MapDiagramNode> StructureDiagram { get; }
         /// <summary>
@@ -23,7 +23,7 @@ namespace Yours.QuickCity.Internal
         string Name { get; }
     }
 
-    public enum StructureGeneratePriority
+    internal enum StructureGeneratePriority
     {
         Normal, ReplaceExists, Force
     }

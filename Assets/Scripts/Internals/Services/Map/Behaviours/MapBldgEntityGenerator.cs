@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    public sealed class MapBldgEntityGenerator
+    internal sealed class MapBldgEntityGenerator
     {
         private readonly MapBasicProperty _basicProperty;
         private readonly MapBaseGenerationProperty _baseGenProperty;
@@ -13,13 +13,13 @@ namespace Yours.QuickCity.Internal
         private int _generatedCount;
         private int _targetGenerateCount;
 
-        public MapBldgEntityGenerator(MapBasicProperty basicProp, MapBaseGenerationProperty entityProp, IMapHandler controller)
+        internal MapBldgEntityGenerator(MapBasicProperty basicProp, MapBaseGenerationProperty entityProp, IMapHandler controller)
         {
             _basicProperty = basicProp;
             _baseGenProperty = entityProp;
             _controller = controller ?? throw new ArgumentNullException(nameof(controller));
         }
-        public void GenerateByDiagram(MapDiagram diagram)
+        internal void GenerateByDiagram(MapDiagram diagram)
         {
             _targetGenerateCount = diagram.TotalNodeNum;
 
@@ -33,7 +33,7 @@ namespace Yours.QuickCity.Internal
                 _generatedCount++;
             }
         }
-        public bool GenerateIsFinished()
+        internal bool GenerateIsFinished()
         {
             return _generatedCount >= _targetGenerateCount;
         }

@@ -5,12 +5,12 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [Serializable]
-    public struct TerrainDetectorProperty
+    internal struct TerrainDetectorProperty
     {
         [SerializeField]
         [Tooltip("探测器能够区分的最大距离. 比此值更远处的目标将不再被区分. \n[性能开销: 无影响]")]
         private float _maxDistanceStandard;
-        public readonly float MaxDistanceStandard
+        internal readonly float MaxDistanceStandard
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Yours.QuickCity.Internal
         [SerializeField]
         [Tooltip("探测器探测的方向数. 更高的值将增加地形图的生成精度. 程序会根据方向数量自动计算每个探测方向. \n[性能开销: 线性]")]
         private int _detectDirectionNum;
-        public readonly Vector3[] DetectDirections
+        internal readonly Vector3[] DetectDirections
         {
             get
             {
@@ -41,7 +41,7 @@ namespace Yours.QuickCity.Internal
         private readonly struct DetectDirectionMgr
         {
             private static readonly Dictionary<int, Vector3[]> _directions = new();            
-            public static Vector3[] GetDirection(int dirNum)
+            internal static Vector3[] GetDirection(int dirNum)
             {
                 if (_directions.ContainsKey(dirNum))
                     return _directions[dirNum];
@@ -72,7 +72,7 @@ namespace Yours.QuickCity.Internal
 
 namespace Yours.QuickCity.Internal
 {
-    public interface IMapTerrainDetector
+    internal interface IMapTerrainDetector
     {
         // getters
 

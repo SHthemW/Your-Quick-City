@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    public static class MapUtils
+    internal static class MapUtils
     {
         /// <summary>
         /// shuffle input data randomly, then return it.
@@ -42,7 +42,7 @@ namespace Yours.QuickCity.Internal
         /// <param name="percentVal">0(green) - 1(red).</param>
         /// <returns> color between red and green.<br/>
         /// others probably means invalid value. </returns>
-        public static Color GetDebugColor(float percentVal)
+        internal static Color GetDebugColor(float percentVal)
         {
             if (percentVal < 0)
                 return Color.black;

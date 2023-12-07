@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.Properties $$ Interfaces.
 {
     [Serializable]
-    public struct MapBasicProperty
+    internal struct MapBasicProperty
     {
         [SerializeField]
         private int _size_x;
@@ -16,7 +16,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
         [SerializeField]
         private float _tileUnitSize;
 
-        public int Size_X
+        internal int Size_X
         {
             get
             {
@@ -25,7 +25,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
                 return _size_x;
             }
         }
-        public int Size_Y
+        internal int Size_Y
         {
             get
             {
@@ -34,7 +34,7 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
                 return _size_y;
             }
         }
-        public float TileUnitSize
+        internal float TileUnitSize
         {
             get
             {
@@ -43,11 +43,11 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
                 return _tileUnitSize;
             }
         }
-        public int TotalNodeNum => Size_X * Size_Y;       
+        internal int TotalNodeNum => Size_X * Size_Y;       
     }
 
     [Serializable]
-    public struct MapBaseGenerationProperty
+    internal struct MapBaseGenerationProperty
     {
         [Header("Property")]
 
@@ -62,19 +62,19 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
         [SerializeField]
         private GameObject[] _obstacleObjs;
 
-        public float ObstaclePercent => _obstaclePercent;
-        public GameObject GetRandomFloor()
+        internal float ObstaclePercent => _obstaclePercent;
+        internal GameObject GetRandomFloor()
         {
             return _floorObjs[UnityEngine.Random.Range(0, _floorObjs.Length)];
         }
-        public GameObject GetRandomObstacle()
+        internal GameObject GetRandomObstacle()
         {
             return _obstacleObjs[UnityEngine.Random.Range(0, _obstacleObjs.Length)];
         }    
     }
 
     [Serializable]
-    public struct MapStructureGenerationProperty
+    internal struct MapStructureGenerationProperty
     {
         [Header("Properties")]
 
@@ -86,19 +86,19 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
         [SerializeField]
         private List<StructureData_SO> _structureList;
 
-        public List<IStructure> StructureList => _structureList.ConvertAll(new Converter<StructureData_SO, IStructure>(i => i));
-        public bool EnableStructureDebug => _enableStructureDebug;
+        internal List<IStructure> StructureList => _structureList.ConvertAll(new Converter<StructureData_SO, IStructure>(i => i));
+        internal bool EnableStructureDebug => _enableStructureDebug;
     }
 
     [Serializable]
-    public struct MapStuffGenerationProperty
+    internal struct MapStuffGenerationProperty
     {
         [Header("Property")]
 
         [SerializeField]
         [Tooltip("决定Stuff生成的地形图的分辨率, 不建议大于10. \n[性能开销: 指数]")]
         private int _stuffGenerateAccuracy;
-        public int StuffGenerateAccuracy
+        internal int StuffGenerateAccuracy
         {
             get
             {
@@ -110,25 +110,25 @@ namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.
 
         [SerializeField]
         private float _stuffDistributeDiagramResolution;
-        public readonly float StuffDistributeDiagramResolution
+        internal readonly float StuffDistributeDiagramResolution
             => _stuffDistributeDiagramResolution;
 
         [Space, SerializeField]
         [Tooltip("地形探测器设置. 本设置将决定与地形图生成相关的属性.")]
         private TerrainDetectorProperty _detectorSettings;
-        public TerrainDetectorProperty DetectorSettings => _detectorSettings;
+        internal TerrainDetectorProperty DetectorSettings => _detectorSettings;
 
         [Header("Generate")]
 
         [SerializeField]
         private List<StuffData_SO> stuffs;
-        public List<IStuff> Stuffs => stuffs.ConvertAll(new Converter<StuffData_SO, IStuff>(s => s));
+        internal List<IStuff> Stuffs => stuffs.ConvertAll(new Converter<StuffData_SO, IStuff>(s => s));
     }
 }
 
 namespace Yours.QuickCity.Internal
 {
-    public interface IMap
+    internal interface IMap
     {
         MapBasicProperty BasicProperty { get; }
         MapBaseGenerationProperty BaseGenerationProperty { get; }

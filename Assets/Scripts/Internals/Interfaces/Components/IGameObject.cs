@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    public interface IGameObject
+    internal interface IGameObject
     {
         GameObject gameObject { get; }
         Transform transform => gameObject.transform;
