@@ -43,4 +43,4 @@ MonoBehaviour:
         type: 3}
   _closedNodeNum: 0
   _generateNumber: 3
-  _forceGenerate: 0
+  _generatePriority: 2
