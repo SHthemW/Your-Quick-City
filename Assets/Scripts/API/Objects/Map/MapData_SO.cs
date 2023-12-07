@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Yours.QuickCity.Internal
 {
@@ -6,10 +7,10 @@ namespace Yours.QuickCity.Internal
     internal sealed class MapData_SO : ScriptableObject, IMap
     {
         [Space, SerializeField]
-        private MapBasicProperty _basicProperty;
-    
+        private MapSizeProperty _size;
+
         [Space, SerializeField]
-        private MapBaseGenerationProperty _baseGenerationProperty;
+        private MapBuildingGenerationProperty _buildingGenerationProperty;
 
         [Space, SerializeField]
         private MapStructureGenerationProperty _structureGenerationProperty;
@@ -21,9 +22,9 @@ namespace Yours.QuickCity.Internal
          *  implements
          */
 
-        public MapBasicProperty BasicProperty => _basicProperty;
-        public MapBaseGenerationProperty BaseGenerationProperty => _baseGenerationProperty;
+        public MapSizeProperty BasicProperty => _size;
+        public MapBuildingGenerationProperty  BuildingGenerationProperty  => _buildingGenerationProperty;
         public MapStructureGenerationProperty StructureGenerationProperty => _structureGenerationProperty;
-        public MapStuffGenerationProperty StuffGenerationProperty => _stuffGenerationProperty;
+        public MapStuffGenerationProperty     StuffGenerationProperty     => _stuffGenerationProperty;
     }
 }

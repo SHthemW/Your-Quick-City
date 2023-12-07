@@ -55,13 +55,13 @@ namespace Yours.QuickCity.Internal
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {           
-            new MapBldgBaseDiagramGenerator(_map.BasicProperty, _map.BaseGenerationProperty).GenerateOnDiagram(map);
+            new MapBldgBaseDiagramGenerator(_map.BasicProperty, _map.BuildingGenerationProperty).GenerateOnDiagram(map);
 
             new MapBldgStructureDiagramGenerator(_map.StructureGenerationProperty).GenerateOnDiagram(map);
 
             map.PrintDebugGraph();
 
-            var entityGenerator = new MapBldgEntityGenerator(_map.BasicProperty, _map.BaseGenerationProperty, GetComponent<IMapHandler>());
+            var entityGenerator = new MapBldgEntityGenerator(_map.BasicProperty, _map.BuildingGenerationProperty, GetComponent<IMapHandler>());
             entityGenerator.GenerateByDiagram(map);
 
             yield return new WaitUntil(entityGenerator.GenerateIsFinished);

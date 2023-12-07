@@ -4,8 +4,8 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapBldgBaseDiagramGenerator
     {
-        private readonly MapBasicProperty _basicProperty;
-        private readonly MapBaseGenerationProperty _baseGenProperty;
+        private readonly MapSizeProperty _basicProperty;
+        private readonly MapBuildingGenerationProperty _baseGenProperty;
 
         private int _obstacleNum => (int)(_basicProperty.TotalNodeNum * _baseGenProperty.ObstaclePercent);
         private List<Coord> _allTileCoords { get; set; } = new();
@@ -14,7 +14,7 @@ namespace Yours.QuickCity.Internal
          *  internal:
          */
 
-        internal MapBldgBaseDiagramGenerator(MapBasicProperty basicProperty, MapBaseGenerationProperty entityProperty)
+        internal MapBldgBaseDiagramGenerator(MapSizeProperty basicProperty, MapBuildingGenerationProperty entityProperty)
         {
             _basicProperty  = basicProperty;
             _baseGenProperty = entityProperty;

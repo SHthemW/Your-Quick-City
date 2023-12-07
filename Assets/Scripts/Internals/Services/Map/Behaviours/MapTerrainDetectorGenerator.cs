@@ -9,7 +9,7 @@ namespace Yours.QuickCity.Internal
         private readonly IMapHandler _handler;
         private readonly MapUtilObjectConf _conf;
 
-        private readonly MapBasicProperty _map;      
+        private readonly MapSizeProperty _map;      
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
         private int _targetGenerateNum  = 1;
@@ -17,7 +17,7 @@ namespace Yours.QuickCity.Internal
         internal bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
-        internal MapTerrainDetectorGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
+        internal MapTerrainDetectorGenerator(MapSizeProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
         {          
             _map = map;
             _conf = conf;

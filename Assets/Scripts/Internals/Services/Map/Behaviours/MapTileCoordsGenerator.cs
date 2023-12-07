@@ -5,12 +5,12 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapTileCoordsGenerator
     {
-        private readonly MapBasicProperty _basicProp;
+        private readonly MapSizeProperty _basicProp;
         private readonly MapStuffGenerationProperty _stuffGenProp;
 
         private const float HANGING_HEIGHT = 1;
 
-        internal MapTileCoordsGenerator(MapBasicProperty basicProp, MapStuffGenerationProperty stuffProp)
+        internal MapTileCoordsGenerator(MapSizeProperty basicProp, MapStuffGenerationProperty stuffProp)
         {
             _basicProp = basicProp;
             _stuffGenProp = stuffProp;

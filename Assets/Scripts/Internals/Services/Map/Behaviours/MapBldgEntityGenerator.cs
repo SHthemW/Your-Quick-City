@@ -4,8 +4,8 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapBldgEntityGenerator
     {
-        private readonly MapBasicProperty _basicProperty;
-        private readonly MapBaseGenerationProperty _baseGenProperty;
+        private readonly MapSizeProperty _basicProperty;
+        private readonly MapBuildingGenerationProperty _baseGenProperty;
         private readonly IMapHandler _controller;
 
         private const Direction FLOOR_DEFAULT_DIRECTION = Direction.Up;
@@ -13,7 +13,7 @@ namespace Yours.QuickCity.Internal
         private int _generatedCount;
         private int _targetGenerateCount;
 
-        internal MapBldgEntityGenerator(MapBasicProperty basicProp, MapBaseGenerationProperty entityProp, IMapHandler controller)
+        internal MapBldgEntityGenerator(MapSizeProperty basicProp, MapBuildingGenerationProperty entityProp, IMapHandler controller)
         {
             _basicProperty = basicProp;
             _baseGenProperty = entityProp;

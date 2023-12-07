@@ -40,7 +40,7 @@ namespace Yours.QuickCity.Internal
         internal Coord CenterPoint => new(SizeX / 2, SizeY / 2);
 
         // readonly properties
-        private readonly MapBasicProperty _basicProperty;
+        private readonly MapSizeProperty _basicProperty;
 
         /*
          *  constructors
@@ -48,7 +48,7 @@ namespace Yours.QuickCity.Internal
          *  methods that used to init the diagram.
          */
 
-        internal MapDiagram(MapBasicProperty basicProperty)
+        internal MapDiagram(MapSizeProperty basicProperty)
         {
             _basicProperty = basicProperty;
 

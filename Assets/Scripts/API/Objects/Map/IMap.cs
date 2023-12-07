@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Yours.QuickCity.Internal;
 
-namespace Yours.QuickCity //TODO: replacement position of Game.General.Properties $$ Interfaces.
+namespace Yours.QuickCity
 {
     [Serializable]
-    internal struct MapBasicProperty
+    internal struct MapSizeProperty
     {
         [SerializeField]
         private int _size_x;
@@ -48,7 +48,7 @@ namespace Yours.QuickCity //TODO: replacement position of Game.General.Propertie
     }
 
     [Serializable]
-    internal struct MapBaseGenerationProperty
+    internal struct MapBuildingGenerationProperty
     {
         [Header("Property")]
 
@@ -131,8 +131,8 @@ namespace Yours.QuickCity
 {
     internal interface IMap
     {
-        MapBasicProperty BasicProperty { get; }
-        MapBaseGenerationProperty BaseGenerationProperty { get; }
+        MapSizeProperty BasicProperty { get; }
+        MapBuildingGenerationProperty BuildingGenerationProperty { get; }
         MapStructureGenerationProperty StructureGenerationProperty { get; }
         MapStuffGenerationProperty StuffGenerationProperty { get; }
     }

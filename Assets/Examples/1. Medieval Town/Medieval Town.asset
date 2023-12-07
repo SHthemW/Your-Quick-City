@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86855dae0e20896479e9ba2699c45b47, type: 3}
   m_Name: Medieval Town
   m_EditorClassIdentifier: 
-  _basicProperty:
+  _size:
     _size_x: 15
     _size_y: 15
     _tileUnitSize: 16
-  _baseGenerationProperty:
+  _buildingGenerationProperty:
     _obstaclePercent: 0.25
     _floorObjs:
     - {fileID: 6779773313222493515, guid: 62e90e4c0779e724ba896bf8dc9f2cf2, type: 3}
