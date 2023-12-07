@@ -1,8 +1,6 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game.Instances.Map.Entities
+namespace Yours.QuickCity.Internal
 {
     internal sealed class MapGroundTile : MapTileEntity
     {

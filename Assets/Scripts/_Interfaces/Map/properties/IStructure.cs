@@ -1,7 +1,6 @@
-﻿using Game.General.Properties;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     public interface IStructure
     {

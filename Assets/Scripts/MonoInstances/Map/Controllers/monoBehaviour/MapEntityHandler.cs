@@ -1,9 +1,6 @@
-﻿using Game.General.Interfaces;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game.Instances.Map
+namespace Yours.QuickCity.Internal
 {
     internal sealed class MapEntityHandler : MonoBehaviour, IMapHandler
     {

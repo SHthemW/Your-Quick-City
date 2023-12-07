@@ -1,8 +1,6 @@
-﻿using Game.General.Properties;
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 
-namespace Game.Ctrller.Map
+namespace Yours.QuickCity.Internal
 {
     public static class MapUtils
     {

@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     public interface IGameObject
     {

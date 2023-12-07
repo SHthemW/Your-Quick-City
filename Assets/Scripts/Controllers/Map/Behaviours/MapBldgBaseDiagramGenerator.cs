@@ -1,11 +1,7 @@
-﻿using Game.General.Properties;
-using Game.General.Interfaces;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-namespace Game.Ctrller.Map 
-{       
+namespace Yours.QuickCity.Internal
+{
     public sealed class MapBldgBaseDiagramGenerator
     {
         private readonly MapBasicProperty _basicProperty;

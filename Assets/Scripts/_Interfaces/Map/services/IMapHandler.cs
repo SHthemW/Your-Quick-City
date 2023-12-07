@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     public interface IMapHandler
     {

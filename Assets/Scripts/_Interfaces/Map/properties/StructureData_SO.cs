@@ -1,9 +1,8 @@
-﻿using Game.General.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Game.General.Properties
+namespace Yours.QuickCity.Internal
 {
     [CreateAssetMenu(fileName = "New Structure", menuName = "Data/MapStructure")]
     public sealed class StructureData_SO : ScriptableObject, IStructure

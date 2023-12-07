@@ -1,8 +1,7 @@
-﻿using Game.General.Interfaces;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
-namespace Game.General.Properties
+namespace Yours.QuickCity.Internal
 {
     [CreateAssetMenu(fileName = "New Stuff", menuName = "Data/Map Stuff")]
     public sealed class StuffData_SO : ScriptableObject, IStuff

@@ -1,10 +1,8 @@
-﻿using Game.General.Properties;
-using Game.General.Utilities;
+﻿using Yours.QuickCity.Internal;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     public interface IStuff
     {

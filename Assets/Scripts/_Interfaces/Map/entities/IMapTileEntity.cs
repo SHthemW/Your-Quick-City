@@ -1,8 +1,7 @@
-﻿using Game.General.Properties;
-using System;
+﻿using System;
 using UnityEngine;
 
-namespace Game.General.Properties
+namespace Yours.QuickCity.Internal
 {
     [Serializable]
     public struct Coord
@@ -61,7 +60,7 @@ namespace Game.General.Properties
     }
 }
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     public interface IMapTileEntity : IGameObject
     {

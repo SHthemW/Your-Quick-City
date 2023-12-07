@@ -1,8 +1,6 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game.Ctrller.Map
+namespace Yours.QuickCity.Internal
 {
     [CreateAssetMenu(fileName = "New Map", menuName = "Data/Map")]
     public sealed class MapData_SO : ScriptableObject, IMap

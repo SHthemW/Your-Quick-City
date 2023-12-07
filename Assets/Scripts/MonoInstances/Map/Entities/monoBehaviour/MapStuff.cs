@@ -1,8 +1,6 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game.Instances.Map
+namespace Yours.QuickCity.Internal
 {
     [RequireComponent(typeof(Collider))]
     internal sealed class MapStuff : MonoBehaviour, IMapStuffEntity

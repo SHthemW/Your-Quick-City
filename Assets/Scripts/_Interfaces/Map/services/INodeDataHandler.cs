@@ -1,9 +1,7 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using System;
+﻿using System;
 using UnityEngine;
 
-namespace Game.General.Properties
+namespace Yours.QuickCity.Internal
 {
     [Serializable]
     public sealed class MapDiagramNode : INodeDataHandler
@@ -58,7 +56,7 @@ namespace Game.General.Properties
     public enum Direction { Random = 0, Up, Down, Left, Right }
 }
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     /// <summary>
     /// data setter interface of <see cref="MapDiagramNode"/>

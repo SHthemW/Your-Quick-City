@@ -1,10 +1,7 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using Game.General.Utilities;
-using System;
+﻿using System;
 using UnityEngine;
 
-namespace Game.Instances.Map.Entities
+namespace Yours.QuickCity.Internal
 {
     [SelectionBase]
     internal abstract class MapTileEntity : MonoBehaviour, IMapTileEntity

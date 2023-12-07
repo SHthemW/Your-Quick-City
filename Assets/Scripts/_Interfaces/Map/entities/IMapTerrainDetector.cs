@@ -1,10 +1,8 @@
-﻿using Game.General.Properties;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.General.Properties
+namespace Yours.QuickCity.Internal
 {
     [Serializable]
     public struct TerrainDetectorProperty
@@ -72,7 +70,7 @@ namespace Game.General.Properties
     }
 }
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     public interface IMapTerrainDetector
     {

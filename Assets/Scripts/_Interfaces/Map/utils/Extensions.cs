@@ -1,8 +1,8 @@
-﻿using Game.General.Properties;
+﻿using Yours.QuickCity.Internal;
 using System;
 using UnityEngine;
 
-namespace Game.General.Utilities
+namespace Yours.QuickCity.Internal
 {
     public static class Extensions
     {

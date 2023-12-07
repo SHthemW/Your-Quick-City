@@ -1,8 +1,6 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using System;
+﻿using System;
 
-namespace Game.Ctrller.Map
+namespace Yours.QuickCity.Internal
 {
     public sealed class MapBldgEntityGenerator
     {

@@ -1,10 +1,8 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.General.Properties //TODO: replacement position of Game.General.Properties $$ Interfaces.
+namespace Yours.QuickCity.Internal //TODO: replacement position of Game.General.Properties $$ Interfaces.
 {
     [Serializable]
     public struct MapBasicProperty
@@ -128,7 +126,7 @@ namespace Game.General.Properties //TODO: replacement position of Game.General.P
     }
 }
 
-namespace Game.General.Interfaces
+namespace Yours.QuickCity.Internal
 {
     public interface IMap
     {

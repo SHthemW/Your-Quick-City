@@ -1,8 +1,7 @@
-﻿using Game.General.Properties;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Ctrller.Map
+namespace Yours.QuickCity.Internal
 {
     public sealed class MapDiagram
     {

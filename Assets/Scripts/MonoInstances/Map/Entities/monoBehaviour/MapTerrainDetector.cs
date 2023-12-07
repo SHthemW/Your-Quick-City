@@ -1,13 +1,9 @@
-﻿using Game.Ctrller.Map;
-using Game.General.Interfaces;
-using Game.General.Properties;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Game.Instances.Map.Entities
+namespace Yours.QuickCity.Internal
 {
     [SelectionBase, Serializable]
     internal sealed class MapTerrainDetector : MonoBehaviour, IMapTerrainDetector

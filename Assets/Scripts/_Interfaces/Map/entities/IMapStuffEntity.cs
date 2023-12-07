@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Game.General.Interfaces
+﻿namespace Yours.QuickCity.Internal
 {
     public interface IMapStuffEntity
     {

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Instances.UI
+namespace Yours.QuickCity.Internal
 {
     public enum LogLevel
     {

@@ -1,12 +1,8 @@
-﻿using Game.General.Interfaces;
-using Game.General.Properties;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Collections;
 
-namespace Game.Ctrller.Map
+namespace Yours.QuickCity.Internal
 {
     public sealed class MapStuffEntityGenerator
     {

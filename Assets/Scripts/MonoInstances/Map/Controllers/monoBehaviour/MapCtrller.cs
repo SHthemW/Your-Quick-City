@@ -1,10 +1,7 @@
-﻿using Game.Ctrller.Map;
-using Game.General.Interfaces;
-using Game.Instances.UI;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
-namespace Game.Instances.Map
+namespace Yours.QuickCity.Internal
 {
     internal sealed class MapCtrller : MonoBehaviour
     {

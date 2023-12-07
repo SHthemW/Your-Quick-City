@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Instances.Map.Entities
+namespace Yours.QuickCity.Internal
 {
     internal sealed class MapObstacleTile : MapTileEntity
     {
