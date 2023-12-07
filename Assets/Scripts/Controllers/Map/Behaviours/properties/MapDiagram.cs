@@ -243,7 +243,7 @@ namespace Game.Ctrller.Map
                 }
                 msg += "\n";
             }
-            Debug.Log("地形示意图: \n" + msg);
+            Debug.Log("地形示意图(z ↑ x →): \n" + msg);
 
             /*
              *  functions
