@@ -102,14 +102,18 @@ namespace Game.Ctrller.Map
             return true;        
 
             bool CanGenerateForcibly(Coord coord)
-            {
+            {                
                 if (diagram.JudgeCoordIfOutOfRange(coord))
                     return false;
 
-                if (!structure.ForceGenerate)
-                    return false;
+                else if(structure.GeneratePriority == StructureGeneratePriority.Force)
+                    return true;
 
-                return diagram[coord.x, coord.y].IsObstacle;
+                else if (structure.GeneratePriority == StructureGeneratePriority.ReplaceExists)
+                    return diagram[coord.x, coord.y].IsObstacle;
+
+                else 
+                    return false;
             }
         }
         private void WriteStructureToDiagram(IStructure structure, MapDiagram diagram)

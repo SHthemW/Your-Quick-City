@@ -17,10 +17,15 @@ namespace Game.General.Interfaces
         /// </summary>
         int GenerateNumber { get; }
         /// <summary>
-        /// when enable, the structure will replace the original structure during generation.
+        /// priority of structure generation. higher value means more mandatory generate.
         /// </summary>
-        bool ForceGenerate { get; }
+        StructureGeneratePriority GeneratePriority { get; }
 
         string Name { get; }
+    }
+
+    public enum StructureGeneratePriority
+    {
+        Normal, ReplaceExists, Force
     }
 }
