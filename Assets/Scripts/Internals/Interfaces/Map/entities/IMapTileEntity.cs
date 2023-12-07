@@ -66,6 +66,6 @@ namespace Yours.QuickCity.Internal
     {
         TileProperty Property { get; }
 
-        void Init(TileProperty properties, IMapHandler controller);
+        void Init(TileProperty properties, IMapObjParent controller);
     }
 }

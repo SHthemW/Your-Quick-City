@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapEntityHandler : MonoBehaviour, IMapHandler
+    internal sealed class MapEntityHandler : MonoBehaviour, IMapObjParent
     {
         [Header("Instance Conf")]
 
@@ -22,10 +22,10 @@ namespace Yours.QuickCity.Internal
          *  Implements
          */
 
-        Transform IMapHandler.GetFloorObjParent() => _floorObjParent;
-        Transform IMapHandler.GetObstacleObjParent() => _obstacleObjParent;
-        Transform IMapHandler.GetStuffDetectorParent() => _stuffDetectorParent;
-        Transform IMapHandler.GetStuffObjParent() => _stuffObjParent;
+        Transform IMapObjParent.GetFloorObjParent() => _floorObjParent;
+        Transform IMapObjParent.GetObstacleObjParent() => _obstacleObjParent;
+        Transform IMapObjParent.GetStuffDetectorParent() => _stuffDetectorParent;
+        Transform IMapObjParent.GetStuffObjParent() => _stuffObjParent;
 
 
     }

@@ -6,7 +6,7 @@ using Yours.QuickCity.Internal;
 namespace Yours.QuickCity
 {
     [Serializable]
-    internal struct MapSizeProperty
+    public struct MapSizeProperty
     {
         [SerializeField]
         private int _size_x;
@@ -48,7 +48,7 @@ namespace Yours.QuickCity
     }
 
     [Serializable]
-    internal struct MapBuildingGenerationProperty
+    public struct MapBuildingGenerationProperty
     {
         [Header("Property")]
 
@@ -75,7 +75,7 @@ namespace Yours.QuickCity
     }
 
     [Serializable]
-    internal struct MapStructureGenerationProperty
+    public struct MapStructureGenerationProperty
     {
         [Header("Properties")]
 
@@ -92,7 +92,7 @@ namespace Yours.QuickCity
     }
 
     [Serializable]
-    internal struct MapStuffGenerationProperty
+    public struct MapStuffGenerationProperty
     {
         [Header("Property")]
 
@@ -129,11 +129,13 @@ namespace Yours.QuickCity
 
 namespace Yours.QuickCity
 {
-    internal interface IMap
+    public interface IMapData
     {
         MapSizeProperty BasicProperty { get; }
         MapBuildingGenerationProperty BuildingGenerationProperty { get; }
         MapStructureGenerationProperty StructureGenerationProperty { get; }
         MapStuffGenerationProperty StuffGenerationProperty { get; }
+
+
     }
 }

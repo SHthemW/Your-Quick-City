@@ -6,7 +6,7 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapTerrainDetectorGenerator
     {     
-        private readonly IMapHandler _handler;
+        private readonly IMapObjParent _handler;
         private readonly MapUtilObjectConf _conf;
 
         private readonly MapSizeProperty _map;      
@@ -17,7 +17,7 @@ namespace Yours.QuickCity.Internal
         internal bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
-        internal MapTerrainDetectorGenerator(MapSizeProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
+        internal MapTerrainDetectorGenerator(MapSizeProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapObjParent handler)
         {          
             _map = map;
             _conf = conf;

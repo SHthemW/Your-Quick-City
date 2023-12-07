@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal interface IMapHandler
+    public interface IMapObjParent
     {
         Transform GetFloorObjParent();
         Transform GetObstacleObjParent();

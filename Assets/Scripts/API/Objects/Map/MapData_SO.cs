@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 namespace Yours.QuickCity.Internal
 {
     [CreateAssetMenu(fileName = "New Map", menuName = "Data/Map")]
-    internal sealed class MapData_SO : ScriptableObject, IMap
+    internal sealed class MapData_SO : ScriptableObject, IMapData
     {
         [Space, SerializeField]
         private MapSizeProperty _size;

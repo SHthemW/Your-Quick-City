@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [Serializable]
-    internal struct MapUtilObjectConf 
+    public struct MapUtilObjectConf 
     {
         [SerializeField]
         private GameObject _terrainDetector;
@@ -15,7 +15,7 @@ namespace Yours.QuickCity.Internal
 
 namespace Yours.QuickCity.Internal
 {
-    internal interface IMapConf
+    public interface IMapConf
     {
         MapUtilObjectConf UtilObjectConf { get; }
     }
