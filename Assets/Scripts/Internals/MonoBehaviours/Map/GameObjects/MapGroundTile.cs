@@ -4,6 +4,6 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapGroundTile : MapTileEntity
     {
-        protected override Transform Parent => _controller.GetFloorObjParent();
+        private protected override sealed Transform Parent => Controller.GetFloorObjParent();
     }
 }

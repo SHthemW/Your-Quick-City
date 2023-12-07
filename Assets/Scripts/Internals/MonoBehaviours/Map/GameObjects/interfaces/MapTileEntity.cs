@@ -6,25 +6,25 @@ namespace Yours.QuickCity.Internal
     [SelectionBase]
     internal abstract class MapTileEntity : MonoBehaviour, IMapTileEntity
     {
-        protected IMapHandler  _controller { get; private set; }
-        protected TileProperty _properties { get; private set; }
-        protected abstract Transform Parent { get; }
+        private protected IMapHandler Controller { get; private set; }
+        private protected TileProperty Properties { get; private set; }
+        private protected abstract Transform Parent { get; }
 
         /*
          *  implements
          */
 
-        TileProperty IMapTileEntity.Property => _properties;
+        TileProperty IMapTileEntity.Property => Properties;
         GameObject IGameObject.gameObject => gameObject;
 
         void IMapTileEntity.Init(TileProperty properties, IMapHandler controller)
         {
             // init properties           
-            _controller = controller ?? throw new ArgumentNullException(nameof(controller));
-            _properties = properties;
+            Controller = controller ?? throw new ArgumentNullException(nameof(controller));
+            Properties = properties;
 
             // init entity
-            transform.SetPositionAndRotation(_properties.ActualPosition, _properties.Direction.ToRotation());
+            transform.SetPositionAndRotation(Properties.ActualPosition, Properties.Direction.ToRotation());
             transform.SetParent(Parent);
         }
 

@@ -4,7 +4,7 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapObstacleTile : MapTileEntity
     {
-        protected override Transform Parent => _controller.GetObstacleObjParent();
+        private protected override sealed Transform Parent => Controller.GetObstacleObjParent();
 
         private void Start()
         {
