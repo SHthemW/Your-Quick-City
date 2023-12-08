@@ -31,41 +31,19 @@ namespace Yours.QuickCity.Internal
             return new Coord(c1.x + c2.x, c1.y + c2.y);
         }
 
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             return obj is Coord coord &&
                    x == coord.x &&
                    y == coord.y;
         }
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return HashCode.Combine(x, y);
         }
-        public override string ToString()
+        public override readonly string ToString()
         {
             return $"x: {x}, y: {y}";
         }
-    }
-
-    internal readonly struct TileProperty
-    {
-        internal Vector3 ActualPosition { get; }
-        internal Direction Direction { get; }
-
-        internal TileProperty(Vector3 actualCoord, Direction direction)
-        {
-            ActualPosition = actualCoord;
-            Direction = direction;
-        }
-    }
-}
-
-namespace Yours.QuickCity.Internal
-{
-    internal interface IMapTileEntity : IGameObject
-    {
-        TileProperty Property { get; }
-
-        void Init(TileProperty properties, IMapObjParent controller);
     }
 }
