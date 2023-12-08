@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapEntityHandler : MonoBehaviour, IMapObjParent
+    internal sealed class MapObjectManager : MonoBehaviour, IMapObjParent
     {
         [Header("Instance Conf")]
 

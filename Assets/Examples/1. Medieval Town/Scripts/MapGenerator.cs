@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapCtrller : MonoBehaviour
+    internal sealed class MapGenerator : MonoBehaviour
     {
         /*
          *  Inspectors
