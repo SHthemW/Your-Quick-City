@@ -13,7 +13,7 @@ namespace Yours.QuickCity.Internal
         private Transform _obstacleObjParent;
 
         [SerializeField]
-        private Transform _stuffDetectorParent;
+        private Transform _terrainDetectorParent;
 
         [SerializeField]
         private Transform _stuffObjParent;
@@ -22,11 +22,10 @@ namespace Yours.QuickCity.Internal
          *  Implements
          */
 
-        Transform IMapObjParent.GetFloorObjParent() => _floorObjParent;
-        Transform IMapObjParent.GetObstacleObjParent() => _obstacleObjParent;
-        Transform IMapObjParent.GetStuffDetectorParent() => _stuffDetectorParent;
-        Transform IMapObjParent.GetStuffObjParent() => _stuffObjParent;
-
+        Transform IMapObjParent.FloorObjParent => _floorObjParent;
+        Transform IMapObjParent.ObstacleObjParent => _obstacleObjParent;
+        Transform IMapObjParent.TerrainDetectorParent => _terrainDetectorParent;
+        Transform IMapObjParent.StuffObjParent => _stuffObjParent;
 
     }
 }

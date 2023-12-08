@@ -33,7 +33,7 @@ namespace Yours.QuickCity.Internal
             {
                 var detector = UnityEngine.Object.Instantiate(
                     _conf.TerrainDetector, 
-                    _handler.GetStuffDetectorParent())
+                    _handler.                    TerrainDetectorParent)
                     .GetComponent<IMapTerrainDetector>();
 
                 detector.Init(coord, CalculateDebuggerSize(), _stuffGenProp.DetectorSettings);

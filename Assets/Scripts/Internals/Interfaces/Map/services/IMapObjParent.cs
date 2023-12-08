@@ -5,9 +5,11 @@ namespace Yours.QuickCity.Internal
 {
     public interface IMapObjParent
     {
-        Transform GetFloorObjParent();
-        Transform GetObstacleObjParent();
-        Transform GetStuffObjParent();
-        Transform GetStuffDetectorParent();
+        Transform FloorObjParent { get; }
+
+        Transform ObstacleObjParent { get; }
+
+        Transform StuffObjParent { get; }
+        Transform TerrainDetectorParent { get; }
     }
 }

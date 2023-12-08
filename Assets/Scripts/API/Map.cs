@@ -85,7 +85,7 @@ namespace Yours.QuickCity
 
             dataAnalyzer.PrintDistributionDiagram();
 
-            new MapStuffEntityGenerator(_parent.GetStuffObjParent())
+            new MapStuffEntityGenerator(_parent.StuffObjParent)
                 .GenerateStuffs(stuffObjData);
 
             yield break;
