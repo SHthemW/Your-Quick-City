@@ -9,39 +9,29 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapStuffDataAnalyzer : StepwiseTask<Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>>
     {
-        private readonly MapProperty _map;
-        private readonly MapEntities _mapObjects;
-
-        private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
         public override sealed int maxTick => 1000;
 
-        internal MapStuffDataAnalyzer(MapEntities mapObjects, MapProperty map)
-        {
-            _mapObjects = mapObjects;
-            _map = map;
-        }
-
+        internal MapStuffDataAnalyzer() { }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        internal IEnumerator Analysis(MapTerrainDetector[] detectors)
+        internal IEnumerator Analysis(MapTerrainDetector[] detectors, Dictionary<(float l, float r), Dictionary<IStuff, float>> distributionDiagram)
         {
+            Result = new(capacity: detectors.Length);
+
             _targetStepCount = detectors.Length;
-
-            Result = new (capacity: detectors.Length);
-
             var totalMapCoords = detectors.Select(d => d.Position).ToArray();
-
-            _distributionDiagram = BakeStuffDistributionDiagram(detectors.Max(d => d.DensityValue));
 
             foreach (var detector in MapUtils.ShuffleRandomly(detectors))
             {
+                _currentStepCount++;
+
                 // for current detector density, get distribution from diagram.
 
                 Dictionary<IStuff, float> distInInterval = 
-                    _distributionDiagram.First(g => 
+                    distributionDiagram.First(g => 
                     g.Key.l <= detector.DensityValue && 
                     g.Key.r >= detector.DensityValue).Value;
 
@@ -52,7 +42,7 @@ namespace Yours.QuickCity.Internal
                 // if no any weight, skip current detector
 
                 if (totalWeightOfInterval == 0)
-                    goto endThisTurn;
+                    continue;
 
                 // else, calc result stuff by its weight.
 
@@ -79,15 +69,11 @@ namespace Yours.QuickCity.Internal
                     .Select(i => totalMapCoords[i])
                     .ToArray();
 
-                if (Result.Any(rst =>
-                    nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
-                    goto endThisTurn;
+                if (Result.Any(rst => nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
+                    continue;
 
                 // append result
                 Result.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
-
-                // add count
-                endThisTurn: _currentStepCount++;
 
                 if (IsTimeToReport())
                 {
@@ -96,28 +82,6 @@ namespace Yours.QuickCity.Internal
                 }
             }
         }
-
-        internal void PrintDistributionDiagram()
-        {
-            StringBuilder content = new("Stuff分布信息: \n");
-
-            foreach (var dist in _distributionDiagram)
-            {
-                content.AppendLine($"[{dist.Key.l} - {dist.Key.r}]");
-
-                foreach (var stuff in dist.Value)
-                {
-                    var keyStr = stuff.Key.Obj.name.PadRight(10);
-                    var valStr = stuff.Value.ToString().PadRight(10);
-
-                    content.AppendLine($"- {keyStr}: {valStr}");
-                }
-            }
-            Debug.Log(content.ToString());
-        }
-
-        private MapStuffDataAnalyzer()
-            => throw new NotImplementedException();
 
         private static int[] GetNearbyCoordIndexes(Vector3[] map, int centerIndex, float radius)
         {
@@ -138,45 +102,6 @@ namespace Yours.QuickCity.Internal
                     nearbyIndexes.Add(i);
             }
             return nearbyIndexes.ToArray();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="toBeBake"></param>
-        /// <param name="maxDensity"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        private Dictionary<(float l, float r), Dictionary<IStuff, float>> BakeStuffDistributionDiagram(float maxDensity)
-        {
-            if (maxDensity <= 0)
-                throw new ArgumentException();
-
-            Dictionary<(float, float), Dictionary<IStuff, float>> bakeResult = new();
-
-            (float min, float max) = (
-                _mapObjects.Stuffs.Min(s => s.MinGenerateDensity),
-                _mapObjects.Stuffs.Max(s => s.MaxGenerateDensity)
-            );
-            float step = (max - min) / _map.StuffDistributeDiagramResolution;
-
-            // 0 - min - max - infinity
-            for (float density = 0; density <= maxDensity; density += step)
-            {
-                var range = (left: density, right: density + step);
-
-                // calc possibility (seriously)
-                Dictionary<IStuff, float> generateWeight = new();
-                foreach (IStuff stuff in _mapObjects.Stuffs)
-                {
-                    float match = stuff.GetDensityMatchingValue(density);
-                    generateWeight.Add(stuff, match);
-                }
-                // add to result           
-                bakeResult.Add(range, generateWeight);
-            }
-
-            return bakeResult;
         }
     }
 }

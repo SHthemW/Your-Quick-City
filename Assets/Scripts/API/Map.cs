@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Yours.QuickCity.Internal;
 
@@ -94,21 +95,36 @@ namespace Yours.QuickCity
         }
         private IEnumerator GenerateStuffByTerrain(MapTerrainDetector[] terrain)
         {
+            #region generate stuff distribution
+
+            var distDiagGenerator = new MapStuffDistributionDiagramGenerator(_map.GameObjectDef, _map.Properties);
+
+            LogUI.AppendLog("generating stuff dist...");
+            LogUI.AppendDynamicPercent(distDiagGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (distDiagGenerator.BakeDistribution(maxDensity: _terrainDetectors.Max(d => d.DensityValue)));
+            yield return new WaitUntil(distDiagGenerator.Completed);
+            var distribution =         distDiagGenerator.Result;
+
+            LogUI.EndDynamicPart(true);
+
+            if (_map.Config.ShowStuffDistributionInfo)
+                distDiagGenerator.PrintDistributionDiagram();
+
+            #endregion
+
             #region analyze stuff distribution
 
-            var dataAnalyzer = new MapStuffDataAnalyzer(_map.GameObjectDef, _map.Properties);
+            var dataAnalyzer = new MapStuffDataAnalyzer();
 
-            LogUI.AppendLog("analysing stuff distribution...");
+            LogUI.AppendLog("analysing stuff dist...");
             LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
 
-            _master.StartCoroutine    (dataAnalyzer.Analysis(terrain));
+            _master.StartCoroutine    (dataAnalyzer.Analysis(terrain, distribution));
             yield return new WaitUntil(dataAnalyzer.Completed);
             var stuffObjData =         dataAnalyzer.Result;
 
-            LogUI.EndDynamicPart();
-
-            if (_map.Config.ShowStuffDistributionInfo)
-                dataAnalyzer.PrintDistributionDiagram();
+            LogUI.EndDynamicPart(true);
 
             #endregion
 
