@@ -62,7 +62,20 @@ namespace Yours.QuickCity
         }
         private IEnumerator GenerateDetectorsOnMap(MapDiagram map)
         {
-            var coords = new MapTileCoordsGenerator(_map.Properties).GenerateCoords(map);
+            #region generate coords
+
+            var coordsGenerator = new MapTileCoordsGenerator(_map.Properties);
+
+            LogUI.AppendLog("generating coords..");
+            LogUI.AppendDynamicPercent(coordsGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (coordsGenerator.GenerateCoords(map));
+            yield return new WaitUntil(coordsGenerator.Completed);
+            var coords =               coordsGenerator.Result.ToArray();
+
+            LogUI.EndDynamicPart(true);
+
+            #endregion
 
             #region generate detectors
 

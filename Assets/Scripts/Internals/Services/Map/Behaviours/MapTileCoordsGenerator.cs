@@ -1,36 +1,47 @@
 ﻿using Codice.Client.BaseCommands;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapTileCoordsGenerator
+    internal sealed class MapTileCoordsGenerator : StepwiseTask<List<Vector3>>
     {
         private readonly MapProperty _map;
 
         private const float HANGING_HEIGHT = 1;
+        public override sealed int MaxTrick => 1000;
 
         internal MapTileCoordsGenerator(MapProperty basicProp)
         {
             _map = basicProp;
         }
-        internal Vector3[] GenerateCoords(MapDiagram map)
-        {
+        internal IEnumerator GenerateCoords(MapDiagram map)
+        {           
+            Result = new();
+
+            _targetStepCount = map.TotalNodeNum;
             var offsets = GeneratePositionOffsets();
-            List<Vector3> result = new();
 
             foreach (var node in map.Content)
             {
+                _currentStepCount++;
+
                 if (node.IsObstacle && _map.IgnoreBuildingAreasWhenAnalysis)
                     continue;
 
                 var tilePos = MapUtils.GetTileActualPosition(_map.TileUnitSize, node.Coordinate);
 
                 foreach (var offset in offsets)
-                    result.Add(offset + tilePos);
-            }
+                    Result.Add(offset + tilePos);
 
-            return result.ToArray();
+                if (IsTimeToReport())
+                {
+                    Trick = 0;
+                    yield return null;
+                }
+            }
+            yield break;
         }
         internal void PrintDebugInfo()
         {
