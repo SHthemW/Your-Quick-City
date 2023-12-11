@@ -83,11 +83,15 @@ namespace Yours.QuickCity
             var dataAnalyzer = new MapStuffDataAnalyzer(_map.GameObjectDef, _map.Properties);
 
             LogUI.AppendLog("start analysis");
+            LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
 
-            var stuffObjData = dataAnalyzer.Analysis(terrain);
+            _master.StartCoroutine(dataAnalyzer.Analysis(terrain));
 
             yield return new WaitUntil(dataAnalyzer.Finished);
 
+            var stuffObjData = dataAnalyzer.Result;
+
+            LogUI.EndDynamicPart();
             LogUI.AppendLog("finish analysis");
 
             if (_map.Config.ShowStuffDistributionInfo)

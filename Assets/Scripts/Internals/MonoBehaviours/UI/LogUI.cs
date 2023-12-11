@@ -30,7 +30,7 @@ namespace Yours.QuickCity.Internal
             _staticText = _instance.LogText.text;
             _instance.LogText.text = _staticText + $"({0.0}%)";
         }
-        internal static void UpdateDynamicPercent()
+        private static void UpdateDynamicPercent()
         {
             if (_percentGetter == null)
                 return;

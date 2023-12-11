@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,12 @@ namespace Yours.QuickCity.Internal
 
         private int _targetAnalysisNum  = 1;
         private int _currentAnalysisNum = 0;
+
+        internal float FinishedPercent()
+        {
+            return ((float)_currentAnalysisNum / _targetAnalysisNum) * 100;
+        }
+
         private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
 
         internal MapStuffDataAnalyzer(MapEntities mapObjects, MapProperty map)
@@ -22,17 +29,18 @@ namespace Yours.QuickCity.Internal
         }
 
         internal bool Finished() => _currentAnalysisNum >= _targetAnalysisNum;
-
+        internal Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> Result { get; private set; }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        internal Dictionary<(Vector3, Vector3), IStuff> Analysis(in MapTerrainDetector[] detectors)
+        internal IEnumerator Analysis(MapTerrainDetector[] detectors)
         {
             _targetAnalysisNum = detectors.Length;
 
-            var analysisResult = new Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>(capacity: detectors.Length);
+            Result = new (capacity: detectors.Length);
+            int trick = 0;
 
             var totalMapCoords = detectors.Select(d => d.Position).ToArray();
 
@@ -56,6 +64,7 @@ namespace Yours.QuickCity.Internal
                 if (totalWeightOfInterval == 0)
                 {
                     _currentAnalysisNum++;
+                    trick++;
                     continue;
                 }
 
@@ -84,19 +93,24 @@ namespace Yours.QuickCity.Internal
                     .Select(i => totalMapCoords[i])
                     .ToArray();
 
-                if (analysisResult.Any(rst => 
+                if (Result.Any(rst => 
                     nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
                 {
+                    trick++;
                     _currentAnalysisNum++;
                     continue;
                 }
 
                 // append result
-
                 _currentAnalysisNum++;
-                analysisResult.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
+                Result.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
+
+                if (trick++ > 1000 || _targetAnalysisNum - _currentAnalysisNum <= trick)
+                {
+                    trick = 0;
+                    yield return null;
+                }
             }
-            return analysisResult;
         }
 
         internal void PrintDistributionDiagram()
