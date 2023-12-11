@@ -87,7 +87,7 @@ namespace Yours.QuickCity
 
             _master.StartCoroutine(dataAnalyzer.Analysis(terrain));
 
-            yield return new WaitUntil(dataAnalyzer.Finished);
+            yield return new WaitUntil(dataAnalyzer.Completed);
 
             var stuffObjData = dataAnalyzer.Result;
 

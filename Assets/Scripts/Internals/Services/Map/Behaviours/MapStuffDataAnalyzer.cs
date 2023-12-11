@@ -7,20 +7,13 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapStuffDataAnalyzer
+    internal sealed class MapStuffDataAnalyzer : StepwiseTask<Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>>
     {
         private readonly MapProperty _map;
         private readonly MapEntities _mapObjects;
 
-        private int _targetAnalysisNum  = 1;
-        private int _currentAnalysisNum = 0;
-
-        internal float FinishedPercent()
-        {
-            return ((float)_currentAnalysisNum / _targetAnalysisNum) * 100;
-        }
-
         private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
+        public override sealed int MaxTrick => 1000;
 
         internal MapStuffDataAnalyzer(MapEntities mapObjects, MapProperty map)
         {
@@ -28,8 +21,6 @@ namespace Yours.QuickCity.Internal
             _map = map;
         }
 
-        internal bool Finished() => _currentAnalysisNum >= _targetAnalysisNum;
-        internal Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> Result { get; private set; }
         /// <summary>
         /// 
         /// </summary>
@@ -37,10 +28,9 @@ namespace Yours.QuickCity.Internal
         /// <returns></returns>
         internal IEnumerator Analysis(MapTerrainDetector[] detectors)
         {
-            _targetAnalysisNum = detectors.Length;
+            _targetStepCount = detectors.Length;
 
             Result = new (capacity: detectors.Length);
-            int trick = 0;
 
             var totalMapCoords = detectors.Select(d => d.Position).ToArray();
 
@@ -62,11 +52,7 @@ namespace Yours.QuickCity.Internal
                 // if no any weight, skip current detector
 
                 if (totalWeightOfInterval == 0)
-                {
-                    _currentAnalysisNum++;
-                    trick++;
-                    continue;
-                }
+                    goto endThisTurn;
 
                 // else, calc result stuff by its weight.
 
@@ -93,21 +79,19 @@ namespace Yours.QuickCity.Internal
                     .Select(i => totalMapCoords[i])
                     .ToArray();
 
-                if (Result.Any(rst => 
+                if (Result.Any(rst =>
                     nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
-                {
-                    trick++;
-                    _currentAnalysisNum++;
-                    continue;
-                }
+                    goto endThisTurn;
 
                 // append result
-                _currentAnalysisNum++;
                 Result.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
 
-                if (trick++ > 1000 || _targetAnalysisNum - _currentAnalysisNum <= trick)
+                // add count
+                endThisTurn: _currentStepCount++;
+
+                if (IsTimeToReport())
                 {
-                    trick = 0;
+                    Trick = 0;
                     yield return null;
                 }
             }
