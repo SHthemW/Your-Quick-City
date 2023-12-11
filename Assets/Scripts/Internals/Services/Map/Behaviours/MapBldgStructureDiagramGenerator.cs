@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
     internal sealed class MapBldgStructureDiagramGenerator
     {
-        private readonly MapStructureGenerationProperty _properties;
+        private readonly MapEntities _mapObjects;
+
+        private readonly StringBuilder _resultMessage = new("结构生成信息: \n");
 
         private Dictionary<Coord, MapDiagramNodeData> _finalStructureDiagram { get; set; } = new();
 
@@ -14,16 +17,20 @@ namespace Yours.QuickCity.Internal
          *  internal:
          */
 
-        internal MapBldgStructureDiagramGenerator(MapStructureGenerationProperty properties)
+        internal MapBldgStructureDiagramGenerator(MapEntities objectsDef)
         {
-            _properties = properties;
+            _mapObjects = objectsDef;
         }
         internal void GenerateOnDiagram(MapDiagram diagram)
         {
-            foreach (var structure in _properties.StructureList)
+            foreach (var structure in _mapObjects.StructureList)
             {
                 TryAddStructuresToDiagram(structure, diagram);
             }
+        }
+        internal void PrintGenerateResult()
+        {
+            Debug.Log(_resultMessage.ToString());
         }
 
         /*
@@ -46,8 +53,7 @@ namespace Yours.QuickCity.Internal
                     continue;
                 }
 
-                if (_properties.EnableStructureDebug)
-                    Debug.Log($"[structure] 结构 {structure.Name} 的第 {times + 1} 次尝试生成成功, 生成位置: {tryingCoord}");
+                _resultMessage.AppendLine($"[structure] 结构 {structure.Name} 的第 {times + 1} 次尝试生成成功, 生成位置: {tryingCoord}");
 
                 success++;
                 succeedCoords.Add(tryingCoord);
@@ -55,8 +61,8 @@ namespace Yours.QuickCity.Internal
                 WriteStructureToDiagram(structure, diagram);
             }
 
-            if (_properties.EnableStructureDebug && (succeedCoords.Count < structure.GenerateNumber))
-                Debug.Log($"[structure] 结构 {structure.Name} 未完成其生成目标 ({succeedCoords.Count} / {structure.GenerateNumber}), 因为整个地图中没有合法的位置供其生成. ");
+            if (succeedCoords.Count < structure.GenerateNumber)
+                _resultMessage.AppendLine($"[structure] 结构 {structure.Name} 未完成其生成目标 ({succeedCoords.Count} / {structure.GenerateNumber}), 因为整个地图中没有合法的位置供其生成. ");
 
             // local function
             Coord ChooseRandomCoord()
@@ -95,7 +101,7 @@ namespace Yours.QuickCity.Internal
                     _finalStructureDiagram.Clear();
                     return false;
                 }
-                _finalStructureDiagram.Add(mapped_coord, (node as INodeDataHandler).Data);
+                _finalStructureDiagram.Add(mapped_coord, node.NodeData);
             }
             return true;        
 
@@ -121,7 +127,7 @@ namespace Yours.QuickCity.Internal
 
             foreach (var nodeKvp in _finalStructureDiagram)
             {
-                (diagram[nodeKvp.Key.x, nodeKvp.Key.y] as INodeDataHandler).Data = nodeKvp.Value;
+                diagram[nodeKvp.Key.x, nodeKvp.Key.y].NodeData = nodeKvp.Value;
             }
             diagram.ClosedNodeNum += structure.ClosedNodeNum;
 

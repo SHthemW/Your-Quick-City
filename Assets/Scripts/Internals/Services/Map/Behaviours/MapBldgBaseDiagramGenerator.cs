@@ -4,20 +4,20 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapBldgBaseDiagramGenerator
     {
-        private readonly MapBasicProperty _basicProperty;
-        private readonly MapBaseGenerationProperty _baseGenProperty;
+        private readonly MapProperty _map;
+        private readonly MapEntities _mapObjects;
 
-        private int _obstacleNum => (int)(_basicProperty.TotalNodeNum * _baseGenProperty.ObstaclePercent);
+        private int _obstacleNum => (int)(_map.TotalNodeNum * _map.ObstaclePercent);
         private List<Coord> _allTileCoords { get; set; } = new();
 
         /*
          *  internal:
          */
 
-        internal MapBldgBaseDiagramGenerator(MapBasicProperty basicProperty, MapBaseGenerationProperty entityProperty)
+        internal MapBldgBaseDiagramGenerator(MapProperty basicProperty, MapEntities entityProperty)
         {
-            _basicProperty  = basicProperty;
-            _baseGenProperty = entityProperty;
+            _map  = basicProperty;
+            _mapObjects = entityProperty;
         }
         internal void GenerateOnDiagram(MapDiagram diagram)
         {
@@ -29,7 +29,7 @@ namespace Yours.QuickCity.Internal
 
                 if (diagram.JudgeIfCanPlaceObstacle(currentCoord))
                 {
-                    diagram[currentCoord.x, currentCoord.y].PlaceObstacle(_baseGenProperty.GetRandomObstacle());
+                    diagram[currentCoord.x, currentCoord.y].PlaceObstacle(_mapObjects.GetRandomBuilding());
                 }
             }
         }
@@ -42,8 +42,8 @@ namespace Yours.QuickCity.Internal
         private Queue<Coord> GenerateRandomCoords()
         {
             // storage all coordinates
-            for (int i = 0; i < _basicProperty.Size_X; i++)
-                for (int j = 0; j < _basicProperty.Size_Y; j++)
+            for (int i = 0; i < _map.Size_X; i++)
+                for (int j = 0; j < _map.Size_Y; j++)
                     _allTileCoords.Add(new Coord(i, j));
 
             // get shuffed random queue.

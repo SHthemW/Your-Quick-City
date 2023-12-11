@@ -8,15 +8,17 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapStuffDataAnalyzer
     {
-        private readonly MapStuffGenerationProperty _stuffGenProp;
+        private readonly MapProperty _map;
+        private readonly MapEntities _mapObjects;
 
         private int _targetAnalysisNum  = 1;
         private int _currentAnalysisNum = 0;
         private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
 
-        internal MapStuffDataAnalyzer(MapStuffGenerationProperty stuffGenProp)
+        internal MapStuffDataAnalyzer(MapEntities mapObjects, MapProperty map)
         {
-            _stuffGenProp = stuffGenProp;
+            _mapObjects = mapObjects;
+            _map = map;
         }
 
         internal bool Finished() => _currentAnalysisNum >= _targetAnalysisNum;
@@ -26,7 +28,7 @@ namespace Yours.QuickCity.Internal
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        internal Dictionary<(Vector3, Vector3), IStuff> Analysis(in IMapTerrainDetector[] detectors)
+        internal Dictionary<(Vector3, Vector3), IStuff> Analysis(in MapTerrainDetector[] detectors)
         {
             _targetAnalysisNum = detectors.Length;
 
@@ -34,7 +36,7 @@ namespace Yours.QuickCity.Internal
 
             var totalMapCoords = detectors.Select(d => d.Position).ToArray();
 
-            _distributionDiagram = BakeStuffDistributionDiagram(_stuffGenProp, detectors.Max(d => d.DensityValue));
+            _distributionDiagram = BakeStuffDistributionDiagram(detectors.Max(d => d.DensityValue));
 
             foreach (var detector in MapUtils.ShuffleRandomly(detectors))
             {
@@ -99,18 +101,18 @@ namespace Yours.QuickCity.Internal
 
         internal void PrintDistributionDiagram()
         {
-            StringBuilder content = new();
+            StringBuilder content = new("Stuff分布信息: \n");
 
             foreach (var dist in _distributionDiagram)
             {
-                content.Append($"\n[{dist.Key.l} - {dist.Key.r}] \n");
+                content.AppendLine($"[{dist.Key.l} - {dist.Key.r}]");
 
                 foreach (var stuff in dist.Value)
                 {
                     var keyStr = stuff.Key.Obj.name.PadRight(10);
                     var valStr = stuff.Value.ToString().PadRight(10);
 
-                    content.Append($"- {keyStr}: {valStr} \n");
+                    content.AppendLine($"- {keyStr}: {valStr}");
                 }
             }
             Debug.Log(content.ToString());
@@ -147,7 +149,7 @@ namespace Yours.QuickCity.Internal
         /// <param name="maxDensity"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        private static Dictionary<(float l, float r), Dictionary<IStuff, float>> BakeStuffDistributionDiagram(MapStuffGenerationProperty toBeBake, float maxDensity)
+        private Dictionary<(float l, float r), Dictionary<IStuff, float>> BakeStuffDistributionDiagram(float maxDensity)
         {
             if (maxDensity <= 0)
                 throw new ArgumentException();
@@ -155,10 +157,10 @@ namespace Yours.QuickCity.Internal
             Dictionary<(float, float), Dictionary<IStuff, float>> bakeResult = new();
 
             (float min, float max) = (
-                toBeBake.Stuffs.Min(s => s.MinGenerateDensity),
-                toBeBake.Stuffs.Max(s => s.MaxGenerateDensity)
+                _mapObjects.Stuffs.Min(s => s.MinGenerateDensity),
+                _mapObjects.Stuffs.Max(s => s.MaxGenerateDensity)
             );
-            float step = (max - min) / toBeBake.StuffDistributeDiagramResolution;
+            float step = (max - min) / _map.StuffDistributeDiagramResolution;
 
             // 0 - min - max - infinity
             for (float density = 0; density <= maxDensity; density += step)
@@ -167,7 +169,7 @@ namespace Yours.QuickCity.Internal
 
                 // calc possibility (seriously)
                 Dictionary<IStuff, float> generateWeight = new();
-                foreach (IStuff stuff in toBeBake.Stuffs)
+                foreach (IStuff stuff in _mapObjects.Stuffs)
                 {
                     float match = stuff.GetDensityMatchingValue(density);
                     generateWeight.Add(stuff, match);

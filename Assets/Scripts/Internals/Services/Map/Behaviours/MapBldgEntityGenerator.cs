@@ -1,23 +1,24 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
     internal sealed class MapBldgEntityGenerator
     {
-        private readonly MapBasicProperty _basicProperty;
-        private readonly MapBaseGenerationProperty _baseGenProperty;
-        private readonly IMapHandler _controller;
+        private readonly MapProperty _map;
+        private readonly MapEntities _mapObjects;
+        private readonly IMapObjParent _parent;
 
         private const Direction FLOOR_DEFAULT_DIRECTION = Direction.Up;
 
         private int _generatedCount;
         private int _targetGenerateCount;
 
-        internal MapBldgEntityGenerator(MapBasicProperty basicProp, MapBaseGenerationProperty entityProp, IMapHandler controller)
+        internal MapBldgEntityGenerator(MapProperty basicProp, MapEntities entityProp, IMapObjParent parent)
         {
-            _basicProperty = basicProp;
-            _baseGenProperty = entityProp;
-            _controller = controller ?? throw new ArgumentNullException(nameof(controller));
+            _map = basicProp;
+            _mapObjects = entityProp;
+            _parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
         internal void GenerateByDiagram(MapDiagram diagram)
         {
@@ -41,25 +42,31 @@ namespace Yours.QuickCity.Internal
         private MapBldgEntityGenerator() { }
         private void GenerateGroundTile(Coord logicPos)
         {
-            var spawnTile =
-                        UnityEngine.Object.Instantiate(_baseGenProperty.GetRandomFloor()).
-                        GetComponent<IMapTileEntity>();
+            var spawnFloor = UnityEngine.Object.
+                Instantiate(_mapObjects.GetRandomFloor());
 
-            spawnTile.Init(new TileProperty(
-                MapUtils.GetTileActualPosition(_basicProperty.TileUnitSize, logicPos), 
-                FLOOR_DEFAULT_DIRECTION), 
-                _controller);
+            spawnFloor.transform.SetPositionAndRotation(
+                position: MapUtils.GetTileActualPosition(_map.TileUnitSize, logicPos),
+                rotation: FLOOR_DEFAULT_DIRECTION.ToRotation());
+
+            spawnFloor.transform.SetParent(_parent.FloorObjParent); 
         }
         private void GenerateObstacleTile(Coord logicPos, MapDiagramNodeData data)
         {
-            var spawnObs =
-                    UnityEngine.Object.Instantiate(data.NodeObj).
-                    GetComponent<IMapTileEntity>();
+            var spawnObstacle = UnityEngine.Object.
+                Instantiate(data.NodeObj);
 
-            spawnObs.Init(new TileProperty(
-                MapUtils.GetTileActualPosition(_basicProperty.TileUnitSize, logicPos), 
-                data.Direction), 
-                _controller);
-        }       
+            spawnObstacle.transform.SetPositionAndRotation(
+                position: MapUtils.GetTileActualPosition(_map.TileUnitSize, logicPos),
+                rotation: data.Direction.ToRotation());
+
+            spawnObstacle.transform.SetParent(_parent.ObstacleObjParent);
+
+            if (!spawnObstacle.TryGetComponent<Rigidbody>(out _))
+                Debug.LogWarning(
+                    $"[Map] warning: we cannot get {nameof(Rigidbody)} component " +
+                    $"in obstacle {spawnObstacle.name}, which means the terrain " +
+                    $"analyzer will not work.");
+        }
     }
 }

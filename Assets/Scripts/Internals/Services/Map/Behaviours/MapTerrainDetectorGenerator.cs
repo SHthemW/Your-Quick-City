@@ -6,37 +6,35 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapTerrainDetectorGenerator
     {     
-        private readonly IMapHandler _handler;
-        private readonly MapUtilObjectConf _conf;
+        private readonly IMapObjParent _parent;
+        private readonly MapTerrainDetector _detectorObject;
 
-        private readonly MapBasicProperty _map;      
-        private readonly MapStuffGenerationProperty _stuffGenProp;
+        private readonly MapProperty _map;      
 
         private int _targetGenerateNum  = 1;
         private int _currentGenerateNum = 0;
         internal bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
-        internal MapTerrainDetectorGenerator(MapBasicProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapHandler handler)
+        internal MapTerrainDetectorGenerator(MapProperty map, MapTerrainDetector detector, IMapObjParent handler)
         {          
             _map = map;
-            _conf = conf;
-            _stuffGenProp = stuffProp;
-            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+            _detectorObject = detector != null ? detector : throw new ArgumentNullException(nameof(detector));
+            _parent = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
-        internal IMapTerrainDetector[] GenerateDetectors(Vector3[] coords)
+        internal MapTerrainDetector[] GenerateDetectors(Vector3[] coords)
         {
-            List<IMapTerrainDetector> detectors = new();
+            List<MapTerrainDetector> detectors = new();
             _targetGenerateNum = coords.Length;
 
             foreach (var coord in coords)
             {
                 var detector = UnityEngine.Object.Instantiate(
-                    _conf.TerrainDetector, 
-                    _handler.GetStuffDetectorParent())
-                    .GetComponent<IMapTerrainDetector>();
+                    _detectorObject, 
+                    _parent.                    TerrainDetectorParent)
+                    .GetComponent<MapTerrainDetector>();
 
-                detector.Init(coord, CalculateDebuggerSize(), _stuffGenProp.DetectorSettings);
+                detector.Init(coord, CalculateDebuggerSize(), _map.DetectorSettings);
                 detector.ExecuteDetect();
                 detector.ShowDebugColor();
 
@@ -49,7 +47,7 @@ namespace Yours.QuickCity.Internal
         private MapTerrainDetectorGenerator() { }
         private float CalculateDebuggerSize()
         {
-            return _map.TileUnitSize / (_stuffGenProp.StuffGenerateAccuracy + 1);
+            return _map.TileUnitSize / (_map.TerrainDetectResolution + 1);
         }
     }
 }

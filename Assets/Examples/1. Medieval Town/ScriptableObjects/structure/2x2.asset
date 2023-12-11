@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 625c9de37fac53a4299616c3f3ec969f, type: 3}
+  m_Name: 2x2
+  m_EditorClassIdentifier: 
+  _diagram:
+  - _coordinate:
+      <x>k__BackingField: 0
+      <y>k__BackingField: 0
+    _data:
+      <Direction>k__BackingField: 2
+      <NodeObj>k__BackingField: {fileID: 5204415565211785388, guid: c9be85fbdd02e4e4b80a20485cde64b7,
+        type: 3}
+  - _coordinate:
+      <x>k__BackingField: 0
+      <y>k__BackingField: 1
+    _data:
+      <Direction>k__BackingField: 0
+      <NodeObj>k__BackingField: {fileID: 4467094880706393330, guid: ea695a474c6f34a47af3ac19e0de603d,
+        type: 3}
+  - _coordinate:
+      <x>k__BackingField: 1
+      <y>k__BackingField: 0
+    _data:
+      <Direction>k__BackingField: 0
+      <NodeObj>k__BackingField: {fileID: 4467094880706393330, guid: ea695a474c6f34a47af3ac19e0de603d,
+        type: 3}
+  - _coordinate:
+      <x>k__BackingField: 1
+      <y>k__BackingField: 1
+    _data:
+      <Direction>k__BackingField: 0
+      <NodeObj>k__BackingField: {fileID: 4467094880706393330, guid: ea695a474c6f34a47af3ac19e0de603d,
+        type: 3}
+  _closedNodeNum: 0
+  _generateNumber: 3
+  _generatePriority: 2

@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Codice.Client.BaseCommands;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
     internal sealed class MapTileCoordsGenerator
     {
-        private readonly MapBasicProperty _basicProp;
-        private readonly MapStuffGenerationProperty _stuffGenProp;
+        private readonly MapProperty _map;
 
         private const float HANGING_HEIGHT = 1;
 
-        internal MapTileCoordsGenerator(MapBasicProperty basicProp, MapStuffGenerationProperty stuffProp)
+        internal MapTileCoordsGenerator(MapProperty basicProp)
         {
-            _basicProp = basicProp;
-            _stuffGenProp = stuffProp;
+            _map = basicProp;
         }
         internal Vector3[] GenerateCoords(MapDiagram map)
         {
@@ -22,10 +21,10 @@ namespace Yours.QuickCity.Internal
 
             foreach (var node in map.Content)
             {
-                if (node.IsObstacle)
+                if (node.IsObstacle && _map.IgnoreBuildingAreasWhenAnalysis)
                     continue;
 
-                var tilePos = MapUtils.GetTileActualPosition(_basicProp.TileUnitSize, node.Coordinate);
+                var tilePos = MapUtils.GetTileActualPosition(_map.TileUnitSize, node.Coordinate);
 
                 foreach (var offset in offsets)
                     result.Add(offset + tilePos);
@@ -49,15 +48,15 @@ namespace Yours.QuickCity.Internal
         private MapTileCoordsGenerator() { }
         private HashSet<Vector3> GeneratePositionOffsets()
         {
-            float unitDistance = (float)_basicProp.TileUnitSize / _stuffGenProp.StuffGenerateAccuracy;
+            float unitDistance = (float)_map.TileUnitSize / _map.TerrainDetectResolution;
             float halfDistance = unitDistance / 2;
 
-            Vector3 origPoint = new(-_basicProp.TileUnitSize / 2, HANGING_HEIGHT, -_basicProp.TileUnitSize / 2);
+            Vector3 origPoint = new(-_map.TileUnitSize / 2, HANGING_HEIGHT, -_map.TileUnitSize / 2);
             HashSet<Vector3> result = new();
 
-            for (int x = 0; x < _stuffGenProp.StuffGenerateAccuracy; x++)
+            for (int x = 0; x < _map.TerrainDetectResolution; x++)
             {
-                for (int y = 0; y < _stuffGenProp.StuffGenerateAccuracy; y++)
+                for (int y = 0; y < _map.TerrainDetectResolution; y++)
                 {
                     Vector3 offsetPos = origPoint + new Vector3(
                         halfDistance + (x * unitDistance),
