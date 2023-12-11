@@ -21,5 +21,14 @@ namespace Yours.QuickCity.Internal
         IMapConf    IMapData.Config => _config != null ? _config : throw new MissingReferenceException();
         MapProperty IMapData.Properties => _properties;
         MapEntities IMapData.GameObjectDef => _gameObjects;
+
+        /*
+         *  valid checks
+         */
+
+        private void OnValidate()
+        {
+            _gameObjects.CheckValid();
+        }
     }
 }

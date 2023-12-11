@@ -120,6 +120,14 @@ namespace Yours.QuickCity
         private List<StuffData_SO> stuffs;
         internal readonly List<IStuff> Stuffs 
             => stuffs.ConvertAll(new Converter<StuffData_SO, IStuff>(s => s));
+
+        internal readonly void CheckValid()
+        {
+            foreach (var obj in _buildingObjs) 
+                Debug.Assert(
+                    condition: obj != null && obj.TryGetComponent(out Rigidbody _), 
+                    message:   "building object must have RigidBody component, to describe its shape.");
+        }
     }
 }
 
