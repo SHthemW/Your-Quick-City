@@ -13,7 +13,7 @@ namespace Yours.QuickCity
         private readonly MonoBehaviour _master;
 
         private MapDiagram            _diagram;
-        private IMapTerrainDetector[] _terrainDetectors;
+        private MapTerrainDetector[] _terrainDetectors;
 
         public Map(IMapData data, IMapObjParent parent, MonoBehaviour master)
         {
@@ -72,7 +72,7 @@ namespace Yours.QuickCity
 
             yield return new WaitUntil(detectorsGenerator.GenerateIsFinished);
         }
-        private IEnumerator GenerateStuffByTerrain(IMapTerrainDetector[] terrain)
+        private IEnumerator GenerateStuffByTerrain(MapTerrainDetector[] terrain)
         {
             var dataAnalyzer = new MapStuffDataAnalyzer(_map.GameObjectDef, _map.Properties);
 

@@ -4,6 +4,6 @@ namespace Yours.QuickCity.Internal
 {
     internal interface IStuffDetectorDataHandler
     {
-        List<IMapTerrainDetector> Detectors { get; }
+        List<MapTerrainDetector> Detectors { get; }
     }
 }

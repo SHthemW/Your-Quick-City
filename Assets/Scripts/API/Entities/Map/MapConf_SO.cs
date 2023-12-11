@@ -7,7 +7,7 @@ namespace Yours.QuickCity.Internal
     public sealed class MapConf_SO : ScriptableObject, IMapConf
     {
         [SerializeField]
-        private GameObject _terrainDetector;
+        private MapTerrainDetector _terrainDetector;
 
         [Header("Debug")]
 
@@ -24,7 +24,7 @@ namespace Yours.QuickCity.Internal
          *  implements
          */
 
-        GameObject IMapConf.TerrainDetector => _terrainDetector;
+        MapTerrainDetector IMapConf.TerrainDetector => _terrainDetector;
         bool IMapConf.PrintMapGridDiagram => _printMapGridDiagram;
         bool IMapConf.ShowStructureGenerateResult => _showStructureGenerateResult;
         bool IMapConf.ShowStuffDistributionInfo => _showStuffDistributionInfo;

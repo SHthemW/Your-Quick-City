@@ -28,7 +28,7 @@ namespace Yours.QuickCity.Internal
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        internal Dictionary<(Vector3, Vector3), IStuff> Analysis(in IMapTerrainDetector[] detectors)
+        internal Dictionary<(Vector3, Vector3), IStuff> Analysis(in MapTerrainDetector[] detectors)
         {
             _targetAnalysisNum = detectors.Length;
 

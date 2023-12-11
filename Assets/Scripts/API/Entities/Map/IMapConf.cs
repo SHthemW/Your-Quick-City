@@ -5,7 +5,7 @@ namespace Yours.QuickCity.Internal
 {
     public interface IMapConf
     {
-        GameObject TerrainDetector { get; }
+        MapTerrainDetector TerrainDetector { get; }
 
         // debug options
         bool PrintMapGridDiagram         { get; }

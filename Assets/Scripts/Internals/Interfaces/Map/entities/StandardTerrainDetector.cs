@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [SelectionBase, Serializable]
-    internal sealed class MapTerrainDetector : MonoBehaviour, IMapTerrainDetector
+    internal sealed class StandardTerrainDetector : MapTerrainDetector
     {
         private TerrainDetectorProperty? _property = null;
         private TerrainDetectorProperty Property
@@ -77,17 +77,17 @@ namespace Yours.QuickCity.Internal
          *  implements
          */
 
-        float IMapTerrainDetector.DensityValue => this.ClosestBuilingDistance;
-        Vector3 IMapTerrainDetector.AttachDirection => this.ClosestAttachDirection;
-        Vector3 IMapTerrainDetector.Position => transform.position;
+        public override sealed float DensityValue => this.ClosestBuilingDistance;
+        public override sealed Vector3 AttachDirection => this.ClosestAttachDirection;
+        public override sealed Vector3 Position => transform.position;
 
-        void IMapTerrainDetector.Init(Vector3 position, float size, TerrainDetectorProperty property)
+        public override sealed void Init(Vector3 position, float size, TerrainDetectorProperty property)
         {
             transform.position = position;
             GetDebugger().localScale = new Vector3(size, size, size);
             Property = property;          
         }
-        void IMapTerrainDetector.ExecuteDetect()
+        public override sealed void ExecuteDetect()
         {
             Dictionary<Vector3, float> dirDistPair = new();
             foreach (var dir in Property.DetectDirections)
@@ -111,7 +111,7 @@ namespace Yours.QuickCity.Internal
             this.ClosestBuilingDistance = closestDis;
             this.ClosestAttachDirection = dirDistPair.First(p => p.Value == closestDis).Key;
         }
-        void IMapTerrainDetector.ShowDebugColor()
+        public override sealed void ShowDebugColor()
         {
             var percent = ClosestBuilingDistance / Property.MaxDistanceStandard;
 

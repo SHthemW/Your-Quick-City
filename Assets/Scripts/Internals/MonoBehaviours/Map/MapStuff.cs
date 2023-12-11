@@ -16,7 +16,7 @@ namespace Yours.QuickCity.Internal
                 Debug.LogWarning($"[Stuff] 警告: 物体 {gameObject.name} 的 {nameof(transform.rotation)} 的初始值可能在初始化时被覆盖.");
         }
 
-        bool IMapStuffEntity.TryInit(IStuff conf, IMapTerrainDetector data)
+        bool IMapStuffEntity.TryInit(IStuff conf, MapTerrainDetector data)
         {
             CheckInitalValue();
 

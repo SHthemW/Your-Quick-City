@@ -2,7 +2,7 @@
 {
     internal interface IMapStuffEntity
     {
-        bool TryInit(IStuff conf, IMapTerrainDetector data);
+        bool TryInit(IStuff conf, MapTerrainDetector data);
         bool IsInited();
     }
 }
