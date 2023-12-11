@@ -3,16 +3,15 @@ using System.Collections.Generic;
 
 namespace Yours.QuickCity.Internal
 {
-    internal abstract class StepwiseTask<TResult> : ITask<TResult>
-    {       
+    internal abstract class StepwiseTask : ITask
+    {
         public int tick { get; set; }
         public abstract int maxTick { get; }
-        public TResult Result { get; protected set; }
 
         public bool Completed()
         {
             return _currentStepCount >= _targetStepCount;
-        }     
+        }
         public float FinishedPercent()
         {
             return (float)_currentStepCount / _targetStepCount * 100;
@@ -24,5 +23,10 @@ namespace Yours.QuickCity.Internal
         {
             return tick++ > maxTick || _targetStepCount - _currentStepCount <= tick;
         }
+    }
+
+    internal abstract class StepwiseTask<TResult> : StepwiseTask, ITask<TResult>
+    {
+        public TResult Result { get; protected set; }
     }
 }
