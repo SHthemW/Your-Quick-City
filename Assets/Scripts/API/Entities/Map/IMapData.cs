@@ -56,6 +56,11 @@ namespace Yours.QuickCity
 
         [Header("Analysis")]
 
+        [SerializeField] 
+        private bool _ignoreBuildingAreasWhenAnalysis;
+        internal readonly bool IgnoreBuildingAreasWhenAnalysis
+            => _ignoreBuildingAreasWhenAnalysis;
+
         [SerializeField]
         [Tooltip("决定Stuff生成的地形图的分辨率, 不建议大于10. \n[性能开销: 指数]")]
         private int _terrainDetectResolution;
@@ -81,7 +86,7 @@ namespace Yours.QuickCity
             }
         }
 
-        [SerializeField]
+        [Space, SerializeField]
         [Tooltip("地形探测器设置. 本设置将决定与地形图生成相关的属性.")]
         private TerrainDetectorProperty _detectorSettings;
         internal readonly TerrainDetectorProperty DetectorSettings 

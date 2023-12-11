@@ -21,7 +21,7 @@ namespace Yours.QuickCity.Internal
 
             foreach (var node in map.Content)
             {
-                if (node.IsObstacle)
+                if (node.IsObstacle && _map.IgnoreBuildingAreasWhenAnalysis)
                     continue;
 
                 var tilePos = MapUtils.GetTileActualPosition(_map.TileUnitSize, node.Coordinate);
