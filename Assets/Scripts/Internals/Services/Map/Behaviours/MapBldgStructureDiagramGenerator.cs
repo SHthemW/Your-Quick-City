@@ -101,7 +101,7 @@ namespace Yours.QuickCity.Internal
                     _finalStructureDiagram.Clear();
                     return false;
                 }
-                _finalStructureDiagram.Add(mapped_coord, (node as INodeDataHandler).Data);
+                _finalStructureDiagram.Add(mapped_coord, node.NodeData);
             }
             return true;        
 
@@ -127,7 +127,7 @@ namespace Yours.QuickCity.Internal
 
             foreach (var nodeKvp in _finalStructureDiagram)
             {
-                (diagram[nodeKvp.Key.x, nodeKvp.Key.y] as INodeDataHandler).Data = nodeKvp.Value;
+                diagram[nodeKvp.Key.x, nodeKvp.Key.y].NodeData = nodeKvp.Value;
             }
             diagram.ClosedNodeNum += structure.ClosedNodeNum;
 

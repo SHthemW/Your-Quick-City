@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [Serializable]
-    internal sealed class MapDiagramNode : INodeDataHandler
+    internal sealed class MapDiagramNode
     {
         [SerializeField]
         [Tooltip("该节点相对于原点(左下角)的坐标.")]
@@ -19,7 +19,11 @@ namespace Yours.QuickCity.Internal
             get => _coordinate; 
             set => _coordinate = value; 
         }      
-        internal MapDiagramNodeData NodeData => _data;
+        internal MapDiagramNodeData NodeData
+        {
+            get => _data; 
+            set => _data = value;
+        }
         internal bool IsObstacle => _data.NodeObj != null;
 
         // runtime setters
@@ -27,13 +31,6 @@ namespace Yours.QuickCity.Internal
         {
             var temp = _data;
             _data = new(temp.Direction, obstacle);
-        }
-
-        // implements
-        MapDiagramNodeData INodeDataHandler.Data
-        {
-            get => _data;
-            set => _data = value;
         }
     }
 
@@ -54,15 +51,4 @@ namespace Yours.QuickCity.Internal
         }
     }
     internal enum Direction { Random = 0, Up, Down, Left, Right }
-}
-
-namespace Yours.QuickCity.Internal
-{
-    /// <summary>
-    /// data setter interface of <see cref="MapDiagramNode"/>
-    /// </summary>
-    internal interface INodeDataHandler
-    {
-        MapDiagramNodeData Data { get; set; }
-    }
 }
