@@ -5,35 +5,25 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapTerrainDetectorGenerator
-    {     
+    internal sealed class MapTerrainDetectorGenerator : StepwiseTask<List<MapTerrainDetector>>
+    {
+        private readonly MapProperty _map;
         private readonly IMapObjParent _parent;
         private readonly MapTerrainDetector _detectorObject;
-
-        private readonly MapProperty _map;      
-
-        private int _targetGenerateNum  = 1;
-        private int _currentGenerateNum = 0;
-        private const int MAX_TRICK  = 1000;
-
-        internal float FinishedPercent()
-        {
-            return (float)_currentGenerateNum / _targetGenerateNum * 100;
-        }
-        internal bool GenerateIsFinished() 
-            => _currentGenerateNum >= _targetGenerateNum;
+        
+        public override int MaxTrick => 1000;
 
         internal MapTerrainDetectorGenerator(MapProperty map, MapTerrainDetector detector, IMapObjParent handler)
         {          
             _map = map;
             _detectorObject = detector != null ? detector : throw new ArgumentNullException(nameof(detector));
             _parent = handler ?? throw new ArgumentNullException(nameof(handler));
-        }       
-        internal List<MapTerrainDetector> Result { get; private set; } = new();
+        }
+
         internal IEnumerator GenerateDetectors(Vector3[] coords)
         {
-            _targetGenerateNum = coords.Length;
-            int trick = 0;
+            _targetStepCount = coords.Length;
+            Result = new();
 
             foreach (var coord in coords)
             {
@@ -46,12 +36,12 @@ namespace Yours.QuickCity.Internal
                 detector.ExecuteDetect();
                 detector.ShowDebugColor();
 
-                _currentGenerateNum++;
+                _currentStepCount++;
                 Result.Add(detector);
 
-                if (trick++ > MAX_TRICK || _targetGenerateNum - _currentGenerateNum <= trick)
+                if (IsTimeToReport())
                 {
-                    trick = 0;
+                    Trick = 0;
                     yield return null;
                 }
             }

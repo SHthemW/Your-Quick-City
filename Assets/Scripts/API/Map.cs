@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Yours.QuickCity.Internal;
 
@@ -65,14 +66,13 @@ namespace Yours.QuickCity
         {
             var coords = new MapTileCoordsGenerator(_map.Properties).GenerateCoords(map);
 
-            var detectorsGenerator = new MapTerrainDetectorGenerator(
-                _map.Properties, _map.Config.TerrainDetector, _parent);
+            var detectorsGenerator = new MapTerrainDetectorGenerator(_map.Properties, _map.Config.TerrainDetector, _parent);
 
             LogUI.AppendDynamicPercent(detectorsGenerator.FinishedPercent);
 
             _master.StartCoroutine(detectorsGenerator.GenerateDetectors(coords));
 
-            yield return new WaitUntil(detectorsGenerator.GenerateIsFinished);
+            yield return new WaitUntil(detectorsGenerator.Completed);
 
             _terrainDetectors = detectorsGenerator.Result.ToArray();
 
