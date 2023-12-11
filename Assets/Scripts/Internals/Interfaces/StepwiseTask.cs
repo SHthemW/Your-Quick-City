@@ -5,8 +5,8 @@ namespace Yours.QuickCity.Internal
 {
     internal abstract class StepwiseTask<TResult> : ITask<TResult>
     {       
-        public int Trick { get; set; }
-        public abstract int MaxTrick { get; }
+        public int tick { get; set; }
+        public abstract int maxTick { get; }
         public TResult Result { get; protected set; }
 
         public bool Completed()
@@ -22,7 +22,7 @@ namespace Yours.QuickCity.Internal
         protected int _currentStepCount { get; set; } = 0;
         protected bool IsTimeToReport()
         {
-            return Trick++ > MaxTrick || _targetStepCount - _currentStepCount <= Trick;
+            return tick++ > maxTick || _targetStepCount - _currentStepCount <= tick;
         }
     }
 }

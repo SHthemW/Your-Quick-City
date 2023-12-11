@@ -13,7 +13,7 @@ namespace Yours.QuickCity.Internal
         private readonly MapEntities _mapObjects;
 
         private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
-        public override sealed int MaxTrick => 1000;
+        public override sealed int maxTick => 1000;
 
         internal MapStuffDataAnalyzer(MapEntities mapObjects, MapProperty map)
         {
@@ -91,7 +91,7 @@ namespace Yours.QuickCity.Internal
 
                 if (IsTimeToReport())
                 {
-                    Trick = 0;
+                    tick = 0;
                     yield return null;
                 }
             }

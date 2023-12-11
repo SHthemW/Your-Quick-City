@@ -10,7 +10,7 @@ namespace Yours.QuickCity.Internal
         private readonly MapProperty _map;
 
         private const float HANGING_HEIGHT = 1;
-        public override sealed int MaxTrick => 1000;
+        public override sealed int maxTick => 1000;
 
         internal MapTileCoordsGenerator(MapProperty basicProp)
         {
@@ -37,7 +37,7 @@ namespace Yours.QuickCity.Internal
 
                 if (IsTimeToReport())
                 {
-                    Trick = 0;
+                    tick = 0;
                     yield return null;
                 }
             }

@@ -11,7 +11,7 @@ namespace Yours.QuickCity.Internal
         private readonly IMapObjParent _parent;
         private readonly MapTerrainDetector _detectorObject;
         
-        public override int MaxTrick => 1000;
+        public override sealed int maxTick => 1000;
 
         internal MapTerrainDetectorGenerator(MapProperty map, MapTerrainDetector detector, IMapObjParent handler)
         {          
@@ -41,7 +41,7 @@ namespace Yours.QuickCity.Internal
 
                 if (IsTimeToReport())
                 {
-                    Trick = 0;
+                    tick = 0;
                     yield return null;
                 }
             }

@@ -6,8 +6,8 @@ namespace Yours.QuickCity.Internal
 {
     internal interface ITask<TResult>
     {      
-        int Trick { get; set; }
-        int MaxTrick { get; }
+        int tick { get; set; }
+        int maxTick { get; }
         TResult Result { get; }
 
         float FinishedPercent();
