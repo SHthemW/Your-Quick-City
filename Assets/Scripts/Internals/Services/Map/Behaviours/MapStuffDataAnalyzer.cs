@@ -22,13 +22,17 @@ namespace Yours.QuickCity.Internal
             _targetStepCount = detectors.Length;
             var totalMapCoords = detectors.Select(d => d.Position).ToArray();
 
+            // temps
+            Dictionary<IStuff, float> distInInterval = new(capacity: detectors.Length);
+            Vector3[] nearbyCoords                   = new Vector3[detectors.Length];
+
             foreach (var detector in MapUtils.ShuffleRandomly(detectors))
             {
                 _currentStepCount++;
 
                 // for current detector density, get distribution from diagram.
 
-                Dictionary<IStuff, float> distInInterval = 
+                distInInterval = 
                     distributionDiagram.First(g => 
                     g.Key.l <= detector.DensityValue && 
                     g.Key.r >= detector.DensityValue).Value;
@@ -59,7 +63,7 @@ namespace Yours.QuickCity.Internal
 
                 // check if current result match the space distance limit
 
-                var nearbyCoords = GetNearbyCoordIndexes(
+                nearbyCoords = GetNearbyCoordIndexes(
                     map:         totalMapCoords, 
                     radius:      resultStuff.GetGenerateSpacing(),
                     centerIndex: Array.IndexOf(totalMapCoords, detector.Position)
@@ -83,6 +87,8 @@ namespace Yours.QuickCity.Internal
 
         private MapStuffDataAnalyzer() : base(-1)
             => throw new InvalidOperationException();
+
+        private static readonly List<int> _nearbyIndexes = new();
         private static int[] GetNearbyCoordIndexes(Vector3[] map, int centerIndex, float radius)
         {
             if (map == null || map.Length == 0)
@@ -91,7 +97,7 @@ namespace Yours.QuickCity.Internal
             if (centerIndex > map.Length - 1)
                 throw new ArgumentOutOfRangeException(nameof(centerIndex));
 
-            List<int> nearbyIndexes = new();
+            _nearbyIndexes.Clear();
 
             for (int i = 0; i < map.Length; i++)
             {
@@ -99,9 +105,9 @@ namespace Yours.QuickCity.Internal
                     continue;
 
                 if (Vector3.Distance(map[i], map[centerIndex]) <= radius)
-                    nearbyIndexes.Add(i);
+                    _nearbyIndexes.Add(i);
             }
-            return nearbyIndexes.ToArray();
+            return _nearbyIndexes.ToArray();
         }
     }
 }
