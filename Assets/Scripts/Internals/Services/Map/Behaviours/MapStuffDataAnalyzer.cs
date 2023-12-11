@@ -101,18 +101,18 @@ namespace Yours.QuickCity.Internal
 
         internal void PrintDistributionDiagram()
         {
-            StringBuilder content = new();
+            StringBuilder content = new("Stuff分布信息: \n");
 
             foreach (var dist in _distributionDiagram)
             {
-                content.Append($"\n[{dist.Key.l} - {dist.Key.r}] \n");
+                content.AppendLine($"[{dist.Key.l} - {dist.Key.r}]");
 
                 foreach (var stuff in dist.Value)
                 {
                     var keyStr = stuff.Key.Obj.name.PadRight(10);
                     var valStr = stuff.Value.ToString().PadRight(10);
 
-                    content.Append($"- {keyStr}: {valStr} \n");
+                    content.AppendLine($"- {keyStr}: {valStr}");
                 }
             }
             Debug.Log(content.ToString());

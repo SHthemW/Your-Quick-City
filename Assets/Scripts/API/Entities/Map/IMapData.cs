@@ -86,6 +86,17 @@ namespace Yours.QuickCity
         private TerrainDetectorProperty _detectorSettings;
         internal readonly TerrainDetectorProperty DetectorSettings 
             => _detectorSettings;
+
+        [Header("Debug")]
+
+        [SerializeField] bool _printMapGridDiagram;
+        internal readonly bool PrintMapGridDiagram => _printMapGridDiagram;
+
+        [SerializeField] bool _showStructureGenerateResult;
+        internal readonly bool ShowStructureGenerateResult => _showStructureGenerateResult;
+
+        [SerializeField] bool _showStuffDistributionInfo;
+        internal readonly bool ShowStuffDistributionInfo => _showStuffDistributionInfo;
     }
 
     [Serializable]

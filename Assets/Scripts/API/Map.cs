@@ -49,9 +49,14 @@ namespace Yours.QuickCity
         {
             new MapBldgBaseDiagramGenerator(_data.Properties, _data.GameObjectDef).GenerateOnDiagram(map);
 
-            new MapBldgStructureDiagramGenerator(_data.GameObjectDef).GenerateOnDiagram(map);
+            var structureGenerator = new MapBldgStructureDiagramGenerator(_data.GameObjectDef);
+            structureGenerator.GenerateOnDiagram(map);
 
-            map.PrintDebugGraph();
+            if (_data.Properties.PrintMapGridDiagram)
+                map.PrintDebugGraph();
+
+            if (_data.Properties.ShowStructureGenerateResult)
+                structureGenerator.PrintGenerateResult();
 
             var entityGenerator = new MapBldgEntityGenerator(_data.Properties, _data.GameObjectDef, _parent);
             entityGenerator.GenerateByDiagram(map);
@@ -67,8 +72,6 @@ namespace Yours.QuickCity
 
             _terrainDetectors = detectorsGenerator.GenerateDetectors(coords);
 
-            Debug.Log("detectors count: " + _terrainDetectors.Length);
-
             yield return new WaitUntil(detectorsGenerator.GenerateIsFinished);
         }
         private IEnumerator GenerateStuffByTerrain(IMapTerrainDetector[] terrain)
@@ -83,7 +86,8 @@ namespace Yours.QuickCity
 
             LogUI.AppendLog("finish analysis");
 
-            dataAnalyzer.PrintDistributionDiagram();
+            if (_data.Properties.ShowStuffDistributionInfo)
+                dataAnalyzer.PrintDistributionDiagram();
 
             new MapStuffEntityGenerator(_parent.StuffObjParent)
                 .GenerateStuffs(stuffObjData);
