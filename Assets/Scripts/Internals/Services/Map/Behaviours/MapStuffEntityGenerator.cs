@@ -1,22 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapStuffEntityGenerator
+    internal sealed class MapStuffEntityGenerator : StepwiseTask
     {
         private readonly Transform _generateParent;
+        public override sealed int maxTick => 1000;
 
         internal MapStuffEntityGenerator(Transform generateParent)
         {
             _generateParent = generateParent != null ? generateParent : throw new ArgumentNullException(nameof(generateParent));
         }
 
-        internal void GenerateStuffs(Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> stuffInfo)
+        internal IEnumerator GenerateStuffs(Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> stuffInfo)
         {
+            _targetStepCount = stuffInfo.Count;
+
             foreach (var info in stuffInfo)
             {
+                _currentStepCount++;
+
                 if (_generateCount.ContainsKey(info.Value) && 
                     _generateCount[info.Value] > info.Value.MaxGenerateNum)
                     continue;
@@ -35,7 +41,14 @@ namespace Yours.QuickCity.Internal
                     _generateCount[info.Value]++;
                 else
                     _generateCount.Add(info.Value, 1);
+
+                if (IsTimeToReport())
+                {
+                    tick = 0;
+                    yield return null;
+                }
             }
+            yield break;
         }
 
         private MapStuffEntityGenerator()

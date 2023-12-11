@@ -114,8 +114,15 @@ namespace Yours.QuickCity
 
             #region generate stuff gameobjects 
 
-            new MapStuffEntityGenerator(_parent.StuffObjParent)
-                .GenerateStuffs(stuffObjData);
+            var stuffEntityGenerator = new MapStuffEntityGenerator(_parent.StuffObjParent);
+
+            LogUI.AppendLog("generating stuffs...");
+            LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
+
+            _master.StartCoroutine    (stuffEntityGenerator.GenerateStuffs(stuffObjData));
+            yield return new WaitUntil(stuffEntityGenerator.Completed);
+
+            LogUI.EndDynamicPart();
 
             #endregion
 
