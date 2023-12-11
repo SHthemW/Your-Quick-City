@@ -30,22 +30,24 @@ namespace Yours.QuickCity.Internal
             _staticText = _instance.LogText.text;
             _instance.LogText.text = _staticText + $"({0.0}%)";
         }
-        private static void UpdateDynamicPercent()
+        private static void UpdateDynamicPercent(float percentValue)
         {
-            if (_percentGetter == null)
-                return;
-            string percent = Math.Round(_percentGetter.Invoke(), 1).ToString();
+            string percent = Math.Round(percentValue, 1).ToString();
             _instance.LogText.text = _staticText + $"({percent}%)";
         }
-        internal static void EndDynamicPart()
+        internal static void EndDynamicPart(bool force100Percent = false)
         {
+            if (force100Percent)
+                UpdateDynamicPercent(100);
             _staticText = _instance.LogText.text;
             _percentGetter = null;
         }
 
         private void Update()
         {
-            UpdateDynamicPercent();
+            if (_percentGetter == null)
+                return;
+            UpdateDynamicPercent(_percentGetter.Invoke());
         }
     }
 }
