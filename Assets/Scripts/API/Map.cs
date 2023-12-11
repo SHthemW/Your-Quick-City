@@ -12,7 +12,7 @@ namespace Yours.QuickCity
         private readonly IMapObjParent _parent;
         private readonly MonoBehaviour _master;
 
-        private MapDiagram            _diagram;
+        private MapDiagram           _diagram;
         private MapTerrainDetector[] _terrainDetectors;
 
         public Map(IMapData data, IMapObjParent parent, MonoBehaviour master)
