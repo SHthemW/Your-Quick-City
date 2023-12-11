@@ -138,7 +138,7 @@ namespace Yours.QuickCity
             _master.StartCoroutine    (stuffEntityGenerator.GenerateStuffs(stuffObjData));
             yield return new WaitUntil(stuffEntityGenerator.Completed);
 
-            LogUI.EndDynamicPart();
+            LogUI.EndDynamicPart(true);
 
             #endregion
 

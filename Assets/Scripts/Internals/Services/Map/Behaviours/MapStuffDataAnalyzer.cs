@@ -24,7 +24,6 @@ namespace Yours.QuickCity.Internal
 
             // temps
             Dictionary<IStuff, float> distInInterval = new(capacity: detectors.Length);
-            Vector3[] nearbyCoords                   = new Vector3[detectors.Length];
 
             foreach (var detector in MapUtils.ShuffleRandomly(detectors))
             {
@@ -32,13 +31,13 @@ namespace Yours.QuickCity.Internal
 
                 // for current detector density, get distribution from diagram.
 
-                distInInterval = 
-                    distributionDiagram.First(g => 
-                    g.Key.l <= detector.DensityValue && 
+                distInInterval =
+                    distributionDiagram.First(g =>
+                    g.Key.l <= detector.DensityValue &&
                     g.Key.r >= detector.DensityValue).Value;
 
                 // calc distribution weight:
-                
+
                 float totalWeightOfInterval = distInInterval.Sum(d => d.Value);
 
                 // if no any weight, skip current detector
@@ -48,7 +47,7 @@ namespace Yours.QuickCity.Internal
 
                 // else, calc result stuff by its weight.
 
-                float  randomSeed  = UnityEngine.Random.Range(0, totalWeightOfInterval);
+                float randomSeed = UnityEngine.Random.Range(0, totalWeightOfInterval);
                 IStuff resultStuff = null;
 
                 foreach (var match in distInInterval)
@@ -63,15 +62,12 @@ namespace Yours.QuickCity.Internal
 
                 // check if current result match the space distance limit
 
-                nearbyCoords = GetNearbyCoordIndexes(
-                    map:         totalMapCoords, 
-                    radius:      resultStuff.GetGenerateSpacing(),
-                    centerIndex: Array.IndexOf(totalMapCoords, detector.Position)
-                    )
-                    .Select(i => totalMapCoords[i])
-                    .ToArray();
+                UpdateNearbyCoords(
+                    map: totalMapCoords,
+                    radius: resultStuff.GetGenerateSpacing(),
+                    centerIndex: Array.IndexOf(totalMapCoords, detector.Position));
 
-                if (Result.Any(rst => nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
+                if (Result.Any(rst => _nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
                     continue;
 
                 // append result
@@ -88,8 +84,8 @@ namespace Yours.QuickCity.Internal
         private MapStuffDataAnalyzer() : base(-1)
             => throw new InvalidOperationException();
 
-        private static readonly List<int> _nearbyIndexes = new();
-        private static int[] GetNearbyCoordIndexes(Vector3[] map, int centerIndex, float radius)
+        private static readonly List<Vector3> _nearbyCoords = new();
+        private static void UpdateNearbyCoords(Vector3[] map, int centerIndex, float radius)
         {
             if (map == null || map.Length == 0)
                 throw new ArgumentException(nameof(map));
@@ -97,17 +93,16 @@ namespace Yours.QuickCity.Internal
             if (centerIndex > map.Length - 1)
                 throw new ArgumentOutOfRangeException(nameof(centerIndex));
 
-            _nearbyIndexes.Clear();
+            _nearbyCoords.Clear();
 
             for (int i = 0; i < map.Length; i++)
             {
-                if (i == centerIndex) 
+                if (i == centerIndex)
                     continue;
 
                 if (Vector3.Distance(map[i], map[centerIndex]) <= radius)
-                    _nearbyIndexes.Add(i);
+                    _nearbyCoords.Add(map[i]);
             }
-            return _nearbyIndexes.ToArray();
         }
     }
 }
