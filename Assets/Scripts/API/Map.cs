@@ -33,13 +33,11 @@ namespace Yours.QuickCity
         {
             _diagram = new(_map.Properties);
 
-            LogUI.AppendLog("start gen buildings..");
+            LogUI.AppendLog("generating buildings..");
             yield return _master.StartCoroutine(GenerateBuildingsOnMap(_diagram));
-
-            LogUI.AppendLog("start gen detectors..");
+        
             yield return _master.StartCoroutine(GenerateDetectorsOnMap(_diagram));
 
-            LogUI.AppendLog("start parse datas..");
             yield return _master.StartCoroutine(GenerateStuffByTerrain(_terrainDetectors));
 
             LogUI.AppendLog("generate finished.");
@@ -66,39 +64,47 @@ namespace Yours.QuickCity
         {
             var coords = new MapTileCoordsGenerator(_map.Properties).GenerateCoords(map);
 
+            #region generate detectors
+
             var detectorsGenerator = new MapTerrainDetectorGenerator(_map.Properties, _map.Config.TerrainDetector, _parent);
 
+            LogUI.AppendLog("generating detectors..");
             LogUI.AppendDynamicPercent(detectorsGenerator.FinishedPercent);
 
-            _master.StartCoroutine(detectorsGenerator.GenerateDetectors(coords));
-
+            _master.StartCoroutine    (detectorsGenerator.GenerateDetectors(coords));
             yield return new WaitUntil(detectorsGenerator.Completed);
-
-            _terrainDetectors = detectorsGenerator.Result.ToArray();
+            _terrainDetectors =        detectorsGenerator.Result.ToArray();
 
             LogUI.EndDynamicPart();
+
+            #endregion
         }
         private IEnumerator GenerateStuffByTerrain(MapTerrainDetector[] terrain)
         {
+            #region analyze stuff distribution
+
             var dataAnalyzer = new MapStuffDataAnalyzer(_map.GameObjectDef, _map.Properties);
 
-            LogUI.AppendLog("start analysis");
+            LogUI.AppendLog("analysing stuff distribution...");
             LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
 
-            _master.StartCoroutine(dataAnalyzer.Analysis(terrain));
-
+            _master.StartCoroutine    (dataAnalyzer.Analysis(terrain));
             yield return new WaitUntil(dataAnalyzer.Completed);
-
-            var stuffObjData = dataAnalyzer.Result;
+            var stuffObjData =         dataAnalyzer.Result;
 
             LogUI.EndDynamicPart();
-            LogUI.AppendLog("finish analysis");
 
             if (_map.Config.ShowStuffDistributionInfo)
                 dataAnalyzer.PrintDistributionDiagram();
 
+            #endregion
+
+            #region generate stuff gameobjects 
+
             new MapStuffEntityGenerator(_parent.StuffObjParent)
                 .GenerateStuffs(stuffObjData);
+
+            #endregion
 
             yield break;
         }
