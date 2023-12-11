@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
@@ -6,12 +7,26 @@ namespace Yours.QuickCity.Internal
     public sealed class MapConf_SO : ScriptableObject, IMapConf
     {
         [SerializeField]
-        private MapUtilObjectConf _utilObjectConf;
+        private GameObject _terrainDetector;
+
+        [Header("Debug")]
+
+        [SerializeField] 
+        private bool _printMapGridDiagram;
+
+        [SerializeField]
+        private bool _showStructureGenerateResult;
+
+        [SerializeField]
+        private bool _showStuffDistributionInfo;
 
         /*
          *  implements
          */
 
-        public MapUtilObjectConf UtilObjectConf => _utilObjectConf;
+        GameObject IMapConf.TerrainDetector => _terrainDetector;
+        bool IMapConf.PrintMapGridDiagram => _printMapGridDiagram;
+        bool IMapConf.ShowStructureGenerateResult => _showStructureGenerateResult;
+        bool IMapConf.ShowStuffDistributionInfo => _showStuffDistributionInfo;
     }
 }

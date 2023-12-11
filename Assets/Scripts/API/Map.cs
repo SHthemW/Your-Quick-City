@@ -7,8 +7,7 @@ namespace Yours.QuickCity
 {
     public sealed class Map
     {
-        private readonly IMapData      _data;
-        private readonly IMapConf      _conf;
+        private readonly IMapData      _map;
 
         private readonly IMapObjParent _parent;
         private readonly MonoBehaviour _master;
@@ -16,10 +15,9 @@ namespace Yours.QuickCity
         private MapDiagram            _diagram;
         private IMapTerrainDetector[] _terrainDetectors;
 
-        public Map(IMapData data, IMapConf conf, IMapObjParent parent, MonoBehaviour master)
+        public Map(IMapData data, IMapObjParent parent, MonoBehaviour master)
         {
-            _data = data ?? throw new ArgumentNullException(nameof(data));
-            _conf = conf ?? throw new ArgumentNullException(nameof(conf));
+            _map    = data ?? throw new ArgumentNullException(nameof(data));
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             _master = master != null ? master : throw new ArgumentNullException(nameof(master));
         }
@@ -32,7 +30,7 @@ namespace Yours.QuickCity
             => throw new NotImplementedException();
         private IEnumerator GenerateSeqence()
         {
-            _diagram = new(_data.Properties);
+            _diagram = new(_map.Properties);
 
             LogUI.AppendLog("start gen buildings..");
             yield return _master.StartCoroutine(GenerateBuildingsOnMap(_diagram));
@@ -47,28 +45,28 @@ namespace Yours.QuickCity
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {
-            new MapBldgBaseDiagramGenerator(_data.Properties, _data.GameObjectDef).GenerateOnDiagram(map);
+            new MapBldgBaseDiagramGenerator(_map.Properties, _map.GameObjectDef).GenerateOnDiagram(map);
 
-            var structureGenerator = new MapBldgStructureDiagramGenerator(_data.GameObjectDef);
+            var structureGenerator = new MapBldgStructureDiagramGenerator(_map.GameObjectDef);
             structureGenerator.GenerateOnDiagram(map);
 
-            if (_data.Properties.PrintMapGridDiagram)
+            if (_map.Config.PrintMapGridDiagram)
                 map.PrintDebugGraph();
 
-            if (_data.Properties.ShowStructureGenerateResult)
+            if (_map.Config.ShowStructureGenerateResult)
                 structureGenerator.PrintGenerateResult();
 
-            var entityGenerator = new MapBldgEntityGenerator(_data.Properties, _data.GameObjectDef, _parent);
+            var entityGenerator = new MapBldgEntityGenerator(_map.Properties, _map.GameObjectDef, _parent);
             entityGenerator.GenerateByDiagram(map);
 
             yield return new WaitUntil(entityGenerator.GenerateIsFinished);
         }
         private IEnumerator GenerateDetectorsOnMap(MapDiagram map)
         {
-            var coords = new MapTileCoordsGenerator(_data.Properties).GenerateCoords(map);
+            var coords = new MapTileCoordsGenerator(_map.Properties).GenerateCoords(map);
 
             var detectorsGenerator = new MapTerrainDetectorGenerator(
-                _data.Properties, _conf.UtilObjectConf, _parent);
+                _map.Properties, _map.Config.TerrainDetector, _parent);
 
             _terrainDetectors = detectorsGenerator.GenerateDetectors(coords);
 
@@ -76,7 +74,7 @@ namespace Yours.QuickCity
         }
         private IEnumerator GenerateStuffByTerrain(IMapTerrainDetector[] terrain)
         {
-            var dataAnalyzer = new MapStuffDataAnalyzer(_data.GameObjectDef, _data.Properties);
+            var dataAnalyzer = new MapStuffDataAnalyzer(_map.GameObjectDef, _map.Properties);
 
             LogUI.AppendLog("start analysis");
 
@@ -86,7 +84,7 @@ namespace Yours.QuickCity
 
             LogUI.AppendLog("finish analysis");
 
-            if (_data.Properties.ShowStuffDistributionInfo)
+            if (_map.Config.ShowStuffDistributionInfo)
                 dataAnalyzer.PrintDistributionDiagram();
 
             new MapStuffEntityGenerator(_parent.StuffObjParent)

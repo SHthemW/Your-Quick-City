@@ -6,8 +6,8 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapTerrainDetectorGenerator
     {     
-        private readonly IMapObjParent _handler;
-        private readonly MapUtilObjectConf _conf;
+        private readonly IMapObjParent _parent;
+        private readonly GameObject    _detectorObject;
 
         private readonly MapProperty _map;      
 
@@ -16,11 +16,11 @@ namespace Yours.QuickCity.Internal
         internal bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
-        internal MapTerrainDetectorGenerator(MapProperty map, MapUtilObjectConf conf, IMapObjParent handler)
+        internal MapTerrainDetectorGenerator(MapProperty map, GameObject detector, IMapObjParent handler)
         {          
             _map = map;
-            _conf = conf;
-            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+            _detectorObject = detector;
+            _parent = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
         internal IMapTerrainDetector[] GenerateDetectors(Vector3[] coords)
         {
@@ -30,8 +30,8 @@ namespace Yours.QuickCity.Internal
             foreach (var coord in coords)
             {
                 var detector = UnityEngine.Object.Instantiate(
-                    _conf.TerrainDetector, 
-                    _handler.                    TerrainDetectorParent)
+                    _detectorObject, 
+                    _parent.                    TerrainDetectorParent)
                     .GetComponent<IMapTerrainDetector>();
 
                 detector.Init(coord, CalculateDebuggerSize(), _map.DetectorSettings);
