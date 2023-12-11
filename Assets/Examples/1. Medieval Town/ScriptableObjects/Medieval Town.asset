@@ -18,6 +18,7 @@ MonoBehaviour:
     _size_y: 15
     _tileUnitSize: 16
     _obstaclePercent: 0.25
+    _ignoreBuildingAreasWhenAnalysis: 0
     _terrainDetectResolution: 6
     _stuffDistributeDiagramResolution: 50
     _detectorSettings:
