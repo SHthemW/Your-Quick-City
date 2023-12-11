@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,12 @@ namespace Yours.QuickCity.Internal
 
         private int _targetGenerateNum  = 1;
         private int _currentGenerateNum = 0;
+        private const int MAX_TRICK  = 1000;
+
+        internal float FinishedPercent()
+        {
+            return (float)_currentGenerateNum / _targetGenerateNum * 100;
+        }
         internal bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
@@ -22,16 +29,17 @@ namespace Yours.QuickCity.Internal
             _detectorObject = detector != null ? detector : throw new ArgumentNullException(nameof(detector));
             _parent = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
-        internal MapTerrainDetector[] GenerateDetectors(Vector3[] coords)
+        internal List<MapTerrainDetector> Result { get; private set; } = new();
+        internal IEnumerator GenerateDetectors(Vector3[] coords)
         {
-            List<MapTerrainDetector> detectors = new();
             _targetGenerateNum = coords.Length;
+            int trick = 0;
 
             foreach (var coord in coords)
             {
                 var detector = UnityEngine.Object.Instantiate(
                     _detectorObject, 
-                    _parent.                    TerrainDetectorParent)
+                    _parent.TerrainDetectorParent)
                     .GetComponent<MapTerrainDetector>();
 
                 detector.Init(coord, CalculateDebuggerSize(), _map.DetectorSettings);
@@ -39,9 +47,15 @@ namespace Yours.QuickCity.Internal
                 detector.ShowDebugColor();
 
                 _currentGenerateNum++;
-                detectors.Add(detector);
+                Result.Add(detector);
+
+                if (trick++ > MAX_TRICK || _targetGenerateNum - _currentGenerateNum <= trick)
+                {
+                    trick = 0;
+                    yield return null;
+                }
             }
-            return detectors.ToArray();
+            yield break;
         }
 
         private MapTerrainDetectorGenerator() { }

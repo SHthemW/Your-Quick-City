@@ -1,14 +1,10 @@
 ﻿using System;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Yours.QuickCity.Internal
 {
-    internal enum LogLevel
-    {
-        Normal, Done, Error
-    }
-
     internal sealed class LogUI : MonoBehaviour
     {
         [field: SerializeField]
@@ -18,24 +14,38 @@ namespace Yours.QuickCity.Internal
         {
             _instance = this;
         }
-
         private static LogUI _instance;
-        internal static void Log(string message, LogLevel level = LogLevel.Normal)
-        {
-            _instance.LogText.text = message;
+        
 
-            _instance.LogText.color = level switch 
-            { 
-                LogLevel.Normal => Color.white,
-                LogLevel.Done   => Color.green,
-                LogLevel.Error  => Color.red,
-
-                _ => throw new NotImplementedException(),
-            };
-        }
         internal static void AppendLog(string message)
         {
             _instance.LogText.text += "\n" + message;
+        }
+
+        private static string _staticText;
+        private static Func<float> _percentGetter;
+        internal static void AppendDynamicPercent(Func<float> percentGetter)
+        {
+            _percentGetter = percentGetter;
+            _staticText = _instance.LogText.text;
+            _instance.LogText.text = _staticText + $"({0.0}%)";
+        }
+        internal static void UpdateDynamicPercent()
+        {
+            if (_percentGetter == null)
+                return;
+            string percent = Math.Round(_percentGetter.Invoke(), 1).ToString();
+            _instance.LogText.text = _staticText + $"({percent}%)";
+        }
+        internal static void EndDynamicPart()
+        {
+            _staticText = _instance.LogText.text;
+            _percentGetter = null;
+        }
+
+        private void Update()
+        {
+            UpdateDynamicPercent();
         }
     }
 }

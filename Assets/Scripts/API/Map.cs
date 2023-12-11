@@ -68,9 +68,15 @@ namespace Yours.QuickCity
             var detectorsGenerator = new MapTerrainDetectorGenerator(
                 _map.Properties, _map.Config.TerrainDetector, _parent);
 
-            _terrainDetectors = detectorsGenerator.GenerateDetectors(coords);
+            LogUI.AppendDynamicPercent(detectorsGenerator.FinishedPercent);
+
+            _master.StartCoroutine(detectorsGenerator.GenerateDetectors(coords));
 
             yield return new WaitUntil(detectorsGenerator.GenerateIsFinished);
+
+            _terrainDetectors = detectorsGenerator.Result.ToArray();
+
+            LogUI.EndDynamicPart();
         }
         private IEnumerator GenerateStuffByTerrain(MapTerrainDetector[] terrain)
         {
