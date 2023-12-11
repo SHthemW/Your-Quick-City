@@ -65,7 +65,7 @@ namespace Yours.QuickCity
         {
             #region generate coords
 
-            var coordsGenerator = new MapTileCoordsGenerator(_map.Properties);
+            var coordsGenerator = new MapTileCoordsGenerator(_map.Properties, maxTick: _map.Config.Tick);
 
             LogUI.AppendLog("generating coords..");
             LogUI.AppendDynamicPercent(coordsGenerator.FinishedPercent);
@@ -80,7 +80,7 @@ namespace Yours.QuickCity
 
             #region generate detectors
 
-            var detectorsGenerator = new MapTerrainDetectorGenerator(_map.Properties, _map.Config.TerrainDetector, _parent);
+            var detectorsGenerator = new MapTerrainDetectorGenerator(_map.Properties, _map.Config.TerrainDetector, _parent, maxTick: _map.Config.Tick);
 
             LogUI.AppendLog("generating detectors..");
             LogUI.AppendDynamicPercent(detectorsGenerator.FinishedPercent);
@@ -97,7 +97,7 @@ namespace Yours.QuickCity
         {
             #region generate stuff distribution
 
-            var distDiagGenerator = new MapStuffDistributionDiagramGenerator(_map.GameObjectDef, _map.Properties);
+            var distDiagGenerator = new MapStuffDistributionDiagramGenerator(_map.GameObjectDef, _map.Properties, maxTick: _map.Config.Tick);
 
             LogUI.AppendLog("generating stuff dist...");
             LogUI.AppendDynamicPercent(distDiagGenerator.FinishedPercent);
@@ -115,7 +115,7 @@ namespace Yours.QuickCity
 
             #region analyze stuff distribution
 
-            var dataAnalyzer = new MapStuffDataAnalyzer();
+            var dataAnalyzer = new MapStuffDataAnalyzer(maxTick: _map.Config.Tick);
 
             LogUI.AppendLog("analysing stuff dist...");
             LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
@@ -130,7 +130,7 @@ namespace Yours.QuickCity
 
             #region generate stuff gameobjects 
 
-            var stuffEntityGenerator = new MapStuffEntityGenerator(_parent.StuffObjParent);
+            var stuffEntityGenerator = new MapStuffEntityGenerator(_parent.StuffObjParent, maxTick: _map.Config.Tick);
 
             LogUI.AppendLog("generating stuffs...");
             LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);

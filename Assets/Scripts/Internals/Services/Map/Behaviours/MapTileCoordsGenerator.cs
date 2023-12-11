@@ -10,9 +10,8 @@ namespace Yours.QuickCity.Internal
         private readonly MapProperty _map;
 
         private const float HANGING_HEIGHT = 1;
-        public override sealed int maxTick => 1000;
 
-        internal MapTileCoordsGenerator(MapProperty basicProp)
+        internal MapTileCoordsGenerator(MapProperty basicProp, int maxTick) : base(maxTick)
         {
             _map = basicProp;
         }
@@ -56,7 +55,8 @@ namespace Yours.QuickCity.Internal
                 offsetMsg);
         }
 
-        private MapTileCoordsGenerator() { }
+        private MapTileCoordsGenerator() : base(-1)
+            => throw new System.InvalidOperationException();
         private HashSet<Vector3> GeneratePositionOffsets()
         {
             float unitDistance = (float)_map.TileUnitSize / _map.TerrainDetectResolution;

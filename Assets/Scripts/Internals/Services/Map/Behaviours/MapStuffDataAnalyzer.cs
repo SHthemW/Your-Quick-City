@@ -9,9 +9,7 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapStuffDataAnalyzer : StepwiseTask<Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>>
     {
-        public override sealed int maxTick => 1000;
-
-        internal MapStuffDataAnalyzer() { }
+        internal MapStuffDataAnalyzer(int maxTick) : base(maxTick) { }
         /// <summary>
         /// 
         /// </summary>
@@ -83,6 +81,8 @@ namespace Yours.QuickCity.Internal
             }
         }
 
+        private MapStuffDataAnalyzer() : base(-1)
+            => throw new InvalidOperationException();
         private static int[] GetNearbyCoordIndexes(Vector3[] map, int centerIndex, float radius)
         {
             if (map == null || map.Length == 0)

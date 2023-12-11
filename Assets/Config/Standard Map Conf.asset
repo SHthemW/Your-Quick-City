@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _terrainDetector: {fileID: 1566368487211108794, guid: 6624877937b55a04d98fb49090cbe4eb,
     type: 3}
+  _tick: 500
   _printMapGridDiagram: 1
   _showStructureGenerateResult: 1
   _showStuffDistributionInfo: 1

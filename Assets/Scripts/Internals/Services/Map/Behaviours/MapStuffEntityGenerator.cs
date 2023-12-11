@@ -8,9 +8,8 @@ namespace Yours.QuickCity.Internal
     internal sealed class MapStuffEntityGenerator : StepwiseTask
     {
         private readonly Transform _generateParent;
-        public override sealed int maxTick => 1000;
 
-        internal MapStuffEntityGenerator(Transform generateParent)
+        internal MapStuffEntityGenerator(Transform generateParent, int maxTick) : base(maxTick)
         {
             _generateParent = generateParent != null ? generateParent : throw new ArgumentNullException(nameof(generateParent));
         }
@@ -51,8 +50,8 @@ namespace Yours.QuickCity.Internal
             yield break;
         }
 
-        private MapStuffEntityGenerator()
-            => throw new NotImplementedException();
+        private MapStuffEntityGenerator() : base(-1)
+            => throw new InvalidOperationException();
 
         private readonly Dictionary<IStuff, int> _generateCount = new();
     }

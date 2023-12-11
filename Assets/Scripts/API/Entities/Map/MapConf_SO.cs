@@ -9,6 +9,9 @@ namespace Yours.QuickCity.Internal
         [SerializeField]
         private MapTerrainDetector _terrainDetector;
 
+        [SerializeField]
+        private int _tick = 1000;
+
         [Header("Debug")]
 
         [SerializeField] 
@@ -28,5 +31,6 @@ namespace Yours.QuickCity.Internal
         bool IMapConf.PrintMapGridDiagram => _printMapGridDiagram;
         bool IMapConf.ShowStructureGenerateResult => _showStructureGenerateResult;
         bool IMapConf.ShowStuffDistributionInfo => _showStuffDistributionInfo;
+        int IMapConf.Tick => _tick;
     }
 }

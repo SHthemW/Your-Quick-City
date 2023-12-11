@@ -11,9 +11,8 @@ namespace Yours.QuickCity.Internal
     {
         private readonly MapProperty _map;
         private readonly MapEntities _mapObjects;
-        public override sealed int maxTick => 1000;
 
-        internal MapStuffDistributionDiagramGenerator(MapEntities mapObjects, MapProperty map)
+        internal MapStuffDistributionDiagramGenerator(MapEntities mapObjects, MapProperty map, int maxTick) : base(maxTick)
         {
             _mapObjects = mapObjects;
             _map = map;
@@ -77,7 +76,7 @@ namespace Yours.QuickCity.Internal
             Debug.Log(content.ToString());
         }
 
-        private MapStuffDistributionDiagramGenerator()
+        private MapStuffDistributionDiagramGenerator() : base(-1)
             => throw new InvalidOperationException();
     }
 }

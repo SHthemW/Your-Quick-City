@@ -11,9 +11,7 @@ namespace Yours.QuickCity.Internal
         private readonly IMapObjParent _parent;
         private readonly MapTerrainDetector _detectorObject;
         
-        public override sealed int maxTick => 1000;
-
-        internal MapTerrainDetectorGenerator(MapProperty map, MapTerrainDetector detector, IMapObjParent handler)
+        internal MapTerrainDetectorGenerator(MapProperty map, MapTerrainDetector detector, IMapObjParent handler, int maxTick) : base(maxTick)
         {          
             _map = map;
             _detectorObject = detector != null ? detector : throw new ArgumentNullException(nameof(detector));
@@ -48,7 +46,8 @@ namespace Yours.QuickCity.Internal
             yield break;
         }
 
-        private MapTerrainDetectorGenerator() { }
+        private MapTerrainDetectorGenerator() : base(-1)
+            => throw new InvalidOperationException();
         private float CalculateDebuggerSize()
         {
             return _map.TileUnitSize / (_map.TerrainDetectResolution + 1);
