@@ -133,7 +133,7 @@ namespace Yours.QuickCity
             var stuffEntityGenerator = new MapStuffEntityGenerator(_parent.StuffObjParent, maxTick: _map.Config.Tick);
 
             LogUI.AppendLog("generating stuffs...");
-            LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
+            LogUI.AppendDynamicPercent(stuffEntityGenerator.FinishedPercent);
 
             _master.StartCoroutine    (stuffEntityGenerator.GenerateStuffs(stuffObjData));
             yield return new WaitUntil(stuffEntityGenerator.Completed);
