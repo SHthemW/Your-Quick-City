@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8231450470812341994}
   - component: {fileID: 8811400428441288750}
   - component: {fileID: 574297402340250395}
-  - component: {fileID: 8360464189561876388}
   m_Layer: 0
   m_Name: Acacia 1
   m_TagString: Untagged
@@ -85,18 +84,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5415733, y: 10.122183, z: 2.7043345}
   m_Center: {x: -0.06724824, y: 4.561091, z: 0.06358762}
---- !u!114 &8360464189561876388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4927119754242237689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81926d79479f5d6449e1e34c8366d0fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6915340324099557539
 GameObject:
   m_ObjectHideFlags: 0

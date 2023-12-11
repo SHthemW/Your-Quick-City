@@ -8,7 +8,7 @@ namespace Yours.QuickCity.Internal
     {
         [Header("Basic")]
 
-        [SerializeField, Tooltip("Stuff的Prefeb. 注意该预制体必须挂载脚本[MapStuffEntity]")]
+        [SerializeField, Tooltip("Stuff的Prefeb.")]
         private GameObject _obj;
 
         [Header("General Options")]
@@ -57,9 +57,6 @@ namespace Yours.QuickCity.Internal
 
             if (_minGenerateSpacing > _maxGenerateSpacing)
                 Debug.LogWarning($"[Map][Stuff] 警告: Stuff {name} 的配置数值出错: 最小间距不应大于最大间距.");
-
-            if (_obj != null && !_obj.TryGetComponent(out IMapStuffEntity _))
-                Debug.LogWarning($"[Map][Stuff] 警告: Stuff {name} 所挂载的Obj {_obj.name} 没有 {nameof(IMapStuffEntity)} 的实现.");
         }
 
         /*

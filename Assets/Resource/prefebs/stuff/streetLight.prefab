@@ -380,7 +380,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7205387262919744356}
   - component: {fileID: 9091614550589548173}
-  - component: {fileID: 3485056387225523643}
   m_Layer: 0
   m_Name: streetLight
   m_TagString: Untagged
@@ -425,15 +424,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.58, y: 12.987056, z: 0.58}
   m_Center: {x: 0, y: 6.44, z: 0}
---- !u!114 &3485056387225523643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7545074355739607518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81926d79479f5d6449e1e34c8366d0fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

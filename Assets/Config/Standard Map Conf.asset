@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ccb5b6e5cd9d24080d49572a2f3c62, type: 3}
   m_Name: Standard Map Conf
   m_EditorClassIdentifier: 
-  _terrainDetector: {fileID: 3883359571548250962, guid: 6624877937b55a04d98fb49090cbe4eb,
+  _terrainDetector: {fileID: 1566368487211108794, guid: 6624877937b55a04d98fb49090cbe4eb,
     type: 3}
   _printMapGridDiagram: 1
   _showStructureGenerateResult: 1

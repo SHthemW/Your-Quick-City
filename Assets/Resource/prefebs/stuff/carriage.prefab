@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 425082358241343048}
   - component: {fileID: 4274394611146499704}
-  - component: {fileID: 575108512008896723}
   m_Layer: 0
   m_Name: carriage
   m_TagString: Untagged
@@ -55,18 +54,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.154888, y: 7.672698, z: 6.0882883}
   m_Center: {x: 0.4548502, y: 3.9329238, z: 0.016182423}
---- !u!114 &575108512008896723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057750576444665074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81926d79479f5d6449e1e34c8366d0fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1548147538131821138
 GameObject:
   m_ObjectHideFlags: 0
