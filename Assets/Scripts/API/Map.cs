@@ -32,7 +32,7 @@ namespace Yours.QuickCity
             => throw new NotImplementedException();
         private IEnumerator GenerateSeqence()
         {
-            _diagram = new(_data.BasicProperty);
+            _diagram = new(_data.Properties);
 
             LogUI.AppendLog("start gen buildings..");
             yield return _master.StartCoroutine(GenerateBuildingsOnMap(_diagram));
@@ -47,23 +47,23 @@ namespace Yours.QuickCity
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {
-            new MapBldgBaseDiagramGenerator(_data.BasicProperty, _data.BuildingGenerationProperty).GenerateOnDiagram(map);
+            new MapBldgBaseDiagramGenerator(_data.Properties, _data.GameObjectDef).GenerateOnDiagram(map);
 
-            new MapBldgStructureDiagramGenerator(_data.StructureGenerationProperty).GenerateOnDiagram(map);
+            new MapBldgStructureDiagramGenerator(_data.GameObjectDef).GenerateOnDiagram(map);
 
             map.PrintDebugGraph();
 
-            var entityGenerator = new MapBldgEntityGenerator(_data.BasicProperty, _data.BuildingGenerationProperty, _parent);
+            var entityGenerator = new MapBldgEntityGenerator(_data.Properties, _data.GameObjectDef, _parent);
             entityGenerator.GenerateByDiagram(map);
 
             yield return new WaitUntil(entityGenerator.GenerateIsFinished);
         }
         private IEnumerator GenerateDetectorsOnMap(MapDiagram map)
         {
-            var coords = new MapTileCoordsGenerator(_data.BasicProperty, _data.StuffGenerationProperty).GenerateCoords(map);
+            var coords = new MapTileCoordsGenerator(_data.Properties).GenerateCoords(map);
 
             var detectorsGenerator = new MapTerrainDetectorGenerator(
-                _data.BasicProperty, _data.StuffGenerationProperty, _conf.UtilObjectConf, _parent);
+                _data.Properties, _conf.UtilObjectConf, _parent);
 
             _terrainDetectors = detectorsGenerator.GenerateDetectors(coords);
 
@@ -73,7 +73,7 @@ namespace Yours.QuickCity
         }
         private IEnumerator GenerateStuffByTerrain(IMapTerrainDetector[] terrain)
         {
-            var dataAnalyzer = new MapStuffDataAnalyzer(_data.StuffGenerationProperty);
+            var dataAnalyzer = new MapStuffDataAnalyzer(_data.GameObjectDef, _data.Properties);
 
             LogUI.AppendLog("start analysis");
 

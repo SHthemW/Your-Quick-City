@@ -6,7 +6,7 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapBldgStructureDiagramGenerator
     {
-        private readonly MapStructureGenerationProperty _properties;
+        private readonly MapEntities _mapObjects;
 
         private Dictionary<Coord, MapDiagramNodeData> _finalStructureDiagram { get; set; } = new();
 
@@ -14,13 +14,13 @@ namespace Yours.QuickCity.Internal
          *  internal:
          */
 
-        internal MapBldgStructureDiagramGenerator(MapStructureGenerationProperty properties)
+        internal MapBldgStructureDiagramGenerator(MapEntities objectsDef)
         {
-            _properties = properties;
+            _mapObjects = objectsDef;
         }
         internal void GenerateOnDiagram(MapDiagram diagram)
         {
-            foreach (var structure in _properties.StructureList)
+            foreach (var structure in _mapObjects.StructureList)
             {
                 TryAddStructuresToDiagram(structure, diagram);
             }
@@ -46,7 +46,7 @@ namespace Yours.QuickCity.Internal
                     continue;
                 }
 
-                if (_properties.EnableStructureDebug)
+                //if (_mapObjects.EnableStructureDebug)
                     Debug.Log($"[structure] 结构 {structure.Name} 的第 {times + 1} 次尝试生成成功, 生成位置: {tryingCoord}");
 
                 success++;
@@ -55,7 +55,7 @@ namespace Yours.QuickCity.Internal
                 WriteStructureToDiagram(structure, diagram);
             }
 
-            if (_properties.EnableStructureDebug && (succeedCoords.Count < structure.GenerateNumber))
+            //if (_mapObjects.EnableStructureDebug && (succeedCoords.Count < structure.GenerateNumber))
                 Debug.Log($"[structure] 结构 {structure.Name} 未完成其生成目标 ({succeedCoords.Count} / {structure.GenerateNumber}), 因为整个地图中没有合法的位置供其生成. ");
 
             // local function

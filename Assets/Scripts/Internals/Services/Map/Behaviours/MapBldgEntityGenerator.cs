@@ -5,8 +5,8 @@ namespace Yours.QuickCity.Internal
 {
     internal sealed class MapBldgEntityGenerator
     {
-        private readonly MapSizeProperty _basicProperty;
-        private readonly MapBuildingGenerationProperty _baseGenProperty;
+        private readonly MapProperty _map;
+        private readonly MapEntities _mapObjects;
         private readonly IMapObjParent _parent;
 
         private const Direction FLOOR_DEFAULT_DIRECTION = Direction.Up;
@@ -14,10 +14,10 @@ namespace Yours.QuickCity.Internal
         private int _generatedCount;
         private int _targetGenerateCount;
 
-        internal MapBldgEntityGenerator(MapSizeProperty basicProp, MapBuildingGenerationProperty entityProp, IMapObjParent parent)
+        internal MapBldgEntityGenerator(MapProperty basicProp, MapEntities entityProp, IMapObjParent parent)
         {
-            _basicProperty = basicProp;
-            _baseGenProperty = entityProp;
+            _map = basicProp;
+            _mapObjects = entityProp;
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
         internal void GenerateByDiagram(MapDiagram diagram)
@@ -43,10 +43,10 @@ namespace Yours.QuickCity.Internal
         private void GenerateGroundTile(Coord logicPos)
         {
             var spawnFloor = UnityEngine.Object.
-                Instantiate(_baseGenProperty.GetRandomFloor());
+                Instantiate(_mapObjects.GetRandomFloor());
 
             spawnFloor.transform.SetPositionAndRotation(
-                position: MapUtils.GetTileActualPosition(_basicProperty.TileUnitSize, logicPos),
+                position: MapUtils.GetTileActualPosition(_map.TileUnitSize, logicPos),
                 rotation: FLOOR_DEFAULT_DIRECTION.ToRotation());
 
             spawnFloor.transform.SetParent(_parent.FloorObjParent); 
@@ -57,7 +57,7 @@ namespace Yours.QuickCity.Internal
                 Instantiate(data.NodeObj);
 
             spawnObstacle.transform.SetPositionAndRotation(
-                position: MapUtils.GetTileActualPosition(_basicProperty.TileUnitSize, logicPos),
+                position: MapUtils.GetTileActualPosition(_map.TileUnitSize, logicPos),
                 rotation: data.Direction.ToRotation());
 
             spawnObstacle.transform.SetParent(_parent.ObstacleObjParent);

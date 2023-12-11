@@ -7,24 +7,16 @@ namespace Yours.QuickCity.Internal
     public sealed class MapData_SO : ScriptableObject, IMapData
     {
         [Space, SerializeField]
-        private MapSizeProperty _size;
+        private MapProperty _properties;
 
         [Space, SerializeField]
-        private MapBuildingGenerationProperty _buildingGenerationProperty;
-
-        [Space, SerializeField]
-        private MapStructureGenerationProperty _structureGenerationProperty;
-
-        [Space, SerializeField]
-        private MapStuffGenerationProperty _stuffGenerationProperty;
+        private MapEntities _gameObjects;
 
         /*
          *  implements
          */
 
-        public MapSizeProperty BasicProperty => _size;
-        public MapBuildingGenerationProperty  BuildingGenerationProperty  => _buildingGenerationProperty;
-        public MapStructureGenerationProperty StructureGenerationProperty => _structureGenerationProperty;
-        public MapStuffGenerationProperty     StuffGenerationProperty     => _stuffGenerationProperty;
+        MapProperty IMapData.Properties => _properties;
+        MapEntities IMapData.GameObjectDef => _gameObjects;
     }
 }

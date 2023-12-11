@@ -9,19 +9,17 @@ namespace Yours.QuickCity.Internal
         private readonly IMapObjParent _handler;
         private readonly MapUtilObjectConf _conf;
 
-        private readonly MapSizeProperty _map;      
-        private readonly MapStuffGenerationProperty _stuffGenProp;
+        private readonly MapProperty _map;      
 
         private int _targetGenerateNum  = 1;
         private int _currentGenerateNum = 0;
         internal bool GenerateIsFinished() 
             => _currentGenerateNum >= _targetGenerateNum;
 
-        internal MapTerrainDetectorGenerator(MapSizeProperty map, MapStuffGenerationProperty stuffProp, MapUtilObjectConf conf, IMapObjParent handler)
+        internal MapTerrainDetectorGenerator(MapProperty map, MapUtilObjectConf conf, IMapObjParent handler)
         {          
             _map = map;
             _conf = conf;
-            _stuffGenProp = stuffProp;
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }       
         internal IMapTerrainDetector[] GenerateDetectors(Vector3[] coords)
@@ -36,7 +34,7 @@ namespace Yours.QuickCity.Internal
                     _handler.                    TerrainDetectorParent)
                     .GetComponent<IMapTerrainDetector>();
 
-                detector.Init(coord, CalculateDebuggerSize(), _stuffGenProp.DetectorSettings);
+                detector.Init(coord, CalculateDebuggerSize(), _map.DetectorSettings);
                 detector.ExecuteDetect();
                 detector.ShowDebugColor();
 
@@ -49,7 +47,7 @@ namespace Yours.QuickCity.Internal
         private MapTerrainDetectorGenerator() { }
         private float CalculateDebuggerSize()
         {
-            return _map.TileUnitSize / (_stuffGenProp.StuffGenerateAccuracy + 1);
+            return _map.TileUnitSize / (_map.TerrainDetectResolution + 1);
         }
     }
 }
