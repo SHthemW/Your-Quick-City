@@ -22,7 +22,7 @@ namespace Yours.QuickCity.Internal
         protected int _currentStepCount { get; set; } = 0;
         protected bool IsTimeToReport()
         {
-            return Trick++ > 1000 || _targetStepCount - _currentStepCount <= Trick;
+            return Trick++ > MaxTrick || _targetStepCount - _currentStepCount <= Trick;
         }
     }
 }
