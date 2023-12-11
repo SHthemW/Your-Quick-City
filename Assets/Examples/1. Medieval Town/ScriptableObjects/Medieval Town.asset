@@ -20,7 +20,7 @@ MonoBehaviour:
     _obstaclePercent: 0.25
     _ignoreBuildingAreasWhenAnalysis: 0
     _terrainDetectResolution: 6
-    _stuffDistributeDiagramResolution: 50
+    _stuffDistributeDiagramResolution: 200
     _detectorSettings:
       _maxDistanceStandard: 50
       _detectDirectionNum: 12
