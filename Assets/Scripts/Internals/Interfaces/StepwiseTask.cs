@@ -20,6 +20,8 @@ namespace Yours.QuickCity.Internal
 
         private int _targetStepCount  = 1;
         private int _currentStepCount = 0;
+        private bool IsTimeToReport => 
+            tick > maxTick || _targetStepCount - _currentStepCount <= tick;
 
         protected StepwiseTask(int maxTick) 
         { 
@@ -40,7 +42,8 @@ namespace Yours.QuickCity.Internal
                 catch (ContinueException) { continue; }
                 catch (BreakException) { break; }
 
-                if (tick++ > maxTick || _targetStepCount - _currentStepCount <= tick)
+                tick++;
+                if (IsTimeToReport)
                 {
                     tick = 0;
                     yield return null;
@@ -62,7 +65,8 @@ namespace Yours.QuickCity.Internal
                 catch (ContinueException) { continue; }
                 catch (BreakException)    { break; }
 
-                if (tick++ > maxTick || _targetStepCount - _currentStepCount <= tick)
+                tick++;
+                if (IsTimeToReport)
                 {
                     tick = 0;
                     yield return null;
