@@ -54,7 +54,7 @@ namespace Yours.QuickCity
             _master.StartCoroutine    (baseDiagGenerator.GenerateOnDiagram(map));
             yield return new WaitUntil(baseDiagGenerator.Completed);
 
-            LogUI.EndDynamicPart(true);
+            LogUI.EndDynamicPart();
 
             #endregion
 
@@ -88,7 +88,7 @@ namespace Yours.QuickCity
             _master.StartCoroutine    (entityGenerator.GenerateByDiagram(map));
             yield return new WaitUntil(entityGenerator.Completed);
 
-            LogUI.EndDynamicPart(true);
+            LogUI.EndDynamicPart();
 
             #endregion
         }
@@ -105,7 +105,7 @@ namespace Yours.QuickCity
             yield return new WaitUntil(coordsGenerator.Completed);
             var coords =               coordsGenerator.Result.ToArray();
 
-            LogUI.EndDynamicPart(true);
+            LogUI.EndDynamicPart();
 
             #endregion
 
@@ -130,14 +130,14 @@ namespace Yours.QuickCity
 
             var distDiagGenerator = new MapStuffDistributionDiagramGenerator(_map.GameObjectDef, _map.Properties, maxTick: _map.Config.Tick);
 
-            LogUI.AppendLog("generating stuff dist...");
+            LogUI.AppendLog("generating stuff dist..");
             LogUI.AppendDynamicPercent(distDiagGenerator.FinishedPercent);
 
             _master.StartCoroutine    (distDiagGenerator.BakeDistribution(maxDensity: _terrainDetectors.Max(d => d.DensityValue)));
             yield return new WaitUntil(distDiagGenerator.Completed);
             var distribution =         distDiagGenerator.Result;
 
-            LogUI.EndDynamicPart(true);
+            LogUI.EndDynamicPart();
 
             if (_map.Config.ShowStuffDistributionInfo)
                 distDiagGenerator.PrintDistributionDiagram();
@@ -148,14 +148,14 @@ namespace Yours.QuickCity
 
             var dataAnalyzer = new MapStuffDataAnalyzer(maxTick: _map.Config.Tick);
 
-            LogUI.AppendLog("analysing stuff dist...");
+            LogUI.AppendLog("analysing stuff dist..");
             LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
 
             _master.StartCoroutine    (dataAnalyzer.Analysis(terrain, distribution));
             yield return new WaitUntil(dataAnalyzer.Completed);
             var stuffObjData =         dataAnalyzer.Result;
 
-            LogUI.EndDynamicPart(true);
+            LogUI.EndDynamicPart();
 
             #endregion
 
@@ -163,13 +163,13 @@ namespace Yours.QuickCity
 
             var stuffEntityGenerator = new MapStuffEntityGenerator(_parent.StuffObjParent, maxTick: _map.Config.Tick);
 
-            LogUI.AppendLog("generating stuffs...");
+            LogUI.AppendLog("generating stuffs..");
             LogUI.AppendDynamicPercent(stuffEntityGenerator.FinishedPercent);
 
             _master.StartCoroutine    (stuffEntityGenerator.GenerateStuffs(stuffObjData));
             yield return new WaitUntil(stuffEntityGenerator.Completed);
 
-            LogUI.EndDynamicPart(true);
+            LogUI.EndDynamicPart();
 
             #endregion
 

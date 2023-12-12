@@ -10,6 +10,8 @@ namespace Yours.QuickCity.Internal
         [field: SerializeField]
         private Text LogText { get; set; }
 
+        private const int DONE_PERCENT = 98;
+
         private void Awake()
         {
             _instance = this;
@@ -33,12 +35,11 @@ namespace Yours.QuickCity.Internal
         private static void UpdateDynamicPercent(float percentValue)
         {
             string percent = Math.Round(percentValue, 1).ToString();
-            _instance.LogText.text = _staticText + $"({percent}%)";
+
+            _instance.LogText.text = _staticText + (percentValue >= DONE_PERCENT ? "(done.)" : $"({percent}%)");
         }
-        internal static void EndDynamicPart(bool force100Percent = false)
+        internal static void EndDynamicPart()
         {
-            if (force100Percent)
-                UpdateDynamicPercent(100);
             _staticText = _instance.LogText.text;
             _percentGetter = null;
         }
