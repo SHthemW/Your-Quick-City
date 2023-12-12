@@ -29,11 +29,11 @@ namespace Yours.QuickCity.Internal
         { 
             this.maxTick = maxTick; 
         }       
-        protected IEnumerator ForStep(Action body, int targetStepCount, Action pre = null, Func<bool> endCond = null, Action step = null)
+        protected IEnumerator ForStep(Action body, int stepcnt, bool endCond = true, Action roundAct = null)
         {
-            _targetStepCount = targetStepCount;
+            _targetStepCount = stepcnt;
 
-            for(pre?.Invoke(); endCond == null || endCond.Invoke(); step?.Invoke())
+            for(; endCond; roundAct?.Invoke())
             {
                 _currentStepCount++;
 
