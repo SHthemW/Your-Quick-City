@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapBldgStructureDiagramGenerator
+    internal sealed class MapBldgStructureDiagramGenerator : StepwiseTask
     {
         private readonly MapEntities _mapObjects;
 
@@ -17,16 +18,16 @@ namespace Yours.QuickCity.Internal
          *  internal:
          */
 
-        internal MapBldgStructureDiagramGenerator(MapEntities objectsDef)
+        internal MapBldgStructureDiagramGenerator(MapEntities objectsDef, int maxTick) : base(maxTick)
         {
             _mapObjects = objectsDef;
         }
-        internal void GenerateOnDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateOnDiagram(MapDiagram diagram)
         {
-            foreach (var structure in _mapObjects.StructureList)
+            yield return ForeachStep(iter: _mapObjects.StructureList, stepcnt: _mapObjects.StructureList.Count / 2, body: structure =>
             {
                 TryAddStructuresToDiagram(structure, diagram);
-            }
+            });
         }
         internal void PrintGenerateResult()
         {
@@ -37,7 +38,8 @@ namespace Yours.QuickCity.Internal
          *  private:
          */
 
-        private MapBldgStructureDiagramGenerator() { }
+        private MapBldgStructureDiagramGenerator() : base(-1)
+            => throw new NotImplementedException();
         private void TryAddStructuresToDiagram(IStructure structure, MapDiagram diagram)
         {
             HashSet<Coord> succeedCoords = new();

@@ -58,14 +58,25 @@ namespace Yours.QuickCity
 
             #endregion
 
-            var structureGenerator = new MapBldgStructureDiagramGenerator(_map.GameObjectDef);
-            structureGenerator.GenerateOnDiagram(map);
+            #region bake structures
+
+            var structureGenerator = new MapBldgStructureDiagramGenerator(_map.GameObjectDef, _map.Config.Tick);
+
+            LogUI.AppendLog("baking structures..");
+            LogUI.AppendDynamicPercent(structureGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (structureGenerator.GenerateOnDiagram(map));
+            yield return new WaitUntil(structureGenerator.Completed);
+
+            LogUI.EndDynamicPart();
 
             if (_map.Config.PrintMapGridDiagram)
                 map.PrintDebugGraph();
 
             if (_map.Config.ShowStructureGenerateResult)
                 structureGenerator.PrintGenerateResult();
+
+            #endregion
 
             var entityGenerator = new MapBldgEntityGenerator(_map.Properties, _map.GameObjectDef, _parent);
             entityGenerator.GenerateByDiagram(map);
