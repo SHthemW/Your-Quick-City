@@ -16,38 +16,27 @@ namespace Yours.QuickCity.Internal
 
         internal IEnumerator GenerateStuffs(Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> stuffInfo)
         {
-            _targetStepCount = stuffInfo.Count;
-
-            foreach (var info in stuffInfo)
+            yield return ForeachStep(iter: stuffInfo, stepcnt: stuffInfo.Count, body: info => 
             {
-                _currentStepCount++;
-
-                if (_generateCount.ContainsKey(info.Value) && 
+                if (_generateCount.ContainsKey(info.Value) &&
                     _generateCount[info.Value] > info.Value.MaxGenerateNum)
-                    continue;
+                    throw new ContinueException();
 
-                UnityEngine.Object.Instantiate(   
-                    parent:   _generateParent,
+                UnityEngine.Object.Instantiate(
+                    parent: _generateParent,
                     original: info.Value.Obj,
                     position: new Vector3(info.Key.pos.x, 0, info.Key.pos.z),
                     rotation: info.Value.GetGenerateDirection
                     (
-                        attachDirection: info.Key.attachDir, 
-                        origRotation:    info.Value.Obj.transform.rotation.eulerAngles)
+                        attachDirection: info.Key.attachDir,
+                        origRotation: info.Value.Obj.transform.rotation.eulerAngles)
                     );
 
                 if (_generateCount.ContainsKey(info.Value))
                     _generateCount[info.Value]++;
                 else
                     _generateCount.Add(info.Value, 1);
-
-                if (IsTimeToReport())
-                {
-                    tick = 0;
-                    yield return null;
-                }
-            }
-            yield break;
+            });
         }
 
         private MapStuffEntityGenerator() : base(-1)
