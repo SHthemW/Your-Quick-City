@@ -20,13 +20,12 @@ namespace Yours.QuickCity.Internal
 
         internal IEnumerator GenerateDetectors(Vector3[] coords)
         {
-            _targetStepCount = coords.Length;
             Result = new();
 
-            foreach (var coord in coords)
+            yield return ForeachStep(iter: coords, stepcnt: coords.Length, body: coord => 
             {
                 var detector = UnityEngine.Object.Instantiate(
-                    _detectorObject, 
+                    _detectorObject,
                     _parent.TerrainDetectorParent)
                     .GetComponent<MapTerrainDetector>();
 
@@ -34,16 +33,8 @@ namespace Yours.QuickCity.Internal
                 detector.ExecuteDetect();
                 detector.ShowDebugColor();
 
-                _currentStepCount++;
                 Result.Add(detector);
-
-                if (IsTimeToReport())
-                {
-                    tick = 0;
-                    yield return null;
-                }
-            }
-            yield break;
+            });
         }
 
         private MapTerrainDetectorGenerator() : base(-1)
