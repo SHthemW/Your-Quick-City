@@ -19,28 +19,18 @@ namespace Yours.QuickCity.Internal
         {           
             Result = new();
 
-            _targetStepCount = map.TotalNodeNum;
             var offsets = GeneratePositionOffsets();
 
-            foreach (var node in map.Content)
+            yield return ForeachStep(iter: map.Content, stepcnt: map.TotalNodeNum, body: node => 
             {
-                _currentStepCount++;
-
                 if (node.IsObstacle && _map.IgnoreBuildingAreasWhenAnalysis)
-                    continue;
+                    throw new ContinueException();
 
                 var tilePos = MapUtils.GetTileActualPosition(_map.TileUnitSize, node.Coordinate);
 
                 foreach (var offset in offsets)
                     Result.Add(offset + tilePos);
-
-                if (IsTimeToReport())
-                {
-                    tick = 0;
-                    yield return null;
-                }
-            }
-            yield break;
+            });
         }
         internal void PrintDebugInfo()
         {
