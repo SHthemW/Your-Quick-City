@@ -15,7 +15,7 @@ namespace Yours.QuickCity.Internal
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        internal IEnumerator Analysis(MapTerrainDetector[] detectors, Dictionary<(float l, float r), Dictionary<IStuff, float>> distributionDiagram)
+        internal IEnumerator Analysis(MapTerrainDetector[] detectors, DistributionDiagram distributionDiagram)
         {
             Result = new(capacity: detectors.Length);
 
@@ -31,10 +31,7 @@ namespace Yours.QuickCity.Internal
 
                 // for current detector density, get distribution from diagram.
 
-                distInInterval =
-                    distributionDiagram.First(g =>
-                    g.Key.l <= detector.DensityValue &&
-                    g.Key.r >= detector.DensityValue).Value;
+                distInInterval = distributionDiagram.GetMatched(detector.DensityValue);
 
                 // calc distribution weight:
 

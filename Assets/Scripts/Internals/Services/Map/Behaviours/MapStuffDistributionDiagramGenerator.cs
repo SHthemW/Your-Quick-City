@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapStuffDistributionDiagramGenerator : StepwiseTask<Dictionary<(float l, float r), Dictionary<IStuff, float>>>
+    internal sealed class MapStuffDistributionDiagramGenerator : StepwiseTask<DistributionDiagram>
     {
         private readonly MapProperty _map;
         private readonly MapEntities _mapObjects;
@@ -23,7 +23,7 @@ namespace Yours.QuickCity.Internal
                 throw new ArgumentException();
 
             Result = new();
-            
+
             (float min, float max) = (
                 _mapObjects.Stuffs.Min(s => s.MinGenerateDensity),
                 _mapObjects.Stuffs.Max(s => s.MaxGenerateDensity)
@@ -47,7 +47,7 @@ namespace Yours.QuickCity.Internal
                     generateWeight.Add(stuff, match);
                 }
                 // add to result           
-                Result.Add(range, generateWeight);
+                Result.AddInAsc(new Distribution { Interval = range, Content = generateWeight });
 
                 if (IsTimeToReport())
                 {
@@ -59,21 +59,7 @@ namespace Yours.QuickCity.Internal
         }
         internal void PrintDistributionDiagram()
         {
-            StringBuilder content = new("Stuff分布信息: \n");
-
-            foreach (var dist in Result)
-            {
-                content.AppendLine($"[{dist.Key.l} - {dist.Key.r}]");
-
-                foreach (var stuff in dist.Value)
-                {
-                    var keyStr = stuff.Key.Obj.name.PadRight(10);
-                    var valStr = stuff.Value.ToString().PadRight(10);
-
-                    content.AppendLine($"- {keyStr}: {valStr}");
-                }
-            }
-            Debug.Log(content.ToString());
+            Debug.Log(Result.DebugMessage);
         }
 
         private MapStuffDistributionDiagramGenerator() : base(-1)
