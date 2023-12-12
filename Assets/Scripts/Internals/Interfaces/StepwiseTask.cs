@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Yours.QuickCity.Internal
 {
@@ -27,12 +28,13 @@ namespace Yours.QuickCity.Internal
         { 
             this.maxTick = maxTick; 
         }       
-        protected IEnumerator ForStep(Action body, int stepcnt, bool endCond = true, Action roundAct = null)
+        protected IEnumerator ForStep(Action body, int stepcnt, bool cond = true, Action inc = null)
         {
             _targetStepCount = stepcnt;
 
-            for(; endCond; roundAct?.Invoke())
+            for(; cond == true; inc?.Invoke())
             {
+                tick++;
                 _currentStepCount++;
 
                 try
@@ -42,7 +44,6 @@ namespace Yours.QuickCity.Internal
                 catch (ContinueException) { continue; }
                 catch (BreakException) { break; }
 
-                tick++;
                 if (IsTimeToReport)
                 {
                     tick = 0;
@@ -50,12 +51,13 @@ namespace Yours.QuickCity.Internal
                 }
             }
         }
-        protected IEnumerator ForeachStep<T>(Action<T> body, IEnumerable<T> iter, int stepcnt)
+        protected IEnumerator ForeachStep<T>(Action<T> body, IEnumerable<T> iter, int stepcnt = -1)
         {
-            _targetStepCount = stepcnt;
+            _targetStepCount = stepcnt == -1 ? iter.Count() : stepcnt;
 
             foreach(T item in iter)
             {
+                tick++;
                 _currentStepCount++;
 
                 try
@@ -65,7 +67,6 @@ namespace Yours.QuickCity.Internal
                 catch (ContinueException) { continue; }
                 catch (BreakException)    { break; }
 
-                tick++;
                 if (IsTimeToReport)
                 {
                     tick = 0;

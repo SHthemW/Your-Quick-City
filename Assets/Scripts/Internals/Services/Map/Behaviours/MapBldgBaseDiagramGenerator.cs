@@ -25,7 +25,7 @@ namespace Yours.QuickCity.Internal
             var randomCoords = GenerateRandomCoords();
 
             int count = 0;
-            yield return ForStep(endCond: count < _obstacleNum, roundAct: () => count++, stepcnt: _obstacleNum, body: () => 
+            yield return ForStep(cond: count < _obstacleNum, inc: () => count++, stepcnt: _obstacleNum, body: () => 
             {
                 if (randomCoords.Count == 0)
                     throw new BreakException();
