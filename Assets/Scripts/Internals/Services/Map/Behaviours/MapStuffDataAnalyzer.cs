@@ -19,28 +19,22 @@ namespace Yours.QuickCity.Internal
         {
             Result = new(capacity: detectors.Length);
 
-            _targetStepCount = detectors.Length;
             var totalMapCoords = detectors.Select(d => d.Position).ToArray();
 
             // temps
             Dictionary<IStuff, float> distInInterval = new(capacity: detectors.Length);
 
-            foreach (var detector in MapUtils.ShuffleRandomly(detectors))
+            yield return ForeachStep(iter: MapUtils.ShuffleRandomly(detectors), stepcnt: detectors.Length, body: detector => 
             {
-                _currentStepCount++;
-
                 // for current detector density, get distribution from diagram.
-
                 distInInterval = distributionDiagram.GetMatched(detector.DensityValue);
 
                 // calc distribution weight:
-
                 float totalWeightOfInterval = distInInterval.Sum(d => d.Value);
 
                 // if no any weight, skip current detector
-
                 if (totalWeightOfInterval == 0)
-                    continue;
+                    throw new ContinueException();
 
                 // else, calc result stuff by its weight.
 
@@ -65,17 +59,11 @@ namespace Yours.QuickCity.Internal
                     centerIndex: Array.IndexOf(totalMapCoords, detector.Position));
 
                 if (Result.Any(rst => _nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
-                    continue;
+                    throw new ContinueException();
 
                 // append result
                 Result.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
-
-                if (IsTimeToReport())
-                {
-                    tick = 0;
-                    yield return null;
-                }
-            }
+            });
         }
 
         private MapStuffDataAnalyzer() : base(-1)
