@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapStuffDistributionDiagramGenerator : StepwiseTask<DistributionDiagram>
+    internal sealed class MapStuffDistributionDiagramGenerator : StepwiseTask<Histogram<Dictionary<IStuff, float>>>
     {
         private readonly MapProperty _map;
         private readonly MapEntities _mapObjects;
@@ -44,7 +44,7 @@ namespace Yours.QuickCity.Internal
                     generateWeight.Add(stuff, match);
                 }
                 // add to result           
-                Result.AddInAsc(new Distribution { Interval = range, Content = generateWeight });
+                Result.AddInAsc(new HistogramInterval<Dictionary<IStuff, float>>(range, generateWeight));
             }, 
             inc: () => curDensity += step);
         }

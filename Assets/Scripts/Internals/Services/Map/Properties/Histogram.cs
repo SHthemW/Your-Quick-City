@@ -5,10 +5,16 @@ using System.Text;
 
 namespace Yours.QuickCity.Internal
 {
-    internal struct Distribution
+    internal readonly struct HistogramInterval<TValue>
     {
-        internal (float l, float r) Interval { get; set; }
-        internal Dictionary<IStuff, float> Content { get; set; }
+        internal (float l, float r) Interval { get; }
+        internal TValue Value { get; }
+
+        internal HistogramInterval((float l, float r) interval, TValue value)
+        {
+            Interval = interval;
+            Value = value;
+        }
 
         /// <summary>
         /// compare specificValue with Interval.
@@ -32,11 +38,11 @@ namespace Yours.QuickCity.Internal
         }       
     }
 
-    internal sealed class DistributionDiagram
+    internal sealed class Histogram<TValue>
     {
-        private readonly List<Distribution> _diagram;
+        private readonly List<HistogramInterval<TValue>> _diagram;
 
-        internal DistributionDiagram()
+        internal Histogram()
         {
             _diagram = new();
         }
@@ -44,19 +50,12 @@ namespace Yours.QuickCity.Internal
         {
             get
             {
-                StringBuilder content = new("Stuff分布信息: \n");
+                StringBuilder content = new("Distribution: \n");
 
                 foreach (var dist in _diagram)
                 {
                     content.AppendLine($"[{dist.Interval.l} - {dist.Interval.r}]");
-
-                    foreach (var stuff in dist.Content)
-                    {
-                        var keyStr = stuff.Key.Obj.name.PadRight(10);
-                        var valStr = stuff.Value.ToString().PadRight(10);
-
-                        content.AppendLine($"- {keyStr}: {valStr}");
-                    }
+                    content.AppendLine(dist.ToString());
                 }
                 return content.ToString();
             }
@@ -64,7 +63,7 @@ namespace Yours.QuickCity.Internal
 
 
         private float _lastAddedIntervalRight = -1;
-        internal void AddInAsc(Distribution distribution)
+        internal void AddInAsc(HistogramInterval<TValue> distribution)
         {
             if (_lastAddedIntervalRight != -1)
                 if (distribution.Interval.l < _lastAddedIntervalRight)
@@ -79,9 +78,9 @@ namespace Yours.QuickCity.Internal
         /// </summary>
         /// <param name="value">specific value</param>
         /// <returns></returns>
-        internal Dictionary<IStuff, float> GetMatched(float value)
+        internal TValue GetMatched(float value)
         {
-            return _diagram.First(dist => dist.TryMatch(value) == 0).Content;
+            return _diagram.First(dist => dist.TryMatch(value) == 0).Value;
 
             //int left  = 0;
             //int right = _diagram.Count - 1;

@@ -15,7 +15,7 @@ namespace Yours.QuickCity.Internal
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        internal IEnumerator Analysis(MapTerrainDetector[] detectors, DistributionDiagram distributionDiagram)
+        internal IEnumerator Analysis(MapTerrainDetector[] detectors, Histogram<Dictionary<IStuff, float>> distributionDiagram)
         {
             Result = new(capacity: detectors.Length);
 
