@@ -34,7 +34,6 @@ namespace Yours.QuickCity
         {
             _diagram = new(_map.Properties);
 
-            LogUI.AppendLog("generating buildings..");
             yield return _master.StartCoroutine(GenerateBuildingsOnMap(_diagram));
         
             yield return _master.StartCoroutine(GenerateDetectorsOnMap(_diagram));
@@ -45,7 +44,19 @@ namespace Yours.QuickCity
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {
-            new MapBldgBaseDiagramGenerator(_map.Properties, _map.GameObjectDef).GenerateOnDiagram(map);
+            #region generate base diagram
+
+            var baseDiagGenerator = new MapBldgBaseDiagramGenerator(_map.Properties, _map.GameObjectDef, _map.Config.Tick);
+
+            LogUI.AppendLog("generating buildings..");
+            LogUI.AppendDynamicPercent(baseDiagGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (baseDiagGenerator.GenerateOnDiagram(map));
+            yield return new WaitUntil(baseDiagGenerator.Completed);
+
+            LogUI.EndDynamicPart(true);
+
+            #endregion
 
             var structureGenerator = new MapBldgStructureDiagramGenerator(_map.GameObjectDef);
             structureGenerator.GenerateOnDiagram(map);

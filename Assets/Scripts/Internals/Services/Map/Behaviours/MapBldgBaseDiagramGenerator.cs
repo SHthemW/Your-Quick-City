@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapBldgBaseDiagramGenerator
+    internal sealed class MapBldgBaseDiagramGenerator : StepwiseTask
     {
         private readonly MapProperty _map;
         private readonly MapEntities _mapObjects;
@@ -14,31 +15,36 @@ namespace Yours.QuickCity.Internal
          *  internal:
          */
 
-        internal MapBldgBaseDiagramGenerator(MapProperty basicProperty, MapEntities entityProperty)
+        internal MapBldgBaseDiagramGenerator(MapProperty basicProperty, MapEntities entityProperty, int maxTick) : base(maxTick)
         {
             _map  = basicProperty;
             _mapObjects = entityProperty;
         }
-        internal void GenerateOnDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateOnDiagram(MapDiagram diagram)
         {
             var randomCoords = GenerateRandomCoords();
 
-            for (int i = 0; i < _obstacleNum; i++)
+            int count = 0;
+            yield return ForStep(endCond: count < _obstacleNum, roundAct: () => count++, stepcnt: _obstacleNum, body: () => 
             {
+                if (randomCoords.Count == 0)
+                    throw new BreakException();
+
                 var currentCoord = randomCoords.Dequeue();
 
                 if (diagram.JudgeIfCanPlaceObstacle(currentCoord))
                 {
                     diagram[currentCoord.x, currentCoord.y].PlaceObstacle(_mapObjects.GetRandomBuilding());
                 }
-            }
+            });
         }
 
         /*
          *  details:
          */
 
-        private MapBldgBaseDiagramGenerator() { }
+        private MapBldgBaseDiagramGenerator() : base(-1)
+            => throw new System.NotImplementedException();
         private Queue<Coord> GenerateRandomCoords()
         {
             // storage all coordinates
