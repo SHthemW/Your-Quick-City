@@ -88,7 +88,7 @@ namespace Yours.QuickCity
             _master.StartCoroutine    (entityGenerator.GenerateByDiagram(map));
             yield return new WaitUntil(entityGenerator.Completed);
 
-            LogUI.EndDynamicPart();
+            LogUI.EndDynamicPart(true);
 
             #endregion
         }
