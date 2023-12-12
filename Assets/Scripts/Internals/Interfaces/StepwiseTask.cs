@@ -18,12 +18,8 @@ namespace Yours.QuickCity.Internal
             return (float)_currentStepCount / _targetStepCount * 100;
         }
 
-        protected int _targetStepCount  = 1;
-        protected int _currentStepCount = 0;
-        protected bool IsTimeToReport()
-        {
-            return tick++ > maxTick || _targetStepCount - _currentStepCount <= tick;
-        }
+        private int _targetStepCount  = 1;
+        private int _currentStepCount = 0;
 
         protected StepwiseTask(int maxTick) 
         { 
