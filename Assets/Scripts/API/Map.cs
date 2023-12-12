@@ -48,7 +48,7 @@ namespace Yours.QuickCity
 
             var baseDiagGenerator = new MapBldgBaseDiagramGenerator(_map.Properties, _map.GameObjectDef, _map.Config.Tick);
 
-            LogUI.AppendLog("generating buildings..");
+            LogUI.AppendLog("generating base diagram..");
             LogUI.AppendDynamicPercent(baseDiagGenerator.FinishedPercent);
 
             _master.StartCoroutine    (baseDiagGenerator.GenerateOnDiagram(map));
@@ -78,10 +78,19 @@ namespace Yours.QuickCity
 
             #endregion
 
-            var entityGenerator = new MapBldgEntityGenerator(_map.Properties, _map.GameObjectDef, _parent);
-            entityGenerator.GenerateByDiagram(map);
+            #region generate building gameobjects
 
-            yield return new WaitUntil(entityGenerator.GenerateIsFinished);
+            var entityGenerator = new MapBldgEntityGenerator(_map.Properties, _map.GameObjectDef, _parent, _map.Config.Tick);
+
+            LogUI.AppendLog("generating buildings..");
+            LogUI.AppendDynamicPercent(entityGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (entityGenerator.GenerateByDiagram(map));
+            yield return new WaitUntil(entityGenerator.Completed);
+
+            LogUI.EndDynamicPart();
+
+            #endregion
         }
         private IEnumerator GenerateDetectorsOnMap(MapDiagram map)
         {
