@@ -28,34 +28,25 @@ namespace Yours.QuickCity.Internal
                 _mapObjects.Stuffs.Min(s => s.MinGenerateDensity),
                 _mapObjects.Stuffs.Max(s => s.MaxGenerateDensity)
             );
+
             float step = (max - min) / _map.StuffDistributeDiagramResolution;
+            float curDensity = 0;
 
-            _targetStepCount = (int)Math.Ceiling(maxDensity / step);
-
-            // 0 - min - max - infinity
-            for (float density = 0; density <= maxDensity; density += step)
+            yield return ForStep(endCond: curDensity <= maxDensity, stepcnt: (int)Math.Ceiling(maxDensity / step), body: () =>
             {
-                _currentStepCount++;
-
-                var range = (left: density, right: density + step);
+                var range = (left: curDensity, right: curDensity + step);
 
                 // calc possibility (seriously)
                 Dictionary<IStuff, float> generateWeight = new();
                 foreach (IStuff stuff in _mapObjects.Stuffs)
                 {
-                    float match = stuff.GetDensityMatchingValue(density);
+                    float match = stuff.GetDensityMatchingValue(curDensity);
                     generateWeight.Add(stuff, match);
                 }
                 // add to result           
                 Result.AddInAsc(new Distribution { Interval = range, Content = generateWeight });
-
-                if (IsTimeToReport())
-                {
-                    tick = 0;
-                    yield return null;
-                }
-            }
-            yield break;
+            }, 
+            roundAct: () => curDensity += step);
         }
         internal void PrintDistributionDiagram()
         {
