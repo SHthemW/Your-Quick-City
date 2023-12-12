@@ -447,7 +447,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _map: {fileID: 11400000, guid: 9ac8617ddd65c5e49b12b329b9d061b1, type: 2}
-  _conf: {fileID: 11400000, guid: 1b8fc9f6bf9189d4aab0801217e98c71, type: 2}
 --- !u!114 &2071400843
 MonoBehaviour:
   m_ObjectHideFlags: 0

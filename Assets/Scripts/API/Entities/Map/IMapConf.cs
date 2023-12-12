@@ -11,5 +11,8 @@ namespace Yours.QuickCity.Internal
         bool PrintMapGridDiagram         { get; }
         bool ShowStructureGenerateResult { get; }
         bool ShowStuffDistributionInfo   { get; }
+
+        // tick
+        int Tick { get; }
     }
 }

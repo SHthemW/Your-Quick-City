@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Yours.QuickCity.Internal;
 
@@ -32,23 +34,41 @@ namespace Yours.QuickCity
         {
             _diagram = new(_map.Properties);
 
-            LogUI.AppendLog("start gen buildings..");
             yield return _master.StartCoroutine(GenerateBuildingsOnMap(_diagram));
-
-            LogUI.AppendLog("start gen detectors..");
+        
             yield return _master.StartCoroutine(GenerateDetectorsOnMap(_diagram));
 
-            LogUI.AppendLog("start parse datas..");
             yield return _master.StartCoroutine(GenerateStuffByTerrain(_terrainDetectors));
 
             LogUI.AppendLog("generate finished.");
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {
-            new MapBldgBaseDiagramGenerator(_map.Properties, _map.GameObjectDef).GenerateOnDiagram(map);
+            #region generate base diagram
 
-            var structureGenerator = new MapBldgStructureDiagramGenerator(_map.GameObjectDef);
-            structureGenerator.GenerateOnDiagram(map);
+            var baseDiagGenerator = new MapBldgBaseDiagramGenerator(_map.Properties, _map.GameObjectDef, _map.Config.Tick);
+
+            LogUI.AppendLog("generating base diagram..");
+            LogUI.AppendDynamicPercent(baseDiagGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (baseDiagGenerator.GenerateOnDiagram(map));
+            yield return new WaitUntil(baseDiagGenerator.Completed);
+
+            LogUI.EndDynamicPart();
+
+            #endregion
+
+            #region bake structures
+
+            var structureGenerator = new MapBldgStructureDiagramGenerator(_map.GameObjectDef, _map.Config.Tick);
+
+            LogUI.AppendLog("baking structures..");
+            LogUI.AppendDynamicPercent(structureGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (structureGenerator.GenerateOnDiagram(map));
+            yield return new WaitUntil(structureGenerator.Completed);
+
+            LogUI.EndDynamicPart();
 
             if (_map.Config.PrintMapGridDiagram)
                 map.PrintDebugGraph();
@@ -56,39 +76,102 @@ namespace Yours.QuickCity
             if (_map.Config.ShowStructureGenerateResult)
                 structureGenerator.PrintGenerateResult();
 
-            var entityGenerator = new MapBldgEntityGenerator(_map.Properties, _map.GameObjectDef, _parent);
-            entityGenerator.GenerateByDiagram(map);
+            #endregion
 
-            yield return new WaitUntil(entityGenerator.GenerateIsFinished);
+            #region generate building gameobjects
+
+            var entityGenerator = new MapBldgEntityGenerator(_map.Properties, _map.GameObjectDef, _parent, _map.Config.Tick);
+
+            LogUI.AppendLog("generating buildings..");
+            LogUI.AppendDynamicPercent(entityGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (entityGenerator.GenerateByDiagram(map));
+            yield return new WaitUntil(entityGenerator.Completed);
+
+            LogUI.EndDynamicPart();
+
+            #endregion
         }
         private IEnumerator GenerateDetectorsOnMap(MapDiagram map)
         {
-            var coords = new MapTileCoordsGenerator(_map.Properties).GenerateCoords(map);
+            #region generate coords
 
-            var detectorsGenerator = new MapTerrainDetectorGenerator(
-                _map.Properties, _map.Config.TerrainDetector, _parent);
+            var coordsGenerator = new MapTileCoordsGenerator(_map.Properties, maxTick: _map.Config.Tick);
 
-            _terrainDetectors = detectorsGenerator.GenerateDetectors(coords);
+            LogUI.AppendLog("generating coords..");
+            LogUI.AppendDynamicPercent(coordsGenerator.FinishedPercent);
 
-            yield return new WaitUntil(detectorsGenerator.GenerateIsFinished);
+            _master.StartCoroutine    (coordsGenerator.GenerateCoords(map));
+            yield return new WaitUntil(coordsGenerator.Completed);
+            var coords =               coordsGenerator.Result.ToArray();
+
+            LogUI.EndDynamicPart();
+
+            #endregion
+
+            #region generate detectors
+
+            var detectorsGenerator = new MapTerrainDetectorGenerator(_map.Properties, _map.Config.TerrainDetector, _parent, maxTick: _map.Config.Tick);
+
+            LogUI.AppendLog("generating detectors..");
+            LogUI.AppendDynamicPercent(detectorsGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (detectorsGenerator.GenerateDetectors(coords));
+            yield return new WaitUntil(detectorsGenerator.Completed);
+            _terrainDetectors =        detectorsGenerator.Result.ToArray();
+
+            LogUI.EndDynamicPart();
+
+            #endregion
         }
         private IEnumerator GenerateStuffByTerrain(MapTerrainDetector[] terrain)
         {
-            var dataAnalyzer = new MapStuffDataAnalyzer(_map.GameObjectDef, _map.Properties);
+            #region generate stuff distribution
 
-            LogUI.AppendLog("start analysis");
+            var distDiagGenerator = new MapStuffDistributionDiagramGenerator(_map.GameObjectDef, _map.Properties, maxTick: _map.Config.Tick);
 
-            var stuffObjData = dataAnalyzer.Analysis(terrain);
+            LogUI.AppendLog("generating stuff dist..");
+            LogUI.AppendDynamicPercent(distDiagGenerator.FinishedPercent);
 
-            yield return new WaitUntil(dataAnalyzer.Finished);
+            _master.StartCoroutine    (distDiagGenerator.BakeDistribution(maxDensity: _terrainDetectors.Max(d => d.DensityValue)));
+            yield return new WaitUntil(distDiagGenerator.Completed);
+            var distribution =         distDiagGenerator.Result;
 
-            LogUI.AppendLog("finish analysis");
+            LogUI.EndDynamicPart();
 
             if (_map.Config.ShowStuffDistributionInfo)
-                dataAnalyzer.PrintDistributionDiagram();
+                distDiagGenerator.PrintDistributionDiagram();
 
-            new MapStuffEntityGenerator(_parent.StuffObjParent)
-                .GenerateStuffs(stuffObjData);
+            #endregion
+
+            #region analyze stuff distribution
+
+            var dataAnalyzer = new MapStuffDataAnalyzer(maxTick: _map.Config.Tick);
+
+            LogUI.AppendLog("analysing stuff dist..");
+            LogUI.AppendDynamicPercent(dataAnalyzer.FinishedPercent);
+
+            _master.StartCoroutine    (dataAnalyzer.Analysis(terrain, distribution));
+            yield return new WaitUntil(dataAnalyzer.Completed);
+            var stuffObjData =         dataAnalyzer.Result;
+
+            LogUI.EndDynamicPart();
+
+            #endregion
+
+            #region generate stuff gameobjects 
+
+            var stuffEntityGenerator = new MapStuffEntityGenerator(_parent.StuffObjParent, maxTick: _map.Config.Tick);
+
+            LogUI.AppendLog("generating stuffs..");
+            LogUI.AppendDynamicPercent(stuffEntityGenerator.FinishedPercent);
+
+            _master.StartCoroutine    (stuffEntityGenerator.GenerateStuffs(stuffObjData));
+            yield return new WaitUntil(stuffEntityGenerator.Completed);
+
+            LogUI.EndDynamicPart();
+
+            #endregion
 
             yield break;
         }

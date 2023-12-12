@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapBldgEntityGenerator
+    internal sealed class MapBldgEntityGenerator : StepwiseTask
     {
         private readonly MapProperty _map;
         private readonly MapEntities _mapObjects;
@@ -11,35 +12,25 @@ namespace Yours.QuickCity.Internal
 
         private const Direction FLOOR_DEFAULT_DIRECTION = Direction.Up;
 
-        private int _generatedCount;
-        private int _targetGenerateCount;
-
-        internal MapBldgEntityGenerator(MapProperty basicProp, MapEntities entityProp, IMapObjParent parent)
+        internal MapBldgEntityGenerator(MapProperty basicProp, MapEntities entityProp, IMapObjParent parent, int maxTick) : base(maxTick)
         {
             _map = basicProp;
             _mapObjects = entityProp;
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
-        internal void GenerateByDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateByDiagram(MapDiagram diagram)
         {
-            _targetGenerateCount = diagram.TotalNodeNum;
-
-            foreach (var node in diagram.Content)
+            yield return ForeachStep(iter: diagram.Content, body: node =>
             {
                 GenerateGroundTile(node.Coordinate);
 
                 if (node.IsObstacle)
                     GenerateObstacleTile(node.Coordinate, node.NodeData);
-
-                _generatedCount++;
-            }
-        }
-        internal bool GenerateIsFinished()
-        {
-            return _generatedCount >= _targetGenerateCount;
+            });
         }
 
-        private MapBldgEntityGenerator() { }
+        private MapBldgEntityGenerator() : base(-1)
+            => throw new NotImplementedException();
         private void GenerateGroundTile(Coord logicPos)
         {
             var spawnFloor = UnityEngine.Object.

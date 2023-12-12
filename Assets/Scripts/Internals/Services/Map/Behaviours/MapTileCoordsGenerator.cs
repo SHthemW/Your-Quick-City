@@ -1,36 +1,36 @@
 ﻿using Codice.Client.BaseCommands;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapTileCoordsGenerator
+    internal sealed class MapTileCoordsGenerator : StepwiseTask<List<Vector3>>
     {
         private readonly MapProperty _map;
 
         private const float HANGING_HEIGHT = 1;
 
-        internal MapTileCoordsGenerator(MapProperty basicProp)
+        internal MapTileCoordsGenerator(MapProperty basicProp, int maxTick) : base(maxTick)
         {
             _map = basicProp;
         }
-        internal Vector3[] GenerateCoords(MapDiagram map)
-        {
-            var offsets = GeneratePositionOffsets();
-            List<Vector3> result = new();
+        internal IEnumerator GenerateCoords(MapDiagram map)
+        {           
+            Result = new();
 
-            foreach (var node in map.Content)
+            var offsets = GeneratePositionOffsets();
+
+            yield return ForeachStep(iter: map.Content, body: node => 
             {
                 if (node.IsObstacle && _map.IgnoreBuildingAreasWhenAnalysis)
-                    continue;
+                    throw new ContinueException();
 
                 var tilePos = MapUtils.GetTileActualPosition(_map.TileUnitSize, node.Coordinate);
 
                 foreach (var offset in offsets)
-                    result.Add(offset + tilePos);
-            }
-
-            return result.ToArray();
+                    Result.Add(offset + tilePos);
+            });
         }
         internal void PrintDebugInfo()
         {
@@ -45,7 +45,8 @@ namespace Yours.QuickCity.Internal
                 offsetMsg);
         }
 
-        private MapTileCoordsGenerator() { }
+        private MapTileCoordsGenerator() : base(-1)
+            => throw new System.InvalidOperationException();
         private HashSet<Vector3> GeneratePositionOffsets()
         {
             float unitDistance = (float)_map.TileUnitSize / _map.TerrainDetectResolution;

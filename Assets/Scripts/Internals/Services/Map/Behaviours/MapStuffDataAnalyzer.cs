@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,62 +7,38 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapStuffDataAnalyzer
+    internal sealed class MapStuffDataAnalyzer : StepwiseTask<Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>>
     {
-        private readonly MapProperty _map;
-        private readonly MapEntities _mapObjects;
-
-        private int _targetAnalysisNum  = 1;
-        private int _currentAnalysisNum = 0;
-        private Dictionary<(float l, float r), Dictionary<IStuff, float>> _distributionDiagram;
-
-        internal MapStuffDataAnalyzer(MapEntities mapObjects, MapProperty map)
-        {
-            _mapObjects = mapObjects;
-            _map = map;
-        }
-
-        internal bool Finished() => _currentAnalysisNum >= _targetAnalysisNum;
-
+        internal MapStuffDataAnalyzer(int maxTick) : base(maxTick) { }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="detectors"></param>
         /// <returns></returns>
-        internal Dictionary<(Vector3, Vector3), IStuff> Analysis(in MapTerrainDetector[] detectors)
+        internal IEnumerator Analysis(MapTerrainDetector[] detectors, DistributionDiagram distributionDiagram)
         {
-            _targetAnalysisNum = detectors.Length;
-
-            var analysisResult = new Dictionary<(Vector3 pos, Vector3 attachDir), IStuff>(capacity: detectors.Length);
+            Result = new(capacity: detectors.Length);
 
             var totalMapCoords = detectors.Select(d => d.Position).ToArray();
 
-            _distributionDiagram = BakeStuffDistributionDiagram(detectors.Max(d => d.DensityValue));
+            // temps
+            Dictionary<IStuff, float> distInInterval = new(capacity: detectors.Length);
 
-            foreach (var detector in MapUtils.ShuffleRandomly(detectors))
+            yield return ForeachStep(iter: MapUtils.ShuffleRandomly(detectors), body: detector => 
             {
                 // for current detector density, get distribution from diagram.
-
-                Dictionary<IStuff, float> distInInterval = 
-                    _distributionDiagram.First(g => 
-                    g.Key.l <= detector.DensityValue && 
-                    g.Key.r >= detector.DensityValue).Value;
+                distInInterval = distributionDiagram.GetMatched(detector.DensityValue);
 
                 // calc distribution weight:
-                
                 float totalWeightOfInterval = distInInterval.Sum(d => d.Value);
 
                 // if no any weight, skip current detector
-
                 if (totalWeightOfInterval == 0)
-                {
-                    _currentAnalysisNum++;
-                    continue;
-                }
+                    throw new ContinueException();
 
                 // else, calc result stuff by its weight.
 
-                float  randomSeed  = UnityEngine.Random.Range(0, totalWeightOfInterval);
+                float randomSeed = UnityEngine.Random.Range(0, totalWeightOfInterval);
                 IStuff resultStuff = null;
 
                 foreach (var match in distInInterval)
@@ -76,52 +53,24 @@ namespace Yours.QuickCity.Internal
 
                 // check if current result match the space distance limit
 
-                var nearbyCoords = GetNearbyCoordIndexes(
-                    map:         totalMapCoords, 
-                    radius:      resultStuff.GetGenerateSpacing(),
-                    centerIndex: Array.IndexOf(totalMapCoords, detector.Position)
-                    )
-                    .Select(i => totalMapCoords[i])
-                    .ToArray();
+                UpdateNearbyCoords(
+                    map: totalMapCoords,
+                    radius: resultStuff.GetGenerateSpacing(),
+                    centerIndex: Array.IndexOf(totalMapCoords, detector.Position));
 
-                if (analysisResult.Any(rst => 
-                    nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
-                {
-                    _currentAnalysisNum++;
-                    continue;
-                }
+                if (Result.Any(rst => _nearbyCoords.Contains(rst.Key.pos) && rst.Value == resultStuff))
+                    throw new ContinueException();
 
                 // append result
-
-                _currentAnalysisNum++;
-                analysisResult.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
-            }
-            return analysisResult;
+                Result.Add((pos: detector.Position, attachDir: detector.AttachDirection), resultStuff);
+            });
         }
 
-        internal void PrintDistributionDiagram()
-        {
-            StringBuilder content = new("Stuff分布信息: \n");
+        private MapStuffDataAnalyzer() : base(-1)
+            => throw new InvalidOperationException();
 
-            foreach (var dist in _distributionDiagram)
-            {
-                content.AppendLine($"[{dist.Key.l} - {dist.Key.r}]");
-
-                foreach (var stuff in dist.Value)
-                {
-                    var keyStr = stuff.Key.Obj.name.PadRight(10);
-                    var valStr = stuff.Value.ToString().PadRight(10);
-
-                    content.AppendLine($"- {keyStr}: {valStr}");
-                }
-            }
-            Debug.Log(content.ToString());
-        }
-
-        private MapStuffDataAnalyzer()
-            => throw new NotImplementedException();
-
-        private static int[] GetNearbyCoordIndexes(Vector3[] map, int centerIndex, float radius)
+        private static readonly List<Vector3> _nearbyCoords = new();
+        private static void UpdateNearbyCoords(Vector3[] map, int centerIndex, float radius)
         {
             if (map == null || map.Length == 0)
                 throw new ArgumentException(nameof(map));
@@ -129,56 +78,16 @@ namespace Yours.QuickCity.Internal
             if (centerIndex > map.Length - 1)
                 throw new ArgumentOutOfRangeException(nameof(centerIndex));
 
-            List<int> nearbyIndexes = new();
+            _nearbyCoords.Clear();
 
             for (int i = 0; i < map.Length; i++)
             {
-                if (i == centerIndex) 
+                if (i == centerIndex)
                     continue;
 
                 if (Vector3.Distance(map[i], map[centerIndex]) <= radius)
-                    nearbyIndexes.Add(i);
+                    _nearbyCoords.Add(map[i]);
             }
-            return nearbyIndexes.ToArray();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="toBeBake"></param>
-        /// <param name="maxDensity"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        private Dictionary<(float l, float r), Dictionary<IStuff, float>> BakeStuffDistributionDiagram(float maxDensity)
-        {
-            if (maxDensity <= 0)
-                throw new ArgumentException();
-
-            Dictionary<(float, float), Dictionary<IStuff, float>> bakeResult = new();
-
-            (float min, float max) = (
-                _mapObjects.Stuffs.Min(s => s.MinGenerateDensity),
-                _mapObjects.Stuffs.Max(s => s.MaxGenerateDensity)
-            );
-            float step = (max - min) / _map.StuffDistributeDiagramResolution;
-
-            // 0 - min - max - infinity
-            for (float density = 0; density <= maxDensity; density += step)
-            {
-                var range = (left: density, right: density + step);
-
-                // calc possibility (seriously)
-                Dictionary<IStuff, float> generateWeight = new();
-                foreach (IStuff stuff in _mapObjects.Stuffs)
-                {
-                    float match = stuff.GetDensityMatchingValue(density);
-                    generateWeight.Add(stuff, match);
-                }
-                // add to result           
-                bakeResult.Add(range, generateWeight);
-            }
-
-            return bakeResult;
         }
     }
 }
