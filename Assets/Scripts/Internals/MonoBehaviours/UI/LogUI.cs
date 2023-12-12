@@ -21,7 +21,7 @@ namespace Yours.QuickCity.Internal
 
         internal static void AppendLog(string message)
         {
-            _instance.LogText.text += "\n" + message;
+            _instance.LogText.text += $"{Style.Gray}\n{message}{Style.End}";
         }
 
         private static string _staticText;
