@@ -57,6 +57,8 @@ namespace Yours.QuickCity.Internal
             set => _closestAttachDirection = value;
         }
 
+        private static readonly Vector3 CheckBoxSize = new(0.1f, 0.1f, 0.1f);
+
         /*
          *  private
          */
@@ -66,7 +68,14 @@ namespace Yours.QuickCity.Internal
             return transform.GetChild(0);
         }
         private float CastRayAndDetectDistance(Vector3 direction)
-        {          
+        {
+            // overlap
+            if (Physics.CheckBox(
+                center:      transform.position,
+                halfExtents: CheckBoxSize, 
+                orientation: Quaternion.identity))
+                return 0;
+
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, MAX_DIST))
                 return hit.distance;
             else
