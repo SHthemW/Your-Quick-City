@@ -54,7 +54,7 @@ namespace Yours.QuickCity.Internal
 
             InitMapAsMatrix();
         }       
-        private void InitMapAsMatrix()
+        private void InitMapAsMatrix() // TODO: shape + sizeRatio => mapMatrix
         {
             _nodes = new MapDiagramNode[_basicProperty.Size_X, _basicProperty.Size_Y];
 
