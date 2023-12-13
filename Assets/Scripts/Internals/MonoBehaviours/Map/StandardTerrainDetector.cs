@@ -57,7 +57,7 @@ namespace Yours.QuickCity.Internal
             set => _closestAttachDirection = value;
         }
 
-        private static readonly Vector3 CheckBoxSize = new(0.1f, 0.1f, 0.1f);
+        private static readonly Vector3 CheckBoxSize = new(0.02f, 0.02f, 0.02f);
 
         /*
          *  private
