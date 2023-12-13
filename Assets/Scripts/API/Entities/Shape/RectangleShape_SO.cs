@@ -17,18 +17,32 @@ namespace Yours.QuickCity
         [SerializeField]
         private int _size_y;
 
-        [SerializeField]
-        private float _evenness;
+        [SerializeField, Range(0, 1)]
+        private float _maxEdgeConcavePercent;
+
+        [SerializeField, Range(0, 1)]
+        private float _maxEdgeConvexityPercent;
+
+        [Header("Advanced")]
+
+        [SerializeField, Range(1, 10)]
+        private int _matrixAllocSizeMultiplier = 3;
 
         public bool[,] GenerateMatrix()
         {
-            bool[,] matrix = new bool[_size_x, _size_y] ;
+            bool[,] matrix = new bool[_size_x * _matrixAllocSizeMultiplier, _size_y * _matrixAllocSizeMultiplier];
 
-            for (int x = 0; x < matrix.GetLength(0); x++)
+            int startX = ((_matrixAllocSizeMultiplier - 1) / 2) * _size_x;
+            int startY = ((_matrixAllocSizeMultiplier - 1) / 2) * _size_y;
+
+            int endX = startX + _size_x;
+            int endY = startY + _size_y;
+
+            for (int x = startX; x < endX; x++)
             {
-                for (int y = 0; y < matrix.GetLength(1); y++)
+                for (int y = startY; y < endY; y++)
                 {
-                    if (x == 0 && y == 0)
+                    if (x == startX && y == startY)
                         matrix[x, y] = false;
                     else
                         matrix[x, y] = true;
