@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _size_x: 10
   _size_y: 10
-  _evenness: 0
+  _maxEdgeConcavePercent: 0
+  _maxEdgeConvexityPercent: 0
+  _matrixAllocSizeMultiplier: 3

@@ -32,8 +32,8 @@ namespace Yours.QuickCity
         {
             bool[,] matrix = new bool[_size_x * _matrixAllocSizeMultiplier, _size_y * _matrixAllocSizeMultiplier];
 
-            int startX = ((_matrixAllocSizeMultiplier - 1) / 2) * _size_x;
-            int startY = ((_matrixAllocSizeMultiplier - 1) / 2) * _size_y;
+            int startX = (int)((float)(_matrixAllocSizeMultiplier - 1) / 2 * _size_x);
+            int startY = (int)((float)(_matrixAllocSizeMultiplier - 1) / 2 * _size_y);
 
             int endX = startX + _size_x;
             int endY = startY + _size_y;
