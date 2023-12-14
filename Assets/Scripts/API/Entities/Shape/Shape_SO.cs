@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -45,8 +46,72 @@ namespace Yours.QuickCity.Shape
             get; 
         }
 
+        protected Dictionary<(int x, int y), EdgeOutsideDir> Edges
+        {
+            get
+            {
+                int size_x = _matrix.GetLength(0);
+                int size_y = _matrix.GetLength(1);
+
+                var result = new Dictionary<(int x, int y), EdgeOutsideDir>(capacity: size_x * size_y);
+
+                for (int x = 0; x < size_x; x++)
+                {
+                    for (int y = 0; y < size_y; y++)
+                    {
+                        if ((x + 1) >= size_x
+                            || (y + 1) >= size_y
+                            || (x - 1) < 0
+                            || (y - 1) < 0)
+                            continue;
+
+                        var direction = IsEdge(_matrix, (x, y));
+
+                        if (direction != EdgeOutsideDir.NotEdge)
+                            result.Add((x, y), direction);
+                    }
+                }
+                return result;
+            }
+        }
+        protected virtual EdgeOutsideDir IsEdge(bool[,] map, (int x, int y) coord)
+        {
+            (int x, int y) = coord;
+
+            if (!map[x, y])
+                return EdgeOutsideDir.NotEdge;
+
+            bool left = map[x - 1, y];
+            bool right = map[x + 1, y];
+            bool up = map[x, y - 1];
+            bool down = map[x, y + 1];
+
+            if (left && right && up && down)
+                return EdgeOutsideDir.NotEdge;
+
+            if (left && !right)
+                return EdgeOutsideDir.Right;
+
+            else if (!left && right)
+                return EdgeOutsideDir.Left;
+
+            else if (up && !down)
+                return EdgeOutsideDir.Down;
+
+            else if (!up && down)
+                return EdgeOutsideDir.Up;
+
+            return EdgeOutsideDir.NotEdge;
+        }
+
         protected virtual void ScaleMatrix(float sizeMultiple)
         {
+            if (sizeMultiple <= 0)
+                throw new ArgumentException();
+
+            if (sizeMultiple == 1)
+                return;
+
             int originalWidth = _matrix.GetLength(0);
             int originalHeight = _matrix.GetLength(1);
 
@@ -107,7 +172,6 @@ namespace Yours.QuickCity.Shape
             _matrix = outputMatrix;
         }
 
-
         [Header("Test")]
 
         [SerializeField] float _testScaleMultiple = 1;
@@ -130,5 +194,11 @@ namespace Yours.QuickCity.Shape
 
             Debug.Log(msg.ToString());
         }
+
+    }
+
+    public enum EdgeOutsideDir
+    {
+        NotEdge, Up, Down, Left, Right
     }
 }

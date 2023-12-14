@@ -59,28 +59,7 @@ namespace Yours.QuickCity.Shape
                 for (int y = startY; y < endY; y++)
                     _matrix[x, y] = true;
 
-            // edge
-            Dictionary<(int x, int y), EdgeOutsideDir> edges = new();
-
-            for (int x = 0; x < matrix_size_x; x++)
-            {
-                for (int y = 0; y < matrix_size_y; y++)
-                {
-                    if ((x + 1) >= matrix_size_x
-                        || (y + 1) >= matrix_size_y
-                        || (x - 1) < 0
-                        || (y - 1) < 0)
-                        continue;
-
-                    IEdgeJudger edgeJudger = new CrossEdgeJudger();
-                    var direction = edgeJudger.Judge(_matrix, (x, y));
-
-                    if (direction != EdgeOutsideDir.NotEdge)
-                        edges.Add((x, y), direction);
-                }
-            }
-
-            foreach (var edge in edges)
+            foreach (var edge in this.Edges)
                 SetConcaveAndConvexity(edge.Key, edge.Value);
         }
 
@@ -144,7 +123,6 @@ namespace Yours.QuickCity.Shape
                     throw new ArgumentException();
             }
         }
-
         private static float RandomRoughFunc(float min, float max, float minValTendency)
         {
             float randomFloat         = (float)new System.Random().NextDouble();
@@ -152,6 +130,8 @@ namespace Yours.QuickCity.Shape
 
             return min + adjustedRandomFloat * (max - min);
         }
+
+        // test
 
         private readonly Dictionary<int, int> _extendLengthCount = new();
 
