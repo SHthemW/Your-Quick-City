@@ -28,7 +28,7 @@ namespace Yours.QuickCity.Shape
         [SerializeField, Range(-0.9f, 1)]
         private float _attachmentDegree = 0;
 
-        protected override sealed string ShapeDebugMsg
+        protected override sealed string StatsDebugMsg
         {
             get
             {
@@ -38,10 +38,7 @@ namespace Yours.QuickCity.Shape
                     constrToVal: dic => new string('|', dic.Sum(kvp => kvp.Value)),
                     intervalSize: 1
                     );
-
-                return base.ShapeDebugMsg
-                    + "stat:\n"
-                    + extendStat.DebugMessage;
+                return base.StatsDebugMsg + extendStat.DebugMessage;
             }
         }
         protected override sealed void GenerateOnMatrix()

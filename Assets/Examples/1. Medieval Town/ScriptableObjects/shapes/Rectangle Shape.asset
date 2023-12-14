@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81f1cce0d4bcead44bc93d3a16fdf483, type: 3}
-  m_Name: Test RectangleShape
+  m_Name: Rectangle Shape
   m_EditorClassIdentifier: 
+  _testScaleMultiple: 1.5
   _size_x: 10
   _size_y: 10
   _emptySizeMultiplier: 3
   _maxExtendPercent: 0.35
-  _attachmentDegree: 1
+  _attachmentDegree: 0
