@@ -26,6 +26,10 @@ namespace Yours.QuickCity.Shape
         [SerializeField, Range(1, 10)]
         private int _matrixAllocSizeMultiplier = 3;
 
+        [SerializeField]
+        private float _degree;
+
+        private readonly Dictionary<int, int> _extendLengthCount = new();
         public bool[,] GenerateMatrix()
         {
             int matrix_size_x = _size_x * _matrixAllocSizeMultiplier;
@@ -86,8 +90,6 @@ namespace Yours.QuickCity.Shape
                 }
             }
 
-            Debug.Log("edge count:" + edges.Count);
-
             foreach (var edge in edges)
             {
                 try
@@ -105,7 +107,7 @@ namespace Yours.QuickCity.Shape
 
             void SetConcaveAndConvexity((int x, int y) coord, EdgeOutsideDir extendDir)
             {
-                var roughSeed = RandomFunc(0, _maxEdgeConvexityPercent);
+                var roughSeed = RandomFunc_3(0, _maxEdgeConvexityPercent);
 
                 int extendGridNumX = (int)(Mathf.Abs(roughSeed) * _size_x);
                 int extendGridNumY = (int)(Mathf.Abs(roughSeed) * _size_y);
@@ -115,7 +117,14 @@ namespace Yours.QuickCity.Shape
                 const int up   = -1;
                 const int left = -1;
 
-                switch(extendDir)
+                int countKey = (extendDir == EdgeOutsideDir.Up || extendDir == EdgeOutsideDir.Down)
+                    ? extendGridNumY
+                    : extendGridNumX;
+
+                if (!_extendLengthCount.TryAdd(countKey, 1))
+                    _extendLengthCount[countKey]++;
+
+                switch (extendDir)
                 {
                     case EdgeOutsideDir.Up:
                         y = coord.y;
@@ -155,37 +164,62 @@ namespace Yours.QuickCity.Shape
             }
         }
 
-        private static readonly System.Random random = new();
-
-        private static readonly Func<float, float, float> RandomFunc = RandomFunc_1;
-
-        private static float RandomFunc_1(float small, float large) // TODO: *Shape: IRandomFunc interface
+        public float RandomFunc_3(float min, float max)
         {
-            return UnityEngine.Random.Range(small, large);
-        }
-        private static float RandomFunc_2(float small, float large)
-        {
-            float range = large - small;
-            float randomValue = (float)((Math.Asin((2 * random.NextDouble()) - 1) / Math.PI + 0.5) * range + small);
-            return randomValue;
+            float randomFloat = (float)new System.Random().NextDouble();
+
+            // 使用degree调整随机数的分布
+            float adjustedRandomFloat = (float)Math.Pow(randomFloat, _degree);
+            // 使用调整后的随机数在min和max之间插值
+            return min + adjustedRandomFloat * (max - min);
         }
 
+
+        private string NewGraphDebugMsg
+        {
+            get
+            {
+                var generated = GenerateMatrix();
+                StringBuilder graphMsg = new("graph: \n");
+
+                for (int x = 0; x < generated.GetLength(0); x++)
+                {
+                    for (int y = 0; y < generated.GetLength(1); y++)
+                    {
+                        graphMsg.Append((generated[x, y] ? "■" : "□") + "  ");
+                    }
+                    graphMsg.Append("\n");
+                }
+
+                graphMsg.AppendLine("\nstats: \n");
+
+                Histogram<KeyValuePair<int, int>, string> extendStat = new(
+                    dataSet: _extendLengthCount.ToList(),
+                    getKeyIn: kvp => kvp.Key,
+                    constrToVal: dic => new string('|', dic.Sum(kvp => kvp.Value)),
+                    intervalSize: 1
+                    );
+
+                graphMsg.AppendLine(extendStat.DebugMessage);
+                return graphMsg.ToString();
+            }
+        }
 
         [ContextMenu("Print Debug Graph")]
         private void PrintGraphOnConsole()
         {
-            var generated = GenerateMatrix();
-            StringBuilder msg = new ("graph: \n");
+            Debug.Log(NewGraphDebugMsg);
+        }
 
-            for (int x = 0; x < generated.GetLength(0); x++)
-            {
-                for (int y = 0; y < generated.GetLength(1); y++)
-                {
-                    msg.Append((generated[x, y] ? "■" : "□") + "  ");           
-                }
-                msg.Append("\n");
-            }
-            Debug.Log(msg);
+        [ContextMenu("Print Debug Graph * 3")]
+        private void PrintGraphOnConsoleFor3Times()
+        {
+            StringBuilder msg = new();
+
+            for (int i = 0; i < 3; i++)
+                msg.AppendLine(NewGraphDebugMsg);
+
+            Debug.Log(msg.ToString());
         }
 
         [ContextMenu("Print Random Func")]
@@ -197,7 +231,7 @@ namespace Yours.QuickCity.Shape
 
             for (int count = 0; count < times; count++)
             {
-                result.Add(RandomFunc(0, 1));
+                result.Add(RandomFunc_3(0, 1));
             }
 
             Histogram<float, string> histogram = new(
