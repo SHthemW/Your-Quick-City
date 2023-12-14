@@ -6,6 +6,6 @@ namespace Yours.QuickCity.Shape
 { 
     public interface IShape
     {
-        bool[,] GenerateMatrix();
+        bool[,] RandomShapeMatrix { get; }
     }
 }
