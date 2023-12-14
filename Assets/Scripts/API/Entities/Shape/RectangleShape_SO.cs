@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 using Yours.QuickCity.Internal;
 
@@ -107,7 +108,10 @@ namespace Yours.QuickCity.Shape
 
         private void SetConcaveAndConvexity((int x, int y) coord, EdgeOutsideDir extendDir)
         {
-            var roughSeed = RandomFunc_3(0, _maxExtendPercent);
+            var roughSeed = RandomRoughFunc(
+                min:            0, 
+                max:            _maxExtendPercent, 
+                minValTendency: _attachmentDegree + 1);
 
             int extendGridNumX = (int)(Mathf.Abs(roughSeed) * _size_x);
             int extendGridNumY = (int)(Mathf.Abs(roughSeed) * _size_y);
@@ -162,10 +166,11 @@ namespace Yours.QuickCity.Shape
                     throw new ArgumentException();
             }
         }
-        private float RandomFunc_3(float min, float max)
+
+        private static float RandomRoughFunc(float min, float max, float minValTendency)
         {
             float randomFloat         = (float)new System.Random().NextDouble();
-            float adjustedRandomFloat = (float)Math.Pow(randomFloat, (_attachmentDegree + 1f));
+            float adjustedRandomFloat = (float)Math.Pow(randomFloat, minValTendency);
 
             return min + adjustedRandomFloat * (max - min);
         }
@@ -181,7 +186,7 @@ namespace Yours.QuickCity.Shape
 
             for (int count = 0; count < times; count++)
             {
-                result.Add(RandomFunc_3(0, 1));
+                result.Add(RandomRoughFunc(0, 1, _attachmentDegree + 1));
             }
 
             Histogram<float, string> histogram = new(
