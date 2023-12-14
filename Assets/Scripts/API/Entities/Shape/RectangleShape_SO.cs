@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 using Yours.QuickCity.Internal;
 
@@ -71,34 +69,17 @@ namespace Yours.QuickCity.Shape
             {
                 for (int y = 0; y < matrix_size_y; y++)
                 {
-                    if (!_matrix[x, y])
-                        continue;
-
                     if ((x + 1) >= matrix_size_x
                         || (y + 1) >= matrix_size_y
-                        || (x - 1) < 0 
+                        || (x - 1) < 0
                         || (y - 1) < 0)
                         continue;
 
-                    bool left  = _matrix[x - 1, y];
-                    bool right = _matrix[x + 1, y];
-                    bool up    = _matrix[x, y - 1];
-                    bool down  = _matrix[x, y + 1];
+                    IEdgeJudger edgeJudger = new CrossEdgeJudger();
+                    var direction = edgeJudger.Judge(_matrix, (x, y));
 
-                    if (left && right && up && down)
-                        continue;
-
-                    if (left && !right)
-                        edges.Add((x, y), EdgeOutsideDir.Right);
-
-                    else if (!left && right)
-                        edges.Add((x, y), EdgeOutsideDir.Left);
-
-                    else if (up && !down)
-                        edges.Add((x, y), EdgeOutsideDir.Down);
-
-                    else if (!up && down)
-                        edges.Add((x, y), EdgeOutsideDir.Up);
+                    if (direction != EdgeOutsideDir.NotEdge)
+                        edges.Add((x, y), direction);
                 }
             }
 
