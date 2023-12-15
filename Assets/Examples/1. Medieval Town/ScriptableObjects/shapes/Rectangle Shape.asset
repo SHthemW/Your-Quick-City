@@ -16,5 +16,5 @@ MonoBehaviour:
   _size_x: 10
   _size_y: 10
   _emptySizeMultiplier: 3
-  _maxExtendPercent: 0.35
+  _maxExtendPercent: 0.7
   _attachmentDegree: 0
