@@ -135,7 +135,7 @@ namespace Yours.QuickCity.Shape
 
         private readonly Dictionary<int, int> _extendLengthCount = new();
 
-        [ContextMenu("Print Random Func")]
+        [ContextMenu("Test Random Func")]
         private void PrintFunctionTestOnConsole()
         {
             const int times = 10000;
