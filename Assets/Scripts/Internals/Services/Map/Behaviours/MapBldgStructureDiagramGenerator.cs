@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -45,7 +46,7 @@ namespace Yours.QuickCity.Internal
             HashSet<Coord> succeedCoords = new();
             HashSet<Coord> failureCoords = new();
 
-            for (int times = 0, success = 0; times < diagram.TotalNodeNum && success < structure.GenerateNumber; times++)
+            for (int times = 0, success = 0; times < diagram.Content.Count() && success < structure.GenerateNumber; times++)
             {              
                 var tryingCoord = ChooseRandomCoord();
 
@@ -78,9 +79,10 @@ namespace Yours.QuickCity.Internal
 
                 Coord GetRandomCoord()
                 {
-                    int random_x = UnityEngine.Random.Range(0, diagram.SizeX);
-                    int random_y = UnityEngine.Random.Range(0, diagram.SizeY);
-                    return new Coord(random_x, random_y);
+                    var nodes = diagram.Content.ToArray();
+                    var randn = nodes[UnityEngine.Random.Range(0, nodes.Length - 1)];
+
+                    return randn.Coordinate;
                 }
             }
             
