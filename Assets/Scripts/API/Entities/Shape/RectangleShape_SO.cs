@@ -32,13 +32,15 @@ namespace Yours.QuickCity.Shape
         {
             get
             {
-                Histogram<KeyValuePair<int, int>, string> extendStat = new(
+                Histogram<string> extendStat = new("extend count"); 
+
+                extendStat.Construct(
                     dataSet: _extendLengthCount.ToList(),
                     getKeyIn: kvp => kvp.Key,
                     constrToVal: dic => new string('|', dic.Sum(kvp => kvp.Value)),
                     intervalSize: 1
                     );
-                return base.StatsDebugMsg + extendStat.DebugMessage;
+                return base.StatsDebugMsg + extendStat;
             }
         }
         protected override sealed void GenerateOnMatrix()
@@ -147,13 +149,15 @@ namespace Yours.QuickCity.Shape
                 result.Add(RandomRoughFunc(0, 1, _attachmentDegree + 1));
             }
 
-            Histogram<float, string> histogram = new(
+            Histogram<string> histogram = new("random");
+
+            histogram.Construct(
                 dataSet: result,
                 getKeyIn: num => num,
                 constrToVal: interval => new string('|', interval.Count() / 20),
                 intervalSize: 0.1f);
 
-            Debug.Log(histogram.DebugMessage);
+            Debug.Log(histogram);
         }
     }
 }

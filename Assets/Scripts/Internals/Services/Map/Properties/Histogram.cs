@@ -44,29 +44,54 @@ namespace Yours.QuickCity.Internal
         }
     }
 
-    internal class Histogram<TValue>
+    internal sealed class Histogram<TValue>
     {
-        protected List<HistogramInterval<TValue>> _diagram;
+        private readonly List<HistogramInterval<TValue>> _diagram;
+        private readonly string _title = "Distribution";
 
-        /// <summary>
-        /// construct a empty Histogram.
-        /// </summary>
         internal Histogram()
         {
             _diagram = new();
-        }
-        internal string DebugMessage
+        }     
+        internal Histogram(string title)
         {
-            get
+            _diagram = new();
+            _title = title ?? throw new ArgumentNullException();
+        }
+     
+        /// <summary>
+        /// construct histogram with existing dataSet.
+        /// </summary>
+        /// <param name="dataSet">data to construct Histogram</param>
+        /// <param name="getKeyIn">function that get interval key in each data</param>
+        /// <param name="constrToVal">function that convert an interval to final Histogram value.</param>
+        /// <param name="intervalSize">size of each interval</param>
+        internal void Construct<TData>(in List<TData> dataSet, Func<TData, float> getKeyIn, Func<IEnumerable<TData>, TValue> constrToVal, float intervalSize)
+        {
+            List<float> keys = new();
+
+            foreach (var data in dataSet)
+                keys.Add(getKeyIn(data));
+
+            keys.Sort();
+
+            int index = 0;
+            while (index < keys.Count)
             {
-                StringBuilder content = new("Distribution: \n");
+                float intervalStart = keys[index];
+                float intervalEnd = intervalStart + intervalSize;
+                List<TData> valuesInInterval = new();
 
-                foreach (var dist in _diagram)
-                    content.AppendLine(dist.ToString());
-                return content.ToString();
+                while (index < keys.Count && keys[index] < intervalEnd)
+                {
+                    valuesInInterval.Add(dataSet[index]);
+                    index++;
+                }
+
+                TValue value = constrToVal(valuesInInterval);
+                _diagram.Add(new HistogramInterval<TValue>((intervalStart, intervalEnd), value));
             }
-         }
-
+        }
 
         private float _lastAddedIntervalRight = -1;
         internal void AddInAsc(HistogramInterval<TValue> distribution)
@@ -111,43 +136,14 @@ namespace Yours.QuickCity.Internal
             //}
             //throw new KeyNotFoundException($"key: {value}");
         }
-    }
 
-    internal class Histogram<TData, TValue> : Histogram<TValue>
-    {
-        /// <summary>
-        /// construct a Histogram with existing dataSet.
-        /// </summary>
-        /// <param name="dataSet">data to construct Histogram</param>
-        /// <param name="getKeyIn">function that get interval key in each data</param>
-        /// <param name="constrToVal">function that convert an interval to final Histogram value.</param>
-        /// <param name="intervalSize">size of each interval</param>
-        internal Histogram(in List<TData> dataSet, Func<TData, float> getKeyIn, Func<IEnumerable<TData>, TValue> constrToVal, float intervalSize)
+        public override sealed string ToString()
         {
-            List<float> keys = new();
+            StringBuilder content = new($"{_title}: \n");
 
-            foreach (var data in dataSet)
-                keys.Add(getKeyIn(data));
-
-            keys.Sort();
-            _diagram = new();
-
-            int index = 0;
-            while (index < keys.Count)
-            {
-                float intervalStart = keys[index];
-                float intervalEnd = intervalStart + intervalSize;
-                List<TData> valuesInInterval = new();
-
-                while (index < keys.Count && keys[index] < intervalEnd)
-                {
-                    valuesInInterval.Add(dataSet[index]);
-                    index++;
-                }
-
-                TValue value = constrToVal(valuesInInterval);
-                _diagram.Add(new HistogramInterval<TValue>((intervalStart, intervalEnd), value));
-            }
+            foreach (var dist in _diagram)
+                content.AppendLine(dist.ToString());
+            return content.ToString();
         }
     }
 }
