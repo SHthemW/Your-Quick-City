@@ -43,49 +43,28 @@ namespace Yours.QuickCity.Internal
             => throw new NotImplementedException();
         private void TryAddStructuresToDiagram(IStructure structure, MapDiagram diagram)
         {
-            HashSet<Coord> succeedCoords = new();
-            HashSet<Coord> failureCoords = new();
+            var totalCoords  = diagram.Content.Select(n => n.Coordinate).ToArray();
+            int successCount = 0;
+            
+            for (int times = 0; times < totalCoords.Count() && successCount < structure.GenerateNumber; times++)
+            {
+                Queue<Coord> randoms = new(MapUtils.ShuffleRandomly(totalCoords));
 
-            for (int times = 0, success = 0; times < diagram.Content.Count() && success < structure.GenerateNumber; times++)
-            {              
-                var tryingCoord = ChooseRandomCoord();
-
+                if (!randoms.TryDequeue(out Coord tryingCoord))
+                    break;
+               
                 if (!JudgeIfCanGenerateStructure(structure, diagram, tryingCoord))
-                {
-                    failureCoords.Add(tryingCoord);
                     continue;
-                }
 
                 _resultMessage.AppendLine($"[structure] 结构 {structure.Name} 的第 {times + 1} 次尝试生成成功, 生成位置: {tryingCoord}");
 
-                success++;
-                succeedCoords.Add(tryingCoord);
+                successCount++;
 
                 WriteStructureToDiagram(structure, diagram);
             }
 
-            if (succeedCoords.Count < structure.GenerateNumber)
-                _resultMessage.AppendLine($"[structure] 结构 {structure.Name} 未完成其生成目标 ({succeedCoords.Count} / {structure.GenerateNumber}), 因为整个地图中没有合法的位置供其生成. ");
-
-            // local function
-            Coord ChooseRandomCoord()
-            {
-                var result = GetRandomCoord();
-
-                while (succeedCoords.Contains(result) || failureCoords.Contains(result))
-                    result = GetRandomCoord();
-
-                return result;
-
-                Coord GetRandomCoord()
-                {
-                    var nodes = diagram.Content.ToArray();
-                    var randn = nodes[UnityEngine.Random.Range(0, nodes.Length - 1)];
-
-                    return randn.Coordinate;
-                }
-            }
-            
+            if (successCount < structure.GenerateNumber)
+                _resultMessage.AppendLine($"[structure] 结构 {structure.Name} 未完成其生成目标 ({successCount} / {structure.GenerateNumber}), 因为整个地图中没有合法的位置供其生成. ");
         }
         /// <summary>
         /// judge if given coordinate can generate such structure <br/>
