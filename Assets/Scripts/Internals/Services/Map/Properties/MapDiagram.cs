@@ -244,7 +244,7 @@ namespace Yours.QuickCity.Internal
                 }
                 msg.Append("\n");
             }
-            Debug.Log("地形示意图(z ↑ x →): \n" + msg);
+            Debug.Log("地形示意图(z → x ↓): \n" + msg);
 
             static string GetGridOutputMsg(MapDiagramNode node)
             {
