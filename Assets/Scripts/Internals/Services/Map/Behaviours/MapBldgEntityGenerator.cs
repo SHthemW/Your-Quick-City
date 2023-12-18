@@ -22,7 +22,8 @@ namespace Yours.QuickCity.Internal
         {
             yield return ForeachStep(iter: diagram.Content, body: node =>
             {
-                GenerateGroundTile(node.Coordinate);
+                if (_map.GenerateGround)
+                    GenerateGroundTile(node.Coordinate);
 
                 if (node.IsObstacle)
                     GenerateObstacleTile(node.Coordinate, node.NodeData);

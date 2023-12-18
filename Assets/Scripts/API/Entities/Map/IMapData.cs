@@ -51,7 +51,13 @@ namespace Yours.QuickCity
 
         [SerializeField]
         private float _obstaclePercent;
-        internal readonly float ObstaclePercent => _obstaclePercent;
+        internal readonly float ObstaclePercent 
+            => _obstaclePercent;
+
+        [SerializeField]
+        private bool _generateGround;
+        internal readonly bool GenerateGround
+            => _generateGround;
 
         [Header("Analysis")]
 
