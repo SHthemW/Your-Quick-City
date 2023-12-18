@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,22 @@ namespace Yours.QuickCity.Internal
     {
         internal (float l, float r) Interval { get; }
         internal TValue Value { get; }
+
+        private readonly static StringBuilder _strBuilder = new();
+        private readonly string ValueStr => Value switch
+        {
+            IDictionary dict => dict.Keys.Cast<object>()
+                .Zip(
+                    second: dict.Values.Cast<object>(), 
+                    resultSelector: (k, v) => $"{k.ToString().Split('(').First()} : {v}")
+                .Aggregate(
+                    seed: _strBuilder.Clear(), 
+                    func: (sb, str) => sb.AppendLine(str), 
+                    resultSelector: sb => sb.ToString()
+                    ),
+
+            _ => Value.ToString()
+        };
 
         internal HistogramInterval((float l, float r) interval, TValue value)
         {
@@ -40,7 +57,7 @@ namespace Yours.QuickCity.Internal
         {
             return 
                 $"[{Math.Round(Interval.l, 1)}-{Math.Round(Interval.r, 1)}]\n" +
-                $" {Value}\n";
+                $" {ValueStr}\n";
         }
     }
 
