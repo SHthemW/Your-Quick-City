@@ -32,7 +32,7 @@ namespace Yours.QuickCity
             => throw new NotImplementedException();
         private IEnumerator GenerateSeqence()
         {
-            _diagram = new(_map.Properties);
+            _diagram = new(_map.Properties.Shape, _map.Properties.SizeMultiple);
 
             yield return _master.StartCoroutine(GenerateBuildingsOnMap(_diagram));
         

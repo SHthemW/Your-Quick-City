@@ -50,6 +50,7 @@ namespace Yours.QuickCity.Internal
                     yield return null;
                 }
             }
+            yield break;
         }
         protected IEnumerator ForeachStep<T>(Action<T> body, IEnumerable<T> iter, int stepcnt = -1)
         {
@@ -73,6 +74,7 @@ namespace Yours.QuickCity.Internal
                     yield return null;
                 }
             }
+            yield break;
         }
     }
 

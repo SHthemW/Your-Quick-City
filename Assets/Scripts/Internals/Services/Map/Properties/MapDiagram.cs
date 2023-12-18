@@ -1,31 +1,30 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Yours.QuickCity.Shape;
 
 namespace Yours.QuickCity.Internal
 {
     internal sealed class MapDiagram
     {
-        private MapDiagramNode[,] _nodes;
+        private readonly MapDiagramNode[,] _nodes;
 
-        // general getters
-        internal MapDiagramNode this[int x, int y]
-        {
-            get => _nodes[x, y];
-        }
+        private readonly Coord? _startPoint = null;
+
+        // properties
+        internal MapDiagramNode this[int x, int y] 
+            => _nodes[x, y] ?? throw new System.Exception("invalid coord.");
         internal IEnumerable<MapDiagramNode> Content
         {
             get
             {
                 for (int i = 0; i < _nodes.GetLength(0); i++)
                     for (int j = 0; j < _nodes.GetLength(1); j++)
-                        yield return _nodes[i, j];
+                        if (_nodes[i, j] != null)
+                            yield return _nodes[i, j];
             }
-        }
+        }       
 
-        // properties
-        internal int SizeX => _nodes.GetLength(0);
-        internal int SizeY => _nodes.GetLength(1);
-        internal int TotalNodeNum => SizeX * SizeY;
         /// <summary>
         /// number of node that closed, which are not <br/>
         /// connected to other area.
@@ -37,36 +36,31 @@ namespace Yours.QuickCity.Internal
         /// generator etc.
         /// </remarks>
         internal int ClosedNodeNum { get; set; } = 0;
-        internal Coord CenterPoint => new(SizeX / 2, SizeY / 2);
-
-        // readonly properties
-        private readonly MapProperty _basicProperty;
+        private int RectangleSizeX => _nodes.GetLength(0);
+        private int RectangleSizeY => _nodes.GetLength(1);
 
         /*
          *  constructors
-         *  
+
          *  methods that used to init the diagram.
          */
 
-        internal MapDiagram(MapProperty basicProperty)
+        internal MapDiagram(IShape shape, float sizeMultiple)
         {
-            _basicProperty = basicProperty;
+            var matrix = shape.GenerateShapeMatrix(sizeMultiple);
 
-            InitMapAsMatrix();
-        }       
-        private void InitMapAsMatrix()
-        {
-            _nodes = new MapDiagramNode[_basicProperty.Size_X, _basicProperty.Size_Y];
+            var (sz_x, sz_y) = IShape.SizeOf(matrix);
 
-            // arrage
-            for (int i = 0; i < this.SizeX; i++)
-            {
-                for (int j = 0; j < this.SizeY; j++)
-                {
-                    _nodes[i, j] = new();
-                    _nodes[i, j].Coordinate = new(i, j);
-                }
-            }
+            _nodes = new MapDiagramNode[sz_x, sz_y];
+
+            for (int x = 0; x < sz_x; x++)
+                for (int y = 0; y < sz_y; y++)
+                    if (matrix[x, y])
+                    {
+                        if (_startPoint == null)
+                            _startPoint = new Coord(x, y);
+                        _nodes[x, y] = new() { Coordinate = new(x, y) };
+                    }
         }
 
         /*
@@ -122,7 +116,7 @@ namespace Yours.QuickCity.Internal
             int accessibleTileCount = 0;
 
             // sign checked coord.
-            bool[,] mapCheckedFlags = new bool[this.SizeX, this.SizeY];
+            bool[,] mapCheckedFlags = new bool[this.RectangleSizeX, this.RectangleSizeY];
             Queue<Coord> checkedCoords = new();
 
             #endregion
@@ -130,7 +124,7 @@ namespace Yours.QuickCity.Internal
             #region Program
 
             // init, mark center point as accessible and start
-            SignCoordAsAccessible(this.CenterPoint);
+            SignCoordAsAccessible((Coord)_startPoint);
 
             // posit current input coord is obstacle.
             PositCurrentTileIsObs();
@@ -194,10 +188,10 @@ namespace Yours.QuickCity.Internal
             }
             bool[,] GetObstacleDiagram()
             {
-                bool[,] diagram = new bool[this.SizeX, this.SizeY];
+                bool[,] diagram = new bool[this.RectangleSizeX, this.RectangleSizeY];
 
                 foreach (var node in this.Content)
-                    if (node.IsObstacle)
+                    if (node != null && node.IsObstacle)
                         diagram[node.Coordinate.x, node.Coordinate.y] = true;
 
                 return diagram;
@@ -207,7 +201,7 @@ namespace Yours.QuickCity.Internal
             bool CalculateAccessible()
             {
                 // get ideal
-                int idealAccessibleCount = this.TotalNodeNum - this.ClosedNodeNum - currentObsNum;
+                int idealAccessibleCount = this.Content.Count() - this.ClosedNodeNum - currentObsNum;
                 return accessibleTileCount == idealAccessibleCount;
             }
 
@@ -221,9 +215,11 @@ namespace Yours.QuickCity.Internal
         /// <returns><see langword="true"/> if out of range.</returns>
         internal bool JudgeCoordIfOutOfRange(Coord targetCoord)
         {
-            return (targetCoord.x < 0 || targetCoord.x >= this.SizeX)
+            return (targetCoord.x < 0 || targetCoord.x >= this.RectangleSizeX)
                    ||
-                   (targetCoord.y < 0 || targetCoord.y >= this.SizeY);
+                   (targetCoord.y < 0 || targetCoord.y >= this.RectangleSizeY)
+                   ||
+                   (_nodes[targetCoord.x, targetCoord.y] == null);
         }
 
         /// <summary>
@@ -231,32 +227,29 @@ namespace Yours.QuickCity.Internal
         /// </summary>
         internal void PrintDebugGraph()
         {
-            string msg = "";
+            System.Text.StringBuilder msg = new();
+            MapDiagramNode node = null;
 
-            for (int x = 0; x < this.SizeX; x++)
+            for (int x = 0; x < this.RectangleSizeX; x++)
             {
-                for (int y = 0; y < this.SizeY; y++)
+                for (int y = 0; y < this.RectangleSizeX; y++)
                 {
-                    var node = GetTransformedValue(_nodes, x, y);
-                    msg += (GetGridOutputMsg(node.IsObstacle) + " ");
+                    try
+                    {
+                        node = _nodes[x, y];
+                    } 
+                    catch (System.IndexOutOfRangeException) { }
+                    
+                    msg.Append(GetGridOutputMsg(node) + " ");
                 }
-                msg += "\n";
+                msg.Append("\n");
             }
-            Debug.Log("地形示意图(z ↑ x →): \n" + msg);
+            Debug.Log("地形示意图(z → x ↓): \n" + msg);
 
-            /*
-             *  functions
-             */
-
-            static T GetTransformedValue<T>(T[,] origMartix, int x, int y)
+            static string GetGridOutputMsg(MapDiagramNode node)
             {
-                var transed_x = y;
-                var transed_y = origMartix.GetLength(0) - x - 1;
-                return origMartix[transed_x, transed_y];
-            }
-            static string GetGridOutputMsg(bool isObs)
-            {
-                return isObs ? "■" : "□";
+                if (node == null) return "▁";
+                return node.IsObstacle ? "■" : "□";
             }
         }
         

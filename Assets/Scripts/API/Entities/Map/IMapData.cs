@@ -2,35 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Yours.QuickCity.Internal;
+using Yours.QuickCity.Shape;
 
 namespace Yours.QuickCity
 {
     [Serializable]
     public struct MapProperty
     {
-        [Header("Size")]
+        [Header("Basement")]
 
         [SerializeField]
-        private int _size_x;
-        internal readonly int Size_X
+        private Shape_SO _shape;
+        internal readonly IShape Shape
         {
             get
             {
-                if (_size_x == 0)
-                    Debug.LogWarning($"[Map] 检测到未初始化的属性 {nameof(_size_x)} .");
-                return _size_x;
+                if (_shape == null)
+                    throw new ArgumentNullException();
+                return _shape;
             }
         }
 
         [SerializeField]
-        private int _size_y;
-        internal readonly int Size_Y
+        private float _sizeMultiple;
+        internal readonly float SizeMultiple
         {
             get
             {
-                if (_size_y == 0)
-                    Debug.LogWarning($"[Map] 检测到未初始化的属性 {nameof(_size_y)} .");
-                return _size_y;
+                if (_sizeMultiple <= 0)
+                    throw new ArgumentException();
+                return _sizeMultiple;
             }
         }
 
@@ -45,8 +46,6 @@ namespace Yours.QuickCity
                 return _tileUnitSize;
             }
         }
-        internal readonly int TotalNodeNum 
-            => Size_X * Size_Y;
 
         [Header("Generate")]
 

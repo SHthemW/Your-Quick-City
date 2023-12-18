@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace Yours.QuickCity.Internal
 {
@@ -7,18 +8,16 @@ namespace Yours.QuickCity.Internal
         /// <summary>
         /// shuffle input data randomly, then return it.
         /// </summary>
-        internal static T[] ShuffleRandomly<T>(in T[] coords)
+        internal static T[] ShuffleRandomly<T>(in T[] elements)
         {
-            for (int i = 0; i < coords.Length; i++)
+            for (int i = 0; i < elements.Length; i++)
             {
-                int randomNum = UnityEngine.Random.Range(i, coords.Length);
+                int randomNum = UnityEngine.Random.Range(i, elements.Length);
 
                 // swap
-                T tmp = coords[randomNum];
-                coords[randomNum] = coords[i];
-                coords[i] = tmp;
+                (elements[i], elements[randomNum]) = (elements[randomNum], elements[i]);
             }
-            return coords;
+            return elements;
         }
 
         /// <summary>

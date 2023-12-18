@@ -50,7 +50,7 @@ namespace Yours.QuickCity.Internal
         }
         internal void PrintDistributionDiagram()
         {
-            Debug.Log(Result.DebugMessage);
+            Debug.Log(Result);
         }
 
         private MapStuffDistributionDiagramGenerator() : base(-1)

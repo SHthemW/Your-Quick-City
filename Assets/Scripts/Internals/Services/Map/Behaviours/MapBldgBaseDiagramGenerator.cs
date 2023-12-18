@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Yours.QuickCity.Internal
 {
@@ -7,9 +8,6 @@ namespace Yours.QuickCity.Internal
     {
         private readonly MapProperty _map;
         private readonly MapEntities _mapObjects;
-
-        private int _obstacleNum => (int)(_map.TotalNodeNum * _map.ObstaclePercent);
-        private List<Coord> _allTileCoords { get; set; } = new();
 
         /*
          *  internal:
@@ -24,8 +22,10 @@ namespace Yours.QuickCity.Internal
         {
             var randomCoords = GenerateRandomCoords();
 
+            int obstacleNumb = (int)(_map.ObstaclePercent * diagram.Content.Count());
+
             int count = 0;
-            yield return ForStep(cond: count < _obstacleNum, inc: () => count++, stepcnt: _obstacleNum, body: () => 
+            yield return ForStep(cond: count < obstacleNumb, inc: () => count++, stepcnt: obstacleNumb, body: () => 
             {
                 if (randomCoords.Count == 0)
                     throw new BreakException();
@@ -37,6 +37,15 @@ namespace Yours.QuickCity.Internal
                     diagram[currentCoord.x, currentCoord.y].PlaceObstacle(_mapObjects.GetRandomBuilding());
                 }
             });
+
+            Queue<Coord> GenerateRandomCoords()
+            {
+                // storage all coordinates
+                var allCoords = diagram.Content.Select(node => node.Coordinate);
+
+                // get shuffed random queue.
+                return new(MapUtils.ShuffleRandomly(allCoords.ToArray()));
+            }
         }
 
         /*
@@ -45,15 +54,5 @@ namespace Yours.QuickCity.Internal
 
         private MapBldgBaseDiagramGenerator() : base(-1)
             => throw new System.NotImplementedException();
-        private Queue<Coord> GenerateRandomCoords()
-        {
-            // storage all coordinates
-            for (int i = 0; i < _map.Size_X; i++)
-                for (int j = 0; j < _map.Size_Y; j++)
-                    _allTileCoords.Add(new Coord(i, j));
-
-            // get shuffed random queue.
-            return new(MapUtils.ShuffleRandomly(_allTileCoords.ToArray()));
-        }
     }
 }
