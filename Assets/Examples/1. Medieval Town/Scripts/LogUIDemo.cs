@@ -21,7 +21,7 @@ namespace Yours.QuickCity
             LogText.text += $"<color=#DCDCDC>\n{message}</color>";
         }
        
-        void IDebugLogger.AddDynamicFloat(Func<float> percentGetter, Func<bool> until)
+        void IDebugLogger.AddDynamicPerc(Func<float> percentGetter, Func<bool> until)
         {
             _percentGetter = percentGetter;
             _endCondition  = until;

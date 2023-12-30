@@ -7,7 +7,7 @@ namespace Yours.QuickCity.Internal
     {
         void Add(string message) => UnityEngine.Debug.Log(message);
 
-        void AddDynamicFloat(Func<float> percent, Func<bool> until);
+        void AddDynamicPerc(Func<float> percent, Func<bool> until);
 
         void Clear();
     }
