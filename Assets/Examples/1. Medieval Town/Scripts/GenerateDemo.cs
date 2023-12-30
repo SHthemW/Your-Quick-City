@@ -13,19 +13,25 @@ namespace Yours.QuickCity.Internal
         [SerializeField]
         private MapData_SO _map;
 
+        private IMapObjParent Parent => GetComponent<IMapObjParent>();
+        private IDebugLogger LogUI => FindObjectOfType<LogUIDemo>();
+
         public void Run()
         {
-            var map = new Map(_map, GetComponent<IMapObjParent>(), this);
+            var map = new Map(_map, Parent, this)
+            {
+                Logger = this.LogUI
+            };
+
             map.Generate();
         }
 
         public void Clean()
         {
             // clean objects
-            var handler = GetComponent<IMapObjParent>();
-            CleanChild(handler.StuffObjParent);
-            CleanChild(handler.ObstacleObjParent);
-            CleanChild(handler.TerrainDetectorParent);
+            CleanChild(Parent.StuffObjParent);
+            CleanChild(Parent.ObstacleObjParent);
+            CleanChild(Parent.TerrainDetectorParent);
 
             // clean ui
             LogUI.Clear();
