@@ -11,7 +11,7 @@ namespace Yours.QuickCity
         private Text LogText { get; set; }
 
         private const int DONE_PERCENT = 98;
-        private string _textTemp;
+        private string _currentStaticText;
 
         private Func<float> _percentGetter;
         private Func<bool>  _endCondition;
@@ -26,8 +26,8 @@ namespace Yours.QuickCity
             _percentGetter = percentGetter;
             _endCondition  = until;
 
-            _textTemp = LogText.text;
-            LogText.text = _textTemp + $"({0.0}%)";
+            _currentStaticText = LogText.text;
+            LogText.text = _currentStaticText + $"({0.0}%)";
         }
 
         void IDebugLogger.Clear()
@@ -41,25 +41,22 @@ namespace Yours.QuickCity
             if (_percentGetter == null || _endCondition == null)
                 return;
 
-            if (_endCondition())
-            {
-                EndDynamicPart();
-                return;
-            }
-
             UpdateDynamicPercent(_percentGetter.Invoke());
+
+            if (_endCondition())
+                EndDynamicPart();
         }
 
         private void UpdateDynamicPercent(float percentValue)
         {
             string percent = Math.Round(percentValue, 1).ToString();
 
-            LogText.text = _textTemp + (percentValue >= DONE_PERCENT ? "(done.)" : $"({percent}%)");
+            LogText.text = _currentStaticText + (percentValue >= DONE_PERCENT ? "(done.)" : $"({percent}%)");
         }
 
         private void EndDynamicPart()
         {
-            _textTemp = LogText.text;
+            _currentStaticText = LogText.text;
             _percentGetter = null;
         }
 
