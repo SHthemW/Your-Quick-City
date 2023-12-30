@@ -1,11 +1,11 @@
 ﻿using System;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
+using Yours.QuickCity.Internal;
 
-namespace Yours.QuickCity.Internal
+namespace Yours.QuickCity
 {
-    internal sealed class LogUI : MonoBehaviour
+    public sealed class LogUI : MonoBehaviour
     {
         [field: SerializeField]
         private Text LogText { get; set; }
@@ -18,6 +18,10 @@ namespace Yours.QuickCity.Internal
         }
         private static LogUI _instance;
         
+        public static void Clear()
+        {
+            _instance.LogText.text = string.Empty;
+        }
 
         internal static void AppendLog(string message)
         {
