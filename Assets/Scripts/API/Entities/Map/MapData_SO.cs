@@ -18,9 +18,9 @@ namespace Yours.QuickCity.Internal
          *  implements
          */
 
-        IMapConf    IMapData.Config => _config != null ? _config : throw new MissingReferenceException();
-        MapProperty IMapData.Properties => _properties;
-        MapEntities IMapData.GameObjectDef => _gameObjects;
+        public IMapConf    Config => _config != null ? _config : throw new MissingReferenceException();
+        public MapProperty Properties => _properties;
+        public MapEntities GameObjectDef => _gameObjects;
 
         /*
          *  valid checks

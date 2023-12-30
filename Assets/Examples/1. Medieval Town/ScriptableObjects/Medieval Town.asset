@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 1b8fc9f6bf9189d4aab0801217e98c71, type: 2}
   _properties:
-    _shape: {fileID: 11400000, guid: 10dcf11cb705dcd429cfc7953c632a9f, type: 2}
+    _shape: {fileID: 11400000, guid: 2d0d3cc4ad6f08b47addd810cd64472d, type: 2}
     _sizeMultiple: 1.5
     _tileUnitSize: 16
     _obstaclePercent: 0.25
