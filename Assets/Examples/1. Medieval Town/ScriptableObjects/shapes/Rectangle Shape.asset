@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Rectangle Shape
   m_EditorClassIdentifier: 
   _testScaleMultiple: 1.5
-  _size_x: 10
-  _size_y: 10
+  _size_x: 15
+  _size_y: 15
   _emptySizeMultiplier: 3
-  _maxExtendPercent: 0.7
+  _maxExtendPercent: 0
   _attachmentDegree: 0
