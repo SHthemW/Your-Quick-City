@@ -22,10 +22,14 @@ namespace Yours.QuickCity.Internal
         {
             var randomCoords = GenerateRandomCoords();
 
-            int obstacleNumb = (int)(_map.ObstaclePercent * diagram.Content.Count());
+            int obstacleCount = (int)(_map.ObstaclePercent * diagram.Content.Count());
 
             int count = 0;
-            yield return ForStep(cond: count < obstacleNumb, inc: () => count++, stepcnt: obstacleNumb, body: () => 
+            yield return For(
+                continueCondition: count < obstacleCount, 
+                endStepFunc: () => count++, 
+                stepCount: obstacleCount, 
+                body: () => 
             {
                 if (randomCoords.Count == 0)
                     throw new BreakException();

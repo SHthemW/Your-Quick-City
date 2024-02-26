@@ -28,11 +28,15 @@ namespace Yours.QuickCity.Internal
         { 
             this.maxTick = maxTick; 
         }       
-        protected IEnumerator ForStep(Action body, int stepcnt, bool cond = true, Action inc = null)
+        protected IEnumerator For(
+            Action body, 
+            int    stepCount, 
+            bool   continueCondition = true, 
+            Action endStepFunc = null)
         {
-            _targetStepCount = stepcnt;
+            _targetStepCount = stepCount;
 
-            for(; cond == true; inc?.Invoke())
+            for(; continueCondition == true; endStepFunc?.Invoke())
             {
                 tick++;
                 _currentStepCount++;
@@ -52,9 +56,13 @@ namespace Yours.QuickCity.Internal
             }
             yield break;
         }
-        protected IEnumerator ForeachStep<T>(Action<T> body, IEnumerable<T> iter, int stepcnt = -1)
+
+        protected IEnumerator Foreach<T>(
+            Action<T>      body, 
+            IEnumerable<T> iter, 
+            int            stepCount = -1)
         {
-            _targetStepCount = stepcnt == -1 ? iter.Count() : stepcnt;
+            _targetStepCount = stepCount == -1 ? iter.Count() : stepCount;
 
             foreach(T item in iter)
             {

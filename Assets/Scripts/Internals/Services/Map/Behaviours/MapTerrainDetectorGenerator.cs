@@ -22,7 +22,7 @@ namespace Yours.QuickCity.Internal
         {
             Result = new();
 
-            yield return ForeachStep(iter: coords, stepcnt: coords.Length, body: coord => 
+            yield return Foreach(iter: coords, stepCount: coords.Length, body: coord => 
             {
                 var detector = UnityEngine.Object.Instantiate(
                     _detectorObject,

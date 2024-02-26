@@ -1,5 +1,4 @@
-﻿using Codice.Client.BaseCommands;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +20,7 @@ namespace Yours.QuickCity.Internal
 
             var offsets = GeneratePositionOffsets();
 
-            yield return ForeachStep(iter: map.Content, body: node => 
+            yield return Foreach(iter: map.Content, body: node => 
             {
                 if (node.IsObstacle && _map.IgnoreBuildingAreasWhenAnalysis)
                     throw new ContinueException();

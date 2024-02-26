@@ -25,7 +25,7 @@ namespace Yours.QuickCity.Internal
         }
         internal IEnumerator GenerateOnDiagram(MapDiagram diagram)
         {
-            yield return ForeachStep(iter: _mapObjects.StructureList, stepcnt: _mapObjects.StructureList.Count / 2, body: structure =>
+            yield return Foreach(iter: _mapObjects.StructureList, stepCount: _mapObjects.StructureList.Count / 2, body: structure =>
             {
                 TryAddStructuresToDiagram(structure, diagram);
             });

@@ -16,7 +16,7 @@ namespace Yours.QuickCity.Internal
 
         internal IEnumerator GenerateStuffs(Dictionary<(Vector3 pos, Vector3 attachDir), IStuff> stuffInfo)
         {
-            yield return ForeachStep(iter: stuffInfo, stepcnt: stuffInfo.Count, body: info => 
+            yield return Foreach(iter: stuffInfo, stepCount: stuffInfo.Count, body: info => 
             {
                 if (_generateCount.ContainsKey(info.Value) &&
                     _generateCount[info.Value] > info.Value.MaxGenerateNum)
