@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
+      <canvas id="unity-canvas" width=1280 height=720 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -57,11 +57,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/YQC 0.1.0 webgl.loader.js";
+      var loaderUrl = buildUrl + "/Your Quick City webgl.loader.js";
       var config = {
-        dataUrl: buildUrl + "/YQC 0.1.0 webgl.data.br",
-        frameworkUrl: buildUrl + "/YQC 0.1.0 webgl.framework.js.br",
-        codeUrl: buildUrl + "/YQC 0.1.0 webgl.wasm.br",
+        dataUrl: buildUrl + "/Your Quick City webgl.data.unityweb",
+        frameworkUrl: buildUrl + "/Your Quick City webgl.framework.js.unityweb",
+        codeUrl: buildUrl + "/Your Quick City webgl.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "SHW",
         productName: "YQC",
@@ -94,8 +94,8 @@
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
-        canvas.style.width = "1920px";
-        canvas.style.height = "1080px";
+        canvas.style.width = "1280px";
+        canvas.style.height = "720px";
       }
 
       loadingBar.style.display = "block";
