@@ -20,7 +20,7 @@ namespace Yours.QuickCity.Internal
         }
         internal IEnumerator GenerateByDiagram(MapDiagram diagram)
         {
-            yield return ForeachStep(iter: diagram.Content, body: node =>
+            yield return Foreach(iter: diagram.Content, body: node =>
             {
                 if (_map.GenerateGround)
                     GenerateGroundTile(node.Coordinate);

@@ -24,7 +24,7 @@ namespace Yours.QuickCity.Internal
             // temps
             Dictionary<IStuff, float> distInInterval = new(capacity: detectors.Length);
 
-            yield return ForeachStep(iter: MapUtils.ShuffleRandomly(detectors), body: detector => 
+            yield return Foreach(iter: MapUtils.ShuffleRandomly(detectors), body: detector => 
             {
                 // for current detector density, get distribution from diagram.
                 distInInterval = distributionDiagram.GetMatched(detector.DensityValue);

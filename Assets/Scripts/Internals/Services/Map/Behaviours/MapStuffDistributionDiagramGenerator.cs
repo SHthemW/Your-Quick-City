@@ -32,7 +32,10 @@ namespace Yours.QuickCity.Internal
             float step = (max - min) / _map.StuffDistributeDiagramResolution;
             float curDensity = 0;
 
-            yield return ForStep(cond: curDensity <= maxDensity, stepcnt: (int)Math.Ceiling(maxDensity / step), body: () =>
+            yield return For(
+                continueCondition: curDensity <= maxDensity, 
+                stepCount: (int)Math.Ceiling(maxDensity / step), 
+                body: () =>
             {
                 var range = (left: curDensity, right: curDensity + step);
 
@@ -46,7 +49,7 @@ namespace Yours.QuickCity.Internal
                 // add to result           
                 Result.AddInAsc(new HistogramInterval<Dictionary<IStuff, float>>(range, generateWeight));
             }, 
-            inc: () => curDensity += step);
+            endStepFunc: () => curDensity += step);
         }
         internal void PrintDistributionDiagram()
         {
