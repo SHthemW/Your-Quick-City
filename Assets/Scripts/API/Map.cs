@@ -41,7 +41,7 @@ namespace Yours.QuickCity
 
             yield return _master.StartCoroutine(GenerateStuffByTerrain(_terrainDetectors));
 
-            Logger.Add("generate finished.");
+            Logger.Add("generate is finished.");
         }
         private IEnumerator GenerateBuildingsOnMap(MapDiagram map)
         {
@@ -158,7 +158,7 @@ namespace Yours.QuickCity
 
             #endregion
 
-            yield break;
+            yield return null;
         }
     }
 }
