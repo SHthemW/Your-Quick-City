@@ -13,14 +13,14 @@ namespace Yours.QuickCity.Internal
         [SerializeField]
         private TData _data;
 
-        internal Coord Coordinate 
-        { 
-            get => _coordinate; 
-            set => _coordinate = value; 
-        }      
+        internal Coord Coordinate
+        {
+            get => _coordinate;
+            set => _coordinate = value;
+        }
         internal TData Data
         {
-            get => _data; 
+            get => _data;
             set => _data = value;
         }
 
@@ -34,18 +34,4 @@ namespace Yours.QuickCity.Internal
     {
         bool HasContent { get; }
     }
-
-    [Serializable]
-    internal sealed class MapDiagramNodeData : IMatrixNodeData
-    {
-        [field: SerializeField]
-        internal Direction Direction { get; set; }
-
-        [field: SerializeField]
-        [Tooltip("该节点应该生成的Object.")]
-        internal GameObject NodeObj { get; set; }
-
-        public bool HasContent => NodeObj != null;
-    }
-    internal enum Direction { Random = 0, Up, Down, Left, Right }
 }

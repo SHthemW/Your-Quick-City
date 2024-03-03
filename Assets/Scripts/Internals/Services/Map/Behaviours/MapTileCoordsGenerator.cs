@@ -14,7 +14,7 @@ namespace Yours.QuickCity.Internal
         {
             _map = basicProp;
         }
-        internal IEnumerator GenerateCoords(Martrix<MapDiagramNodeData> map)
+        internal IEnumerator GenerateCoords(Martrix<MapNodeData> map)
         {           
             Result = new();
 

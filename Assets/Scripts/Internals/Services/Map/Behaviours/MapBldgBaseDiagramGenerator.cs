@@ -18,7 +18,7 @@ namespace Yours.QuickCity.Internal
             _map  = basicProperty;
             _mapObjects = entityProperty;
         }
-        internal IEnumerator GenerateOnDiagram(Martrix<MapDiagramNodeData> diagram)
+        internal IEnumerator GenerateOnDiagram(Martrix<MapNodeData> diagram)
         {
             var randomCoords = GenerateRandomCoords();
 

@@ -18,7 +18,7 @@ namespace Yours.QuickCity.Internal
             _mapObjects = entityProp;
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
-        internal IEnumerator GenerateByDiagram(Martrix<MapDiagramNodeData> diagram)
+        internal IEnumerator GenerateByDiagram(Martrix<MapNodeData> diagram)
         {
             yield return Foreach(iter: diagram.Content, body: node =>
             {
@@ -43,7 +43,7 @@ namespace Yours.QuickCity.Internal
 
             spawnFloor.transform.SetParent(_parent.FloorObjParent); 
         }
-        private void GenerateObstacleTile(Coord logicPos, MapDiagramNodeData data)
+        private void GenerateObstacleTile(Coord logicPos, MapNodeData data)
         {
             var spawnObstacle = UnityEngine.Object.
                 Instantiate(data.NodeObj);
