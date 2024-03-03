@@ -14,7 +14,7 @@ namespace Yours.QuickCity.Internal
         {
             _map = basicProp;
         }
-        internal IEnumerator GenerateCoords(MapDiagram map)
+        internal IEnumerator GenerateCoords(Martrix<MapDiagramNodeData> map)
         {           
             Result = new();
 
@@ -22,7 +22,7 @@ namespace Yours.QuickCity.Internal
 
             yield return Foreach(iter: map.Content, body: node => 
             {
-                if (node.IsObstacle && _map.IgnoreBuildingAreasWhenAnalysis)
+                if (node.Data.HasContent && _map.IgnoreBuildingAreasWhenAnalysis)
                     throw new ContinueException();
 
                 var tilePos = MapUtils.GetTileActualPosition(_map.TileUnitSize, node.Coordinate);

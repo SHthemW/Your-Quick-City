@@ -4,51 +4,48 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [Serializable]
-    internal sealed class MapDiagramNode
+    internal sealed class MartrixNode<TData> where TData : IMatrixNodeData, new()
     {
         [SerializeField]
         [Tooltip("该节点相对于原点(左下角)的坐标.")]
         private Coord _coordinate;
 
         [SerializeField]
-        private MapDiagramNodeData _data;
+        private TData _data;
 
-        // properties
         internal Coord Coordinate 
         { 
             get => _coordinate; 
             set => _coordinate = value; 
         }      
-        internal MapDiagramNodeData NodeData
+        internal TData Data
         {
             get => _data; 
             set => _data = value;
         }
-        internal bool IsObstacle => _data.NodeObj != null;
 
-        // runtime setters
-        internal void PlaceObstacle(GameObject obstacle)
+        internal MartrixNode()
         {
-            var temp = _data;
-            _data = new(temp.Direction, obstacle);
+            this._data = new();
         }
     }
 
+    internal interface IMatrixNodeData
+    {
+        bool HasContent { get; }
+    }
+
     [Serializable]
-    internal struct MapDiagramNodeData
+    internal sealed class MapDiagramNodeData : IMatrixNodeData
     {
         [field: SerializeField]
-        internal Direction Direction { get; private set; }
+        internal Direction Direction { get; set; }
 
         [field: SerializeField]
         [Tooltip("该节点应该生成的Object.")]
-        internal GameObject NodeObj { get; private set; }
+        internal GameObject NodeObj { get; set; }
 
-        internal MapDiagramNodeData(Direction direction, GameObject nodeObj)
-        {
-            Direction = direction;
-            NodeObj = nodeObj;
-        }
+        public bool HasContent => NodeObj != null;
     }
     internal enum Direction { Random = 0, Up, Down, Left, Right }
 }

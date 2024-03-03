@@ -5,16 +5,15 @@ using Yours.QuickCity.Shape;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class MapDiagram
+    internal sealed class Martrix<TData> where TData : IMatrixNodeData, new()
     {
-        private readonly MapDiagramNode[,] _nodes;
-
+        private readonly MartrixNode<TData>[,] _nodes;
         private readonly Coord? _startPoint = null;
 
         // properties
-        internal MapDiagramNode this[int x, int y] 
+        internal MartrixNode<TData> this[int x, int y] 
             => _nodes[x, y] ?? throw new System.Exception("invalid coord.");
-        internal IEnumerable<MapDiagramNode> Content
+        internal IEnumerable<MartrixNode<TData>> Content
         {
             get
             {
@@ -45,22 +44,26 @@ namespace Yours.QuickCity.Internal
          *  methods that used to init the diagram.
          */
 
-        internal MapDiagram(IShape shape, float sizeMultiple)
+        internal Martrix(IShape shape, float sizeMultiple)
         {
             var matrix = shape.GenerateShapeMatrix(sizeMultiple);
 
             var (sz_x, sz_y) = IShape.SizeOf(matrix);
 
-            _nodes = new MapDiagramNode[sz_x, sz_y];
+            _nodes = new MartrixNode<TData>[sz_x, sz_y];
 
             for (int x = 0; x < sz_x; x++)
+            {
                 for (int y = 0; y < sz_y; y++)
+                {
                     if (matrix[x, y])
                     {
                         if (_startPoint == null)
                             _startPoint = new Coord(x, y);
                         _nodes[x, y] = new() { Coordinate = new(x, y) };
                     }
+                }
+            }
         }
 
         /*
@@ -181,7 +184,7 @@ namespace Yours.QuickCity.Internal
                 int num = 0;
 
                 foreach (var node in this.Content)
-                    if (node.IsObstacle)
+                    if (node.Data.HasContent)
                         num++;
 
                 return num;
@@ -191,7 +194,7 @@ namespace Yours.QuickCity.Internal
                 bool[,] diagram = new bool[this.RectangleSizeX, this.RectangleSizeY];
 
                 foreach (var node in this.Content)
-                    if (node != null && node.IsObstacle)
+                    if (node != null && node.Data.HasContent)
                         diagram[node.Coordinate.x, node.Coordinate.y] = true;
 
                 return diagram;
@@ -228,7 +231,7 @@ namespace Yours.QuickCity.Internal
         internal void PrintDebugGraph()
         {
             System.Text.StringBuilder msg = new();
-            MapDiagramNode node = null;
+            MartrixNode<TData> node = null;
 
             for (int x = 0; x < this.RectangleSizeX; x++)
             {
@@ -246,10 +249,10 @@ namespace Yours.QuickCity.Internal
             }
             Debug.Log("地形示意图(z → x ↓): \n" + msg);
 
-            static string GetGridOutputMsg(MapDiagramNode node)
+            static string GetGridOutputMsg(MartrixNode<TData> node)
             {
                 if (node == null) return "▁";
-                return node.IsObstacle ? "■" : "□";
+                return node.Data.HasContent ? "■" : "□";
             }
         }
         

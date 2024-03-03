@@ -4,7 +4,7 @@ namespace Yours.QuickCity.Internal
 {
     internal interface IStructure
     {
-        List<MapDiagramNode> StructureDiagram { get; }
+        List<MartrixNode<MapDiagramNodeData>> StructureDiagram { get; }
         /// <summary>
         /// number of node that closed in structure internal, <br/>
         /// which not connected to the outside map.

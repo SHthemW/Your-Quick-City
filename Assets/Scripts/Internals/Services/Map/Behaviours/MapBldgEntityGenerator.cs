@@ -18,15 +18,15 @@ namespace Yours.QuickCity.Internal
             _mapObjects = entityProp;
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
-        internal IEnumerator GenerateByDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateByDiagram(Martrix<MapDiagramNodeData> diagram)
         {
             yield return Foreach(iter: diagram.Content, body: node =>
             {
                 if (_map.GenerateGround)
                     GenerateGroundTile(node.Coordinate);
 
-                if (node.IsObstacle)
-                    GenerateObstacleTile(node.Coordinate, node.NodeData);
+                if (node.Data.HasContent)
+                    GenerateObstacleTile(node.Coordinate, node.Data);
             });
         }
 

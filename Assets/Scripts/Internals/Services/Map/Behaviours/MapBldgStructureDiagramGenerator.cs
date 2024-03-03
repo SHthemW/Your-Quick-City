@@ -23,7 +23,7 @@ namespace Yours.QuickCity.Internal
         {
             _mapObjects = objectsDef;
         }
-        internal IEnumerator GenerateOnDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateOnDiagram(Martrix<MapDiagramNodeData> diagram)
         {
             yield return Foreach(iter: _mapObjects.StructureList, stepCount: _mapObjects.StructureList.Count / 2, body: structure =>
             {
@@ -41,7 +41,7 @@ namespace Yours.QuickCity.Internal
 
         private MapBldgStructureDiagramGenerator() : base(-1)
             => throw new NotImplementedException();
-        private void TryAddStructuresToDiagram(IStructure structure, MapDiagram diagram)
+        private void TryAddStructuresToDiagram(IStructure structure, Martrix<MapDiagramNodeData> diagram)
         {
             var totalCoords  = diagram.Content.Select(n => n.Coordinate).ToArray();
             int successCount = 0;
@@ -73,7 +73,7 @@ namespace Yours.QuickCity.Internal
         /// <param name="diagram"></param>
         /// <param name="tryPoint"></param>
         /// <returns></returns>
-        private bool JudgeIfCanGenerateStructure(IStructure structure, MapDiagram diagram, Coord tryPoint)
+        private bool JudgeIfCanGenerateStructure(IStructure structure, Martrix<MapDiagramNodeData> diagram, Coord tryPoint)
         {
             foreach (var node in structure.StructureDiagram)
             {
@@ -84,7 +84,7 @@ namespace Yours.QuickCity.Internal
                     _finalStructureDiagram.Clear();
                     return false;
                 }
-                _finalStructureDiagram.Add(mapped_coord, node.NodeData);
+                _finalStructureDiagram.Add(mapped_coord, node.Data);
             }
             return true;        
 
@@ -97,20 +97,20 @@ namespace Yours.QuickCity.Internal
                     return true;
 
                 else if (structure.GeneratePriority == StructureGeneratePriority.ReplaceExists)
-                    return diagram[coord.x, coord.y].IsObstacle;
+                    return diagram[coord.x, coord.y].Data.HasContent;
 
                 else 
                     return false;
             }
         }
-        private void WriteStructureToDiagram(IStructure structure, MapDiagram diagram)
+        private void WriteStructureToDiagram(IStructure structure, Martrix<MapDiagramNodeData> diagram)
         {
             if (_finalStructureDiagram.Count == 0)
                 throw new InvalidOperationException("[Map]: 无法生成结构, 因为没有可供生成的final diagram.");
 
             foreach (var nodeKvp in _finalStructureDiagram)
             {
-                diagram[nodeKvp.Key.x, nodeKvp.Key.y].NodeData = nodeKvp.Value;
+                diagram[nodeKvp.Key.x, nodeKvp.Key.y].Data = nodeKvp.Value;
             }
             diagram.ClosedNodeNum += structure.ClosedNodeNum;
 
