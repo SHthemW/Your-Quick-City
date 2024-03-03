@@ -75,11 +75,11 @@ namespace Yours.QuickCity.Internal
 
         /// <summary>
         /// calculate if the input coordinate can place <br/>
-        /// an obstacle with no influence on acccessible.
+        /// an obstacle with no influence on graph-connection.
         /// </summary>
-        /// <param name="targetCoord">coordinate to judge</param>
+        /// <param name="coord">coordinate to judge</param>
         /// <returns>true if input coordinate is placeable.</returns>
-        internal bool JudgeIfCanPlaceObstacle(Coord targetCoord)
+        internal bool StillConnectedWhenContented(Coord coord)
         {
             // Summary: 
 
@@ -104,7 +104,7 @@ namespace Yours.QuickCity.Internal
 
             // In that case, function will return TRUE.
 
-            if (JudgeCoordIfOutOfRange(targetCoord))
+            if (CoordIsOutOfBounds(coord))
                 return false;
 
             # region Properties Define
@@ -147,7 +147,7 @@ namespace Yours.QuickCity.Internal
                             currentTileCoord.y + y
                         );
 
-                        if ((x != 0 && y != 0) || JudgeCoordIfOutOfRange(neighbor))
+                        if ((x != 0 && y != 0) || CoordIsOutOfBounds(neighbor))
                             continue;
 
                         if (mapCheckedFlags[neighbor.x, neighbor.y] || currentObsExistMap[neighbor.x, neighbor.y])
@@ -168,7 +168,7 @@ namespace Yours.QuickCity.Internal
             // process func
             void PositCurrentTileIsObs()
             {
-                currentObsExistMap[targetCoord.x, targetCoord.y] = true;
+                currentObsExistMap[coord.x, coord.y] = true;
                 currentObsNum++;
             }
             void SignCoordAsAccessible(Coord target)
@@ -216,7 +216,7 @@ namespace Yours.QuickCity.Internal
         /// </summary>
         /// <param name="targetCoord"></param>
         /// <returns><see langword="true"/> if out of range.</returns>
-        internal bool JudgeCoordIfOutOfRange(Coord targetCoord)
+        internal bool CoordIsOutOfBounds(Coord targetCoord)
         {
             return (targetCoord.x < 0 || targetCoord.x >= this.RectangleSizeX)
                    ||

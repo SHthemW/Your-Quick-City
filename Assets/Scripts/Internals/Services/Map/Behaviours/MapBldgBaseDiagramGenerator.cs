@@ -36,7 +36,7 @@ namespace Yours.QuickCity.Internal
 
                 var currentCoord = randomCoords.Dequeue();
 
-                if (diagram.JudgeIfCanPlaceObstacle(currentCoord))
+                if (diagram.StillConnectedWhenContented(currentCoord))
                 {
                     diagram[currentCoord.x, currentCoord.y].Data.NodeObj = _mapObjects.GetRandomBuilding();
                 }

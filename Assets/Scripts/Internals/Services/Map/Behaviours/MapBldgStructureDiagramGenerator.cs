@@ -79,7 +79,7 @@ namespace Yours.QuickCity.Internal
             {
                 var mapped_coord = tryPoint + node.Coordinate;
                
-                if (!diagram.JudgeIfCanPlaceObstacle(mapped_coord) && !CanGenerateForcibly(mapped_coord))
+                if (!diagram.StillConnectedWhenContented(mapped_coord) && !CanGenerateForcibly(mapped_coord))
                 {
                     _finalStructureDiagram.Clear();
                     return false;
@@ -90,7 +90,7 @@ namespace Yours.QuickCity.Internal
 
             bool CanGenerateForcibly(Coord coord)
             {                
-                if (diagram.JudgeCoordIfOutOfRange(coord))
+                if (diagram.CoordIsOutOfBounds(coord))
                     return false;
 
                 else if(structure.GeneratePriority == StructureGeneratePriority.Force)
