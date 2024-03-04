@@ -19,7 +19,7 @@ namespace Yours.QuickCity
             {
                 if (_shape == null)
                     throw new ArgumentNullException();
-                return _shape;
+                return _shape.Shape;
             }
         }
 

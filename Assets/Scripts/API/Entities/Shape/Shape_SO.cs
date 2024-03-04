@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using UnityEngine;
-using Yours.QuickCity.Internal;
 
 namespace Yours.QuickCity.Shape
 {
-    public abstract class Shape_SO : ScriptableObject, IShape
+    public abstract class Shape_SO : ScriptableObject
     {
-        public abstract bool[,] GenerateShapeMatrix(float sizeMultiple);
+        public abstract IShape Shape { get; }
 
         #region Test
 
@@ -22,7 +19,7 @@ namespace Yours.QuickCity.Shape
         {
             StringBuilder msg = new();
 
-            var matrix = GenerateShapeMatrix(sizeMultiple: _argSizeMultiple);
+            var matrix = Shape.GenerateShapeMatrix(sizeMultiple: _argSizeMultiple);
 
             msg.Append("generate: \n" + GetConsoleGraphByMatrix(matrix));
             Debug.Log(msg.ToString());
