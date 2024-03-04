@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    [CreateAssetMenu(fileName = "New Map Config", menuName = "Config/Map")]
+    [CreateAssetMenu(fileName = "New Map Config", menuName = "Map/Config")]
     public sealed class MapConf_SO : ScriptableObject, IMapConf
     {
         [SerializeField]

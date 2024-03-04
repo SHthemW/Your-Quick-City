@@ -2,7 +2,7 @@
 
 namespace Yours.QuickCity.Internal
 {
-    [CreateAssetMenu(fileName = "New Map", menuName = "Data/Map")]
+    [CreateAssetMenu(fileName = "New Map", menuName = "Map/New")]
     public sealed class MapData_SO : ScriptableObject, IMapData
     {
         [SerializeField]

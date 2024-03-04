@@ -3,7 +3,7 @@ using System;
 
 namespace Yours.QuickCity.Internal
 {
-    [CreateAssetMenu(fileName = "New Stuff", menuName = "Data/Map Stuff")]
+    [CreateAssetMenu(fileName = "New Stuff", menuName = "Map/Stuff/New")]
     internal sealed class StuffData_SO : ScriptableObject, IStuff
     {
         [Header("Basic")]

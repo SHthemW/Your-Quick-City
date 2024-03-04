@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Yours.QuickCity.Internal
 {
-    [CreateAssetMenu(fileName = "New Structure", menuName = "Data/MapStructure")]
+    [CreateAssetMenu(fileName = "New Structure", menuName = "Map/Structure/New")]
     internal sealed class StructureData_SO : ScriptableObject, IStructure
     {
         [Header("Basic")]
