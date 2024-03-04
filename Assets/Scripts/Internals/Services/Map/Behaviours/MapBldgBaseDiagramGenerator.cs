@@ -18,7 +18,7 @@ namespace Yours.QuickCity.Internal
             _map  = basicProperty;
             _mapObjects = entityProperty;
         }
-        internal IEnumerator GenerateOnDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateOnDiagram(Martrix<MapNodeData> diagram)
         {
             var randomCoords = GenerateRandomCoords();
 
@@ -36,9 +36,9 @@ namespace Yours.QuickCity.Internal
 
                 var currentCoord = randomCoords.Dequeue();
 
-                if (diagram.JudgeIfCanPlaceObstacle(currentCoord))
+                if (diagram.StillConnectedWhenContented(currentCoord))
                 {
-                    diagram[currentCoord.x, currentCoord.y].PlaceObstacle(_mapObjects.GetRandomBuilding());
+                    diagram[currentCoord.x, currentCoord.y].Data.NodeObj = _mapObjects.GetRandomBuilding();
                 }
             });
 

@@ -18,15 +18,15 @@ namespace Yours.QuickCity.Internal
             _mapObjects = entityProp;
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
-        internal IEnumerator GenerateByDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateByDiagram(Martrix<MapNodeData> diagram)
         {
             yield return Foreach(iter: diagram.Content, body: node =>
             {
                 if (_map.GenerateGround)
                     GenerateGroundTile(node.Coordinate);
 
-                if (node.IsObstacle)
-                    GenerateObstacleTile(node.Coordinate, node.NodeData);
+                if (node.Data.HasContent)
+                    GenerateObstacleTile(node.Coordinate, node.Data);
             });
         }
 
@@ -43,7 +43,7 @@ namespace Yours.QuickCity.Internal
 
             spawnFloor.transform.SetParent(_parent.FloorObjParent); 
         }
-        private void GenerateObstacleTile(Coord logicPos, MapDiagramNodeData data)
+        private void GenerateObstacleTile(Coord logicPos, MapNodeData data)
         {
             var spawnObstacle = UnityEngine.Object.
                 Instantiate(data.NodeObj);

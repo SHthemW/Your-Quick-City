@@ -13,7 +13,7 @@ namespace Yours.QuickCity.Internal
 
         private readonly StringBuilder _resultMessage = new("结构生成信息: \n");
 
-        private Dictionary<Coord, MapDiagramNodeData> _finalStructureDiagram { get; set; } = new();
+        private Dictionary<Coord, MapNodeData> _finalStructureDiagram { get; set; } = new();
 
         /*
          *  internal:
@@ -23,7 +23,7 @@ namespace Yours.QuickCity.Internal
         {
             _mapObjects = objectsDef;
         }
-        internal IEnumerator GenerateOnDiagram(MapDiagram diagram)
+        internal IEnumerator GenerateOnDiagram(Martrix<MapNodeData> diagram)
         {
             yield return Foreach(iter: _mapObjects.StructureList, stepCount: _mapObjects.StructureList.Count / 2, body: structure =>
             {
@@ -41,7 +41,7 @@ namespace Yours.QuickCity.Internal
 
         private MapBldgStructureDiagramGenerator() : base(-1)
             => throw new NotImplementedException();
-        private void TryAddStructuresToDiagram(IStructure structure, MapDiagram diagram)
+        private void TryAddStructuresToDiagram(IStructure structure, Martrix<MapNodeData> diagram)
         {
             var totalCoords  = diagram.Content.Select(n => n.Coordinate).ToArray();
             int successCount = 0;
@@ -73,44 +73,44 @@ namespace Yours.QuickCity.Internal
         /// <param name="diagram"></param>
         /// <param name="tryPoint"></param>
         /// <returns></returns>
-        private bool JudgeIfCanGenerateStructure(IStructure structure, MapDiagram diagram, Coord tryPoint)
+        private bool JudgeIfCanGenerateStructure(IStructure structure, Martrix<MapNodeData> diagram, Coord tryPoint)
         {
             foreach (var node in structure.StructureDiagram)
             {
                 var mapped_coord = tryPoint + node.Coordinate;
                
-                if (!diagram.JudgeIfCanPlaceObstacle(mapped_coord) && !CanGenerateForcibly(mapped_coord))
+                if (!diagram.StillConnectedWhenContented(mapped_coord) && !CanGenerateForcibly(mapped_coord))
                 {
                     _finalStructureDiagram.Clear();
                     return false;
                 }
-                _finalStructureDiagram.Add(mapped_coord, node.NodeData);
+                _finalStructureDiagram.Add(mapped_coord, node.Data);
             }
             return true;        
 
             bool CanGenerateForcibly(Coord coord)
             {                
-                if (diagram.JudgeCoordIfOutOfRange(coord))
+                if (diagram.CoordIsOutOfBounds(coord))
                     return false;
 
                 else if(structure.GeneratePriority == StructureGeneratePriority.Force)
                     return true;
 
                 else if (structure.GeneratePriority == StructureGeneratePriority.ReplaceExists)
-                    return diagram[coord.x, coord.y].IsObstacle;
+                    return diagram[coord.x, coord.y].Data.HasContent;
 
                 else 
                     return false;
             }
         }
-        private void WriteStructureToDiagram(IStructure structure, MapDiagram diagram)
+        private void WriteStructureToDiagram(IStructure structure, Martrix<MapNodeData> diagram)
         {
             if (_finalStructureDiagram.Count == 0)
                 throw new InvalidOperationException("[Map]: 无法生成结构, 因为没有可供生成的final diagram.");
 
             foreach (var nodeKvp in _finalStructureDiagram)
             {
-                diagram[nodeKvp.Key.x, nodeKvp.Key.y].NodeData = nodeKvp.Value;
+                diagram[nodeKvp.Key.x, nodeKvp.Key.y].Data = nodeKvp.Value;
             }
             diagram.ClosedNodeNum += structure.ClosedNodeNum;
 
