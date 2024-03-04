@@ -10,7 +10,7 @@ namespace Yours.QuickCity.Internal
         [Header("Basic")]
 
         [SerializeField]
-        private List<MartrixNode<MapNodeData>> _diagram;
+        private List<MatrixNode<MapNodeData>> _diagram;
 
         [SerializeField]
         [Tooltip("障碍物内部封闭结点的数量. 请务必正确填写.")]
@@ -54,7 +54,7 @@ namespace Yours.QuickCity.Internal
          *  implements
          */
 
-        List<MartrixNode<MapNodeData>> IStructure.StructureDiagram => _diagram;
+        List<MatrixNode<MapNodeData>> IStructure.StructureDiagram => _diagram;
         int IStructure.ClosedNodeNum => _closedNodeNum;
         int IStructure.GenerateNumber => _generateNumber;
         StructureGeneratePriority IStructure.GeneratePriority => _generatePriority;

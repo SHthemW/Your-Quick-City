@@ -5,15 +5,15 @@ using Yours.QuickCity.Shape;
 
 namespace Yours.QuickCity.Internal
 {
-    internal sealed class Martrix<TData> where TData : IMatrixNodeData, new()
+    internal sealed class Matrix<TData> where TData : IMatrixNodeData, new()
     {
-        private readonly MartrixNode<TData>[,] _nodes;
+        private readonly MatrixNode<TData>[,] _nodes;
         private readonly Coord? _startPoint = null;
 
         // properties
-        internal MartrixNode<TData> this[int x, int y] 
+        internal MatrixNode<TData> this[int x, int y] 
             => _nodes[x, y] ?? throw new System.Exception("invalid coord.");
-        internal IEnumerable<MartrixNode<TData>> Content
+        internal IEnumerable<MatrixNode<TData>> Content
         {
             get
             {
@@ -44,13 +44,13 @@ namespace Yours.QuickCity.Internal
          *  methods that used to init the diagram.
          */
 
-        internal Martrix(IShape shape, float sizeMultiple)
+        internal Matrix(IShape shape, float sizeMultiple)
         {
             var matrix = shape.GenerateShapeMatrix(sizeMultiple);
 
             var (sz_x, sz_y) = IShape.SizeOf(matrix);
 
-            _nodes = new MartrixNode<TData>[sz_x, sz_y];
+            _nodes = new MatrixNode<TData>[sz_x, sz_y];
 
             for (int x = 0; x < sz_x; x++)
             {
@@ -231,7 +231,7 @@ namespace Yours.QuickCity.Internal
         internal void PrintDebugGraph()
         {
             System.Text.StringBuilder msg = new();
-            MartrixNode<TData> node = null;
+            MatrixNode<TData> node = null;
 
             for (int x = 0; x < this.RectangleSizeX; x++)
             {
@@ -249,7 +249,7 @@ namespace Yours.QuickCity.Internal
             }
             Debug.Log("地形示意图(z → x ↓): \n" + msg);
 
-            static string GetGridOutputMsg(MartrixNode<TData> node)
+            static string GetGridOutputMsg(MatrixNode<TData> node)
             {
                 if (node == null) return "▁";
                 return node.Data.HasContent ? "■" : "□";

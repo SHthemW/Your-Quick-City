@@ -18,7 +18,7 @@ namespace Yours.QuickCity.Internal
             _mapObjects = entityProp;
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
-        internal IEnumerator GenerateByDiagram(Martrix<MapNodeData> diagram)
+        internal IEnumerator GenerateByDiagram(Matrix<MapNodeData> diagram)
         {
             yield return Foreach(iter: diagram.Content, body: node =>
             {

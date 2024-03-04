@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [Serializable]
-    internal sealed class MartrixNode<TData> where TData : IMatrixNodeData, new()
+    internal sealed class MatrixNode<TData> where TData : IMatrixNodeData, new()
     {
         [SerializeField]
         [Tooltip("该节点相对于原点(左下角)的坐标.")]
@@ -24,7 +24,7 @@ namespace Yours.QuickCity.Internal
             set => _data = value;
         }
 
-        internal MartrixNode()
+        internal MatrixNode()
         {
             this._data = new();
         }

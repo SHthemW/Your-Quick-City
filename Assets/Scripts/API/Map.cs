@@ -13,7 +13,7 @@ namespace Yours.QuickCity
         private readonly IMapObjParent _parent;
         private readonly MonoBehaviour _master;
 
-        private Martrix<MapNodeData> _diagram;
+        private Matrix<MapNodeData>  _diagram;
         private MapTerrainDetector[] _terrainDetectors;
 
         public IDebugLogger Logger { private get; set; } = null;
@@ -43,7 +43,7 @@ namespace Yours.QuickCity
 
             Logger.Add("generate is finished.");
         }
-        private IEnumerator GenerateBuildingsOnMap(Martrix<MapNodeData> map)
+        private IEnumerator GenerateBuildingsOnMap(Matrix<MapNodeData> map)
         {
             #region generate base diagram
 
@@ -87,7 +87,7 @@ namespace Yours.QuickCity
 
             #endregion
         }
-        private IEnumerator GenerateDetectorsOnMap(Martrix<MapNodeData> map)
+        private IEnumerator GenerateDetectorsOnMap(Matrix<MapNodeData> map)
         {
             #region generate coords
 
