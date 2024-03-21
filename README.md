@@ -4,7 +4,8 @@
 
 还在为制作场景时需要逐个摆放model而困扰吗? YQC插件提供了一套面向开发者的快速城镇模板和生成算法, 让你能快速在场景中布局心仪的地图.
 
-
+该存储库仅作为使用预制模板进行在线生成的展示页面. 要真正在您的项目中部署和使用YQC程序包, 请参阅:
+https://github.com/SHthemW/Your-Quick-City
 
 ![top](./TemplateData/readme/top.png)
 
