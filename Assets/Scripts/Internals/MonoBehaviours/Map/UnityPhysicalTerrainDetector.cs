@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Yours.QuickCity.Internal
 {
     [SelectionBase, Serializable]
-    internal sealed class StandardTerrainDetector : MapTerrainDetector
+    internal sealed class UnityPhysicalTerrainDetector : MapTerrainDetector
     {
         private TerrainDetectorProperty? _property = null;
         private TerrainDetectorProperty Property
