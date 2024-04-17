@@ -63,13 +63,13 @@
 
 > Entities
 
-**Map：** 用于表示地图的实体类。
+**Map：** 用于表示地图的实体类。（接口+基本实现+ScriptableObject实现）
 
-**Shape：** 用于表示地图形状轮廓的实体类。
+**Shape：** 用于表示地图形状轮廓的实体类。（接口+基本实现+ScriptableObject实现）
 
-**Stuff：** 用于表示地图次级实体的实体类。
+**Stuff：** 用于表示地图次级实体的实体类。（接口+基本实现+ScriptableObject实现）
 
-**Structure：** 用于表示地图子结构的实体类。
+**Structure：** 用于表示地图子结构的实体类。（接口+基本实现+ScriptableObject实现）
 
   
 > Interfaces
